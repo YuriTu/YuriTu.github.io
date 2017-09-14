@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="RENN," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="re:从零开始构建技术团队最近一直在招人，我也面了一些人，有一个问题一直没有解决 我们需要什么样的小伙伴？真的只是简单的 器li大hai活好名校学霸就行了吗？ 我们愿要相对技术差点，但是踏实肯干的人的深层原因是什么？ 优秀团队的定义我觉得一个优秀稳定的团队组成应该是这样的。 第一层是管理层，名义管理者扮演技术经理的角色，它的任务就是 抗压、抢资源、谋福利、背锅。技术专家比较好理解，就是负责解决团队">
+<meta name="keywords" content="RENN">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何构建一个优良的技术团队">
+<meta property="og:url" content="http://tuqiang.website/2017/06/18/re：从零开始构建技术团队/index.html">
+<meta property="og:site_name" content="住何乡">
+<meta property="og:description" content="re:从零开始构建技术团队最近一直在招人，我也面了一些人，有一个问题一直没有解决 我们需要什么样的小伙伴？真的只是简单的 器li大hai活好名校学霸就行了吗？ 我们愿要相对技术差点，但是踏实肯干的人的深层原因是什么？ 优秀团队的定义我觉得一个优秀稳定的团队组成应该是这样的。 第一层是管理层，名义管理者扮演技术经理的角色，它的任务就是 抗压、抢资源、谋福利、背锅。技术专家比较好理解，就是负责解决团队">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://odf9m3avc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720170615220302.png">
+<meta property="og:updated_time" content="2017-09-14T12:34:18.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="如何构建一个优良的技术团队">
+<meta name="twitter:description" content="re:从零开始构建技术团队最近一直在招人，我也面了一些人，有一个问题一直没有解决 我们需要什么样的小伙伴？真的只是简单的 器li大hai活好名校学霸就行了吗？ 我们愿要相对技术差点，但是踏实肯干的人的深层原因是什么？ 优秀团队的定义我觉得一个优秀稳定的团队组成应该是这样的。 第一层是管理层，名义管理者扮演技术经理的角色，它的任务就是 抗压、抢资源、谋福利、背锅。技术专家比较好理解，就是负责解决团队">
+<meta name="twitter:image" content="http://odf9m3avc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720170615220302.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://tuqiang.website/2017/06/18/re：从零开始构建技术团队/"/>
+
+
+
+
+
+  <title>如何构建一个优良的技术团队 | 住何乡</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">住何乡</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://tuqiang.website/2017/06/18/re：从零开始构建技术团队/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yuri">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://odf9m3avc.bkt.clouddn.com/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="住何乡">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">如何构建一个优良的技术团队</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-18T00:00:00+08:00">
+                2017-06-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="re-从零开始构建技术团队"><a href="#re-从零开始构建技术团队" class="headerlink" title="re:从零开始构建技术团队"></a>re:从零开始构建技术团队</h1><p>最近一直在招人，我也面了一些人，有一个问题一直没有解决</p>
+<h2 id="我们需要什么样的小伙伴？"><a href="#我们需要什么样的小伙伴？" class="headerlink" title="我们需要什么样的小伙伴？"></a>我们需要什么样的小伙伴？</h2><p>真的只是简单的 器li大hai活好名校学霸就行了吗？</p>
+<p>我们愿要相对技术差点，但是踏实肯干的人的深层原因是什么？</p>
+<h3 id="优秀团队的定义"><a href="#优秀团队的定义" class="headerlink" title="优秀团队的定义"></a>优秀团队的定义</h3><p>我觉得一个优秀稳定的团队组成应该是这样的。<br><img src="http://odf9m3avc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720170615220302.png" alt="此处输入图片的描述"></p>
+<p>第一层是管理层，<br>名义管理者扮演技术经理的角色，它的任务就是 抗压、抢资源、谋福利、背锅。<br>技术专家比较好理解，就是负责解决团队生产开发中的难点，解决别人解决不了的事情。<br>这两个更多应该是刘备和诸葛亮的关系，名义上是刘备的部队，相对于具体的解决某个需求，更多的是应该 给技术团队争取福利、和其他部门对抗协调，阻止压力下泄到基层员工，让技术专家安心解决问题。他不需要代码写的多好，但一定要理解技术团队，绝对信任技术专家。<br>但是真正的任务管理者应该是技术专家。整个团队的走向，技术栈方向的选取，基层的培养，他是基层的引路人，带领初中级员工成长。</p>
+<p>第二层是代理者，在第一层人员缺席时，他们能立刻顶上去，分担部分第一层的职责，不能让团队垮掉。在第三层人员数量不够时，能够高效率完成其工作。</p>
+<p>第三层是基础层，主要是创新者与制造者，这两者都不可缺少，否则团队不稳。</p>
+<p>制造者更偏向于注重细节，按时保质完成开发任务，对重复工作的耐受度高，他们是整个技术团队的本钱，按时交活儿，不犯错，这是最重要的；<br>优秀的制造者存在，管理者才能更好的去问上层要资源，要奖赏。</p>
+<p>创新者更多的是技术专家的副手，当技术专家推出新技术新思想时，创新者需要多踩坑，多犯错，有着哪怕几天没有任何产出也能依靠热情继续debugger是最好的。填完了坑，提高制造者的效率，同时他们的存在营造良好的技术氛围，这就会成为工程师文化。创新者需要做的就是给团队带来长期收益的事情。</p>
+<h2 id="收益的半衰期"><a href="#收益的半衰期" class="headerlink" title="收益的半衰期"></a>收益的半衰期</h2><p>同样收益的事情，我们应该做半衰期更长的。这是一个很常用的思考方式，同样适用于一个技术团队。<br>一个天天被产品的“紧急需求”压着的技术团队，很难得到比较快的发展，一个团队需要一部分人做一些长半衰期的事情。<br>我们团队的小伙伴孕育了 fakeux 框架来解决页面的复杂交互问题，推行了eslint来解决代码风格问题等等，在当初的时间节点这些东西甚至是负产出的，它增加了团队中的学习成本，影响了开发时间，但是一旦付出了学习成本之后，其收益是润物细无声的。这种长半衰期的收益也许它难以量化，但是却不可缺少。</p>
+<hr>
+<p>所以明确了我们需要什么人的时候，我们就能判断什么样的人才是我们需要的小伙伴了。</p>
+<h3 id="这个人到底该不该要"><a href="#这个人到底该不该要" class="headerlink" title="这个人到底该不该要"></a>这个人到底该不该要</h3><p>一般情况下，应届生的水平差距不会太大，那么这时候一些 非硬性素质就会凸显出其比重，不管身份如何我觉得比较重要的是：</p>
+<ol>
+<li>技术敏感性<br>对新技术的接受程度，是否乐于接触了解新技术；<br>新的类库出来了，你会不会去了解一下他的用法呢，会不会想着与自己熟悉的技术进行对比？<br>不能惧怕新技术，抱着自己会的一亩三分地过着老婆孩子热炕头的清闲生活可以舒服一时，但是长久看来是不符合技术团队的高速发展的。</li>
+<li>学习能力<br>一方面是表达，能不能给别人讲清楚<br>应届生的博客大多喜欢写知识总结，成体系的比较少，老实说没啥太大意思。<br>能写出解决问题的思路与方法的，大加分项。<br>另一方面就是速度。</li>
+</ol>
+<p>所以，在硬性的技术基础要求达标之后，往往就可以看我们的团队缺什么人了。<br>做需求的制造者是需要的，营造气氛的创新者也是不可或缺的。<br>打江山容易守江山难，招人容易管理难，我相信能打硬仗胜仗的队伍是不能靠随便招几个熟练工就可以的。</p>
+<p>以上就是我在日常工作中的经验总结了，毕竟不是专业学人力的，也没见过什么大世面，权当抛砖引玉了~</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/RENN/" rel="tag"># RENN</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/10/EffectiveCanvas - 2Dcanvas优化思路/" rel="next" title="EffectiveCanvas - 2Dcanvas优化思路">
+                <i class="fa fa-chevron-left"></i> EffectiveCanvas - 2Dcanvas优化思路
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/24/webpack 3.0 上车指北/" rel="prev" title="webpack 3.0 上车指北">
+                webpack 3.0 上车指北 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="http://odf9m3avc.bkt.clouddn.com/avatar.jpg"
+              alt="Yuri" />
+          
+            <p class="site-author-name" itemprop="name">Yuri</p>
+            <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#re-从零开始构建技术团队"><span class="nav-number">1.</span> <span class="nav-text">re:从零开始构建技术团队</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#我们需要什么样的小伙伴？"><span class="nav-number">1.1.</span> <span class="nav-text">我们需要什么样的小伙伴？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#优秀团队的定义"><span class="nav-number">1.1.1.</span> <span class="nav-text">优秀团队的定义</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#收益的半衰期"><span class="nav-number">1.2.</span> <span class="nav-text">收益的半衰期</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#这个人到底该不该要"><span class="nav-number">1.2.1.</span> <span class="nav-text">这个人到底该不该要</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yuri</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.2</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

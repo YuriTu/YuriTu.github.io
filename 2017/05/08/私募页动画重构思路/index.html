@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="canvas," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="私募页动画是一个很有意思的需求在开发时有很多稚嫩和值得反思的地方在重构的过程中，也逐步反思之前的写法 预览：人人智慧私募之前的版本是：原版动画重构后版本：新版动画 虽然很吃藕，但是毕竟是自己设计的，我觉得还是挺酷炫的我又不是UI ┑(￣Д ￣)┍ （逃… 寻找问题然后我发现它是非常卡顿的，主要表现在  cpu耗费，烧得我整个mac都烫了….当时没看，我估计cpu得有70% 区区一个网页，chrom">
+<meta name="keywords" content="canvas">
+<meta property="og:type" content="article">
+<meta property="og:title" content="私募页动画重构思路">
+<meta property="og:url" content="http://tuqiang.website/2017/05/08/私募页动画重构思路/index.html">
+<meta property="og:site_name" content="住何乡">
+<meta property="og:description" content="私募页动画是一个很有意思的需求在开发时有很多稚嫩和值得反思的地方在重构的过程中，也逐步反思之前的写法 预览：人人智慧私募之前的版本是：原版动画重构后版本：新版动画 虽然很吃藕，但是毕竟是自己设计的，我觉得还是挺酷炫的我又不是UI ┑(￣Д ￣)┍ （逃… 寻找问题然后我发现它是非常卡顿的，主要表现在  cpu耗费，烧得我整个mac都烫了….当时没看，我估计cpu得有70% 区区一个网页，chrom">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://odf9m3avc.bkt.clouddn.com/index.gif">
+<meta property="og:image" content="http://odf9m3avc.bkt.clouddn.com/QQ20170508-0.png">
+<meta property="og:updated_time" content="2017-09-14T12:35:05.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="私募页动画重构思路">
+<meta name="twitter:description" content="私募页动画是一个很有意思的需求在开发时有很多稚嫩和值得反思的地方在重构的过程中，也逐步反思之前的写法 预览：人人智慧私募之前的版本是：原版动画重构后版本：新版动画 虽然很吃藕，但是毕竟是自己设计的，我觉得还是挺酷炫的我又不是UI ┑(￣Д ￣)┍ （逃… 寻找问题然后我发现它是非常卡顿的，主要表现在  cpu耗费，烧得我整个mac都烫了….当时没看，我估计cpu得有70% 区区一个网页，chrom">
+<meta name="twitter:image" content="http://odf9m3avc.bkt.clouddn.com/index.gif">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://tuqiang.website/2017/05/08/私募页动画重构思路/"/>
+
+
+
+
+
+  <title>私募页动画重构思路 | 住何乡</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">住何乡</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://tuqiang.website/2017/05/08/私募页动画重构思路/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yuri">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://odf9m3avc.bkt.clouddn.com/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="住何乡">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">私募页动画重构思路</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-08T00:00:00+08:00">
+                2017-05-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>私募页动画是一个很有意思的需求<br>在开发时有很多稚嫩和值得反思的地方<br>在重构的过程中，也逐步反思之前的写法</p>
+<p>预览：<a href="http://118.186.218.30" target="_blank" rel="external">人人智慧私募</a><br>之前的版本是：<a href="https://github.com/YuriTu/In-RENN/tree/master/canvas" target="_blank" rel="external">原版动画</a><br>重构后版本：<a href="https://github.com/YuriTu/In-RENN/tree/master/newPEcanvas" target="_blank" rel="external">新版动画</a></p>
+<p>虽然很吃藕，但是毕竟是自己设计的，我觉得还是挺酷炫的<br>我又不是UI ┑(￣Д ￣)┍ （逃…</p>
+<h1 id="寻找问题"><a href="#寻找问题" class="headerlink" title="寻找问题"></a>寻找问题</h1><p>然后我发现它是非常卡顿的，主要表现在</p>
+<ol>
+<li>cpu耗费，烧得我整个mac都烫了….当时没看，我估计cpu得有70%</li>
+<li>区区一个网页，chrome占了300多内存</li>
+<li>FPS只有7左右，也就是说，一帧花费150ms左右</li>
+</ol>
+<p>(╯‵□′)╯︵┻━┻  这一下一点都不酷炫了好么<br>  ┬─┬ ノ(‘-‘ノ)  扶好扶好…我们想想办法</p>
+<p>  两个地方： 计算 渲染<br>理论上来说，渲染远大于计算，但是根据chrome 的工具来看，我的计算耗费赶上了渲染</p>
+<h1 id="分析问题"><a href="#分析问题" class="headerlink" title="分析问题"></a>分析问题</h1><h2 id="不必要计算"><a href="#不必要计算" class="headerlink" title="不必要计算"></a>不必要计算</h2><p><img src="http://odf9m3avc.bkt.clouddn.com/index.gif" alt="img"><br>开始的进入动画都是简单的画圆环，移圆弧，都不是性能的瓶颈，他们计算渲染花费都很少，瓶颈就在最后生成的光晕那里。</p>
+<p>这里最后的循环动画有三个构成部分</p>
+<ol>
+<li>文字、中心圆环，有个圆形渐变，费性能吗？费，但是不至于这么卡.</li>
+<li>阴影与文字：阴影是个性能大户，但是因为有响应式问题，不能把阴影转嫁给其他组件</li>
+<li>光环本身，所有的断点与动态的条纹都是通过计算坐标所得的，那么那么每帧计算量就达到了 4000次以上，而且为了减少计算难度通过旋转坐标轴绘制，这也是一个支出。</li>
+</ol>
+<p>无论是背景的光环，还是动态的条纹，我都是实例了50个对象来处理的，这个对象的遍历，也是一个消耗点。<br>而且其实除了动态的条纹，这是一个背景性质的东西，理论上渲染一次就行了，其他的就是旋转了，而目前的方案是每帧重绘，这个支出不应该。<br>动态的条纹，其实本质上是一个遮罩，我在想有必要要那么多的实例对象嘛？可以用一个实例对象来解决吗？</p>
+<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>不动的光环背景，我本来是打算使用分层处理的，那么只需要渲染一遍，就把其所在的canvas作为背景，不需要再渲染。<br>不可行的原因有二，<br>canvas画布本身的支出，两个canvas画布对性能又是一个大支出。<br>二者，我需要背景的旋转，旋转速度与上层画布同步，那么还是要渲染-擦除，仅仅减少了后续的计算支持，本质问题没有解决。</p>
+<p>于是，我打算使用css，css的transform中的3dAPI也可以使用GPU加速。<br>于是我，通过使用一张离屏Canvas，将背景绘制完成，离屏Canvas因为在内存中，绘制速度比在DOM中的canvas快得多，不过记得用完记得干掉，免得内存泄露。<br><img src="http://odf9m3avc.bkt.clouddn.com/QQ20170508-0.png" alt="enter description here"></p>
+<p>通过toDataURL把整个canvas抽成base64，（当然你也可以用toBlob，不过他兼容性不好，）再直接加一个img标签就完成了canvas画布的背景。这个性能支持由canvas转嫁给了css，提高了很多性能。</p>
+<p>另一个可以减少计算的地方就是动态的条纹，以前是每帧计算每个条纹的四个坐标点的，还包括三角函数、浮点计算，这个计算强度一下就上去了。<br>经过大牛指点，我才用了遮罩的方式，<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">this</span>.stripeList.forEach(<span class="function">(<span class="params">item</span>) =&gt;</span> &#123;</div><div class="line">                ctx.beginPath();</div><div class="line">                ctx.rect(<span class="keyword">this</span>.initLB.x + <span class="number">3</span>, item.stepLB.y, <span class="number">40</span>, <span class="number">10</span>);</div><div class="line">                ctx.closePath();</div><div class="line">                ctx.fill();</div><div class="line">                item.stepLB.y -= <span class="number">2</span>;</div><div class="line">                <span class="keyword">if</span> ( item.stepLB.y &lt; <span class="number">40</span>)&#123;</div><div class="line">                    item.stepLB.y = <span class="number">600</span>;</div><div class="line">                &#125;</div><div class="line">            &#125;);</div></pre></td></tr></table></figure></p>
+<p>因为我绘制背景的时候，已经计算完成了其可见范围的坐标，这相当于已经有了他的遮罩，我其实不用管具体的宽度，给予最大宽度，通过clip进行展示就可以的。<br>这样也就是减少了这部分的计算支出。</p>
+<h2 id="计算分步"><a href="#计算分步" class="headerlink" title="计算分步"></a>计算分步</h2><p>我所有的计算都是在中心圆变成光环进行计算的，导致一进入这一步，把进程就阻塞完了。我觉得这个计算应该是可以转移到其他部分的，比如刚开始</p>
+<h3 id="web-worker"><a href="#web-worker" class="headerlink" title="web worker"></a>web worker</h3><p>终于不用兼容IE8啦！！！！！<br>那还犹豫什么，黑科技往上怼。<br>诚然把计算量大的步骤，均摊给整个动画流程是个不错的办法，但是一个是写起来麻烦，另一个是数据管理费劲。<br>干脆交给另一个进程好了，这样本质上把MVC完全分开，worker和配置文件作为数据层，动画逻辑负责控制渲染流程，渲染文件仅接受数据，整体作为单一数据流，就像React的思想一样，非常方便控制。</p>
+<h2 id="渲染性能"><a href="#渲染性能" class="headerlink" title="渲染性能"></a>渲染性能</h2><p>渲染性能控制都是一些程式化的东西了，无非是减少API操作和不必要的赋值，这个时候就体现出了活用save\restore的优势了…当然要是你滥用save…那也没办法了。</p>
+<p>另外一个“道”上的思维就是说，避免无谓的绘制，这个往往在一个巨无霸函数中体现，我们尽量一个函数干一个事，一边吃饭一边炒菜的代码很多，但你自己往往发现不了，还觉得很对。</p>
+<h2 id="反思"><a href="#反思" class="headerlink" title="反思"></a>反思</h2><p>最开始写这个动画逻辑的时候，还是非常傻得，干了很多面对过程的事情。而且有一种拆东墙补西墙的感觉，怎么写都不对劲，这个时候一定好好想想是不是自上而下编码了。<br>其实这个动画我觉得还是可以优化的， 但是我算法实在不行，这是之后一个需要多锻炼的地方。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/canvas/" rel="tag"># canvas</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/06/人人金服前端架构演变之路/" rel="next" title="人人金服前端架构演变之路">
+                <i class="fa fa-chevron-left"></i> 人人金服前端架构演变之路
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/10/EffectiveCanvas - 2Dcanvas优化思路/" rel="prev" title="EffectiveCanvas - 2Dcanvas优化思路">
+                EffectiveCanvas - 2Dcanvas优化思路 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="http://odf9m3avc.bkt.clouddn.com/avatar.jpg"
+              alt="Yuri" />
+          
+            <p class="site-author-name" itemprop="name">Yuri</p>
+            <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#寻找问题"><span class="nav-number">1.</span> <span class="nav-text">寻找问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分析问题"><span class="nav-number">2.</span> <span class="nav-text">分析问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#不必要计算"><span class="nav-number">2.1.</span> <span class="nav-text">不必要计算</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方案"><span class="nav-number">2.1.1.</span> <span class="nav-text">解决方案</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#计算分步"><span class="nav-number">2.2.</span> <span class="nav-text">计算分步</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#web-worker"><span class="nav-number">2.2.1.</span> <span class="nav-text">web worker</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#渲染性能"><span class="nav-number">2.3.</span> <span class="nav-text">渲染性能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#反思"><span class="nav-number">2.4.</span> <span class="nav-text">反思</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yuri</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.2</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

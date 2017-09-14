@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="webpack,node," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="想要解决的问题：项目是否要 换 3.0如何从webpack1.x 向 3.0过渡相关兼容问题  TL；DR对打包体积优化差强人意，但是速度优化让人惊喜有一些API的改变，总体上可以无痛升级   webpack3前段时间推出了，我对新版本进行了一些探索。 需不需要升级判断标准就是：想解决的问题webpack能帮你以低成本解决吗 我想解决的问题是：  打包时间太长，每次fixbug进行项目打包需要5分">
+<meta name="keywords" content="webpack,node">
+<meta property="og:type" content="article">
+<meta property="og:title" content="webpack 3.0 上车指北">
+<meta property="og:url" content="http://tuqiang.website/2017/07/24/webpack 3.0 上车指北/index.html">
+<meta property="og:site_name" content="住何乡">
+<meta property="og:description" content="想要解决的问题：项目是否要 换 3.0如何从webpack1.x 向 3.0过渡相关兼容问题  TL；DR对打包体积优化差强人意，但是速度优化让人惊喜有一些API的改变，总体上可以无痛升级   webpack3前段时间推出了，我对新版本进行了一些探索。 需不需要升级判断标准就是：想解决的问题webpack能帮你以低成本解决吗 我想解决的问题是：  打包时间太长，每次fixbug进行项目打包需要5分">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://odf9m3avc.bkt.clouddn.com/webpack1.jpeg">
+<meta property="og:image" content="http://odf9m3avc.bkt.clouddn.com/webpack2.jpeg">
+<meta property="og:image" content="http://odf9m3avc.bkt.clouddn.com/WechatIMG5.jpeg">
+<meta property="og:image" content="http://odf9m3avc.bkt.clouddn.com/WechatIMG4.jpeg">
+<meta property="og:image" content="http://odf9m3avc.bkt.clouddn.com/c15d6d87ba59982405c8195ef4e0020e.jpeg">
+<meta property="og:image" content="http://odf9m3avc.bkt.clouddn.com/WechatIMG6.jpeg">
+<meta property="og:image" content="http://odf9m3avc.bkt.clouddn.com/webapck3-time.jpg">
+<meta property="og:image" content="http://odf9m3avc.bkt.clouddn.com/webpack3.0%E6%95%88%E6%9E%9C%E5%9B%BE.png">
+<meta property="og:image" content="http://odf9m3avc.bkt.clouddn.com/webapck3.jpeg">
+<meta property="og:image" content="http://odf9m3avc.bkt.clouddn.com/webpack1.13-220s.png">
+<meta property="og:image" content="http://odf9m3avc.bkt.clouddn.com/hold2.png">
+<meta property="og:image" content="http://odf9m3avc.bkt.clouddn.com/hold1.png">
+<meta property="og:image" content="http://odf9m3avc.bkt.clouddn.com/note/20es6-webpack2.png">
+<meta property="og:image" content="http://odf9m3avc.bkt.clouddn.com/note/20es6-webpack3.png">
+<meta property="og:image" content="http://odf9m3avc.bkt.clouddn.com/note/20esmodule-webpack2.png">
+<meta property="og:image" content="http://odf9m3avc.bkt.clouddn.com/note/20esmodule-webpack3.png">
+<meta property="og:image" content="http://odf9m3avc.bkt.clouddn.com/note/20esmodule-webapck1.png">
+<meta property="og:image" content="http://odf9m3avc.bkt.clouddn.com/note/20%E6%83%8A%E4%B8%8D%E6%83%8A%E5%96%9C.jpg">
+<meta property="og:image" content="http://odf9m3avc.bkt.clouddn.com/note/20es6-webpack1.png">
+<meta property="og:image" content="http://odf9m3avc.bkt.clouddn.com/note/20es5-webpack1.png">
+<meta property="og:image" content="http://odf9m3avc.bkt.clouddn.com/note/20webpack2-getter.png">
+<meta property="og:image" content="http://odf9m3avc.bkt.clouddn.com/note/20es6-webpack3.png">
+<meta property="og:image" content="http://odf9m3avc.bkt.clouddn.com/note/20webpack3-sco.png">
+<meta property="og:updated_time" content="2017-09-14T12:21:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="webpack 3.0 上车指北">
+<meta name="twitter:description" content="想要解决的问题：项目是否要 换 3.0如何从webpack1.x 向 3.0过渡相关兼容问题  TL；DR对打包体积优化差强人意，但是速度优化让人惊喜有一些API的改变，总体上可以无痛升级   webpack3前段时间推出了，我对新版本进行了一些探索。 需不需要升级判断标准就是：想解决的问题webpack能帮你以低成本解决吗 我想解决的问题是：  打包时间太长，每次fixbug进行项目打包需要5分">
+<meta name="twitter:image" content="http://odf9m3avc.bkt.clouddn.com/webpack1.jpeg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://tuqiang.website/2017/07/24/webpack 3.0 上车指北/"/>
+
+
+
+
+
+  <title>webpack 3.0 上车指北 | 住何乡</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">住何乡</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://tuqiang.website/2017/07/24/webpack 3.0 上车指北/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yuri">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://odf9m3avc.bkt.clouddn.com/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="住何乡">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">webpack 3.0 上车指北</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-24T15:08:21+08:00">
+                2017-07-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>想要解决的问题：<br>项目是否要 换 3.0<br>如何从webpack1.x 向 3.0过渡<br>相关兼容问题</p>
+<blockquote>
+<p><strong>TL；DR</strong><br>对打包体积优化差强人意，但是速度优化让人惊喜<br>有一些API的改变，总体上可以无痛升级</p>
+</blockquote>
+<hr>
+<p>webpack3前段时间推出了，我对新版本进行了一些探索。</p>
+<h1 id="需不需要升级"><a href="#需不需要升级" class="headerlink" title="需不需要升级"></a>需不需要升级</h1><p>判断标准就是：想解决的问题webpack能帮你以<strong>低成本</strong>解决吗</p>
+<p>我想解决的问题是：</p>
+<ol>
+<li>打包时间太长，每次fixbug进行项目打包需要5分多钟</li>
+<li>体积太大，简单页面100k+ ，复杂页面500k-700k+，</li>
+</ol>
+<h2 id="技术选型标准"><a href="#技术选型标准" class="headerlink" title="技术选型标准"></a>技术选型标准</h2><p>关于技术选型我觉得不同项目需要不同对待，我的理解是</p>
+<blockquote>
+<p>个人项目怎么激进怎么来<br> 集体项目在保守的大方向下前进</p>
+</blockquote>
+<p>如果是简单项目，只需要一个人来完成，比如说简单的活动页，后台管理页，这种需求往往一个人就做完了，不涉及配合的问题，试错成本小，那么激进无妨。</p>
+<p>如果是集体项目，如果使用新技术涉及到团队的学习成本问题，成员间的沟通问题，而且非常容易牵一发而动全身，以前代码的兼容怎么办，用了太新的技术以后不好招人怎么办，都是需要考虑的问题，所以已经成熟的项目，前进要慎重。</p>
+<h2 id="webpack能解决什么"><a href="#webpack能解决什么" class="headerlink" title="webpack能解决什么"></a>webpack能解决什么</h2><h3 id="速度"><a href="#速度" class="headerlink" title="速度"></a>速度</h3><p>我在一个自己负责的小项目中尝试了webpack的3.0版本，最直观感觉就是打包速度快了,之后我开始在主要项目中进行测试,在开发时，我需要起一个本地server</p>
+<p>我主项目entry是20个文件，大小各异，样本多点我们好看对比。</p>
+<p>我的主项目使用的是1.13.1<br><img src="http://odf9m3avc.bkt.clouddn.com/webpack1.jpeg" alt="enter description here"><br>毕竟涉及把所有文件写到虚拟内存里，有点慢</p>
+<p>如果使用3.0<br><img src="http://odf9m3avc.bkt.clouddn.com/webpack2.jpeg" alt="enter description here"></p>
+<p>这里启开发环境不涉及压缩混淆一类的就是过一下loader，差距还是很明显的；</p>
+<p><strong>接下来我们看上线打包</strong><br>在1.X版本慢就慢在：<br><img src="http://odf9m3avc.bkt.clouddn.com/WechatIMG5.jpeg" alt="enter description here"></p>
+<p>然后时间上是<br><img src="http://odf9m3avc.bkt.clouddn.com/WechatIMG4.jpeg" alt="enter description here"></p>
+<p>所以每次改完bug打包都能喝个茶了…</p>
+<p><img src="http://odf9m3avc.bkt.clouddn.com/c15d6d87ba59982405c8195ef4e0020e.jpeg" alt=""></p>
+<p>然后如果使用3.0<br>当然也是有慢的地方的<br><img src="http://odf9m3avc.bkt.clouddn.com/WechatIMG6.jpeg" alt="enter description here"></p>
+<p>但是！<br>时间快了20%所右</p>
+<p><img src="http://odf9m3avc.bkt.clouddn.com/webapck3-time.jpg" alt=" "></p>
+<h3 id="体积"><a href="#体积" class="headerlink" title="体积"></a>体积</h3><p>webpack3.0的新特性之一是 Scope Hoisting 译为 作用域提升<br>特别是这张图传的神乎其神<br><img src="http://odf9m3avc.bkt.clouddn.com/webpack3.0%E6%95%88%E6%9E%9C%E5%9B%BE.png" alt="enter description here"></p>
+<p>近50%的体积减小，惊不惊喜，意不意外！这还有什么好犹豫的快上车啊！</p>
+<p><img src="http://odf9m3avc.bkt.clouddn.com/webapck3.jpeg" alt=""></p>
+<p><img src="http://odf9m3avc.bkt.clouddn.com/webpack1.13-220s.png" alt=" "></p>
+<p><strong>嗯…好像哪里不太对</strong><br><img src="http://odf9m3avc.bkt.clouddn.com/hold2.png" alt="enter description here"><br><img src="http://odf9m3avc.bkt.clouddn.com/hold1.png" alt=" "></p>
+<p>(╯‵□′)╯︵┻━┻ 这不对啊，你就优化了这1%？</p>
+<h3 id="webapck到底优化了什么"><a href="#webapck到底优化了什么" class="headerlink" title="webapck到底优化了什么"></a>webapck到底优化了什么</h3><p>webpack3优化的原因是加入了Scope Hoisting 译为 作用域提升，我们来一起看看他到底做了什么</p>
+<p>我们的实验如下,es6module对照组与webpack版本对照组，webpack3版本增加作用于提升插件<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//test1</span></div><div class="line"><span class="keyword">var</span> foo = <span class="built_in">require</span>(<span class="string">"./module1"</span>)</div><div class="line"></div><div class="line">foo();</div><div class="line"><span class="comment">//module1</span></div><div class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span> <span class="title">foo</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">"hello world"</span>)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//test2.js</span></div><div class="line"><span class="keyword">import</span> foo <span class="keyword">from</span> <span class="string">"./module2"</span></div><div class="line">foo();</div><div class="line"><span class="comment">//module2</span></div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">"hello world"</span>)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//webpack.config for 1&amp;2</span></div><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">    <span class="attr">entry</span>:&#123;</div><div class="line">		<span class="string">"es5"</span>:<span class="string">"./webpacktest/test1"</span>,</div><div class="line">        <span class="string">"es6"</span>:<span class="string">"./webpacktest/test2"</span></div><div class="line">    &#125;,</div><div class="line">    <span class="attr">output</span>:&#123;</div><div class="line">       <span class="attr">filename</span>:<span class="string">"[name].bundle.js"</span></div><div class="line">    &#125;,</div><div class="line">	<span class="attr">plugins</span>: [</div><div class="line">    <span class="keyword">new</span> webpack.optimize.ModuleConcatenationPlugin()<span class="comment">//for webpack3</span></div><div class="line">  ]</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>首先我们一般都知道webapck处理依赖是将其封在一个独立闭包函数里面， 来完成依赖的独立作用域</p>
+<p>然后ES5 与 ES6 的实现还有区别我们之后看</p>
+<p>我们先说ES6module<br>webpack2 的打包情况</p>
+<p>这里是2</p>
+<p><img src="http://odf9m3avc.bkt.clouddn.com/note/20es6-webpack2.png" alt="enter description here" title="es6-webpack2"></p>
+<p>这里是3</p>
+<p><img src="http://odf9m3avc.bkt.clouddn.com/note/20es6-webpack3.png" alt="enter description here" title="es6-webpack3"></p>
+<p><strong>敲黑板！！</strong><br>这里我们看出来webpack2为每一个闭包都加了一个<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params">module, __webpack_exports__, __webpack_require__</span>) </span>&#123;</div><div class="line">	...</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>而webpack3把所有的依赖都打在了一个闭包里，那么你想，你一个组件要是个单页面应用那怎么不得十几个依赖，那就是十几个（function (module）…）<br>然后依赖再依赖别的这得多少啊…<br>Webpack 3 + ModuleConcatenationPlugin() 帮你全干掉，这就是为什么打包体积小了。</p>
+<p>我们可以从下图看出来，es6.js 从3.17k 减少到了2.75k</p>
+<p><img src="http://odf9m3avc.bkt.clouddn.com/note/20esmodule-webpack2.png" alt="enter description here" title="esmodule-webpack2"></p>
+<p><img src="http://odf9m3avc.bkt.clouddn.com/note/20esmodule-webpack3.png" alt="enter description here" title="esmodule-webpack3"></p>
+<hr>
+<p>那有同学就问了，你说的这是2和3对比，1呢，我们来看实验</p>
+<p><img src="http://odf9m3avc.bkt.clouddn.com/note/20esmodule-webapck1.png" alt="enter description here" title="esmodule-webapck1"></p>
+<p><img src="http://odf9m3avc.bkt.clouddn.com/note/20%E6%83%8A%E4%B8%8D%E6%83%8A%E5%96%9C.jpg" alt="enter description here" title="惊不惊喜"></p>
+<p>这不对啊，怎么1反而是最小的，这还升什么级，(╯‵□′)╯︵┻━┻。<br>我们来看1里面打出来是什么</p>
+<p><strong>ES6module</strong></p>
+<p><img src="http://odf9m3avc.bkt.clouddn.com/note/20es6-webpack1.png" alt="enter description here" title="es6-webpack1"></p>
+<p><strong>ES5module</strong></p>
+<p><img src="http://odf9m3avc.bkt.clouddn.com/note/20es5-webpack1.png" alt="enter description here" title="es5-webpack1"></p>
+<p>这就要说到ES6module 的问题了，我们可以看到webpack1对es6module根本没有处理，那么这样的ES6代码，很多浏览器是不支持的，而2、3版本都对ES6module进行了处理</p>
+<blockquote>
+<p>原因是webpack1对es6module支持的很差，在2.1.0版本中的，才开始支持，其bugfixes写到<br><strong>It’s now possible to combine webpack ES2015 modules with babel ES2015 modules
+</strong></p>
+</blockquote>
+<p>所以，在webpack1中传统的es5的方式，webpack对他进行了处理，和我们之前的结果一样，使用了闭包来保证独立作用域。</p>
+<p><strong>那为什么webpack1实验结果体积最小呢</strong></p>
+<p>是因为webpack在包里新加了一些getter setter方法用于优化依赖的加载</p>
+<p><img src="http://odf9m3avc.bkt.clouddn.com/note/20webpack2-getter.png" alt="enter description here" title="webpack2-getter"></p>
+<p>所以虽然在我们的实验中webpack1更小，但是在实际项目的结果中，webapck3的体积要比1要小。</p>
+<p>而在我的项目中因为兼容原因没有使用ES6module所以优化效果比较差，所以如果项目中完全使用es6的话，那么就可以完全发挥ES6的威力。</p>
+<h3 id="webpack3的单一闭包模式的问题"><a href="#webpack3的单一闭包模式的问题" class="headerlink" title="webpack3的单一闭包模式的问题"></a>webpack3的单一闭包模式的问题</h3><p>我们在这张图中可以看到</p>
+<p><img src="http://odf9m3avc.bkt.clouddn.com/note/20es6-webpack3.png" alt="enter description here" title="es6-webpack3"></p>
+<p>在webpack3中依赖存储于一个闭包，那么问题来了，在没有闭包的情况下，他们在同一个块级作用域，如果我在一个依赖里声明了一个变量，其他模块岂不是也能拿到？</p>
+<p><strong>我们来搞事情</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//test2.js</span></div><div class="line"><span class="keyword">import</span> foo <span class="keyword">from</span> <span class="string">"./module2"</span></div><div class="line">foo();</div><div class="line"><span class="built_in">console</span>.log(other)</div><div class="line"><span class="comment">//module2</span></div><div class="line"><span class="keyword">var</span> other = <span class="string">"The World"</span></div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">"hello world"</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><img src="http://odf9m3avc.bkt.clouddn.com/note/20webpack3-sco.png" alt="enter description here" title="webpack3-sco"></p>
+<p>我们可以看出来，虽然没有了闭包，但是使用了另外的名字来保证了作用域。</p>
+<h1 id="相关兼容性"><a href="#相关兼容性" class="headerlink" title="相关兼容性"></a>相关兼容性</h1><p>如果你决定升级了那么首先就要对配置文件进行一些更改，主要是 loader 与 plugins 的一些改变，语法上有一些不兼容。<br>另外webpack3的文档写的比1好多了，读起来清晰多了，所以基本的    api在这里不再赘述，这里列出来我遇到的一些问题</p>
+<h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><p>在打包或者建立服务器的时候可能会报找不到一些node的模块比如fs，这个时候需要在webpack文件里面这么设置<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">node:&#123;</div><div class="line">       <span class="attr">console</span>: <span class="literal">true</span>,</div><div class="line">       <span class="attr">fs</span>: <span class="string">'empty'</span>,</div><div class="line">       <span class="attr">net</span>: <span class="string">'empty'</span>,</div><div class="line">       <span class="attr">tls</span>: <span class="string">'empty'</span>,</div><div class="line">   &#125;,</div></pre></td></tr></table></figure></p>
+<h2 id="插件"><a href="#插件" class="headerlink" title="插件"></a>插件</h2><p>babel-loader 官方推荐更新到7.1+<br>loader得到的souce从String改为了buffer对象，</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>所以说，总体上来说升级有一定收益，webpack官方也说webpack2可以直接升级webpack3，而webapck1升级也仅仅是一些api名字的变化。</p>
+<p>如果用了es6那么升级就可以发挥他的威力。</p>
+<p>而且webpack github上的issues 关于升级后的兼容性问题非常少，如果有时间的同学不妨一试。</p>
+<p>参考：<br><a href="https://github.com/webpack/webpack/releases?after=v2.2.0-rc.0" target="_blank" rel="external">Releases · webpack_webpack</a><br><a href="https://medium.com/webpack/webpack-3-official-release-15fd2dd8f07b" target="_blank" rel="external">🍾🚀 webpack 3_ Official Release!! 🚀🍾 – webpack – Medium</a><br><a href="https://github.com/lishengzxc/bblog/issues/34" target="_blank" rel="external">https://github.com/lishengzxc/bblog/issues/34</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/webpack/" rel="tag"># webpack</a>
+          
+            <a href="/tags/node/" rel="tag"># node</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/18/re：从零开始构建技术团队/" rel="next" title="如何构建一个优良的技术团队">
+                <i class="fa fa-chevron-left"></i> 如何构建一个优良的技术团队
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="http://odf9m3avc.bkt.clouddn.com/avatar.jpg"
+              alt="Yuri" />
+          
+            <p class="site-author-name" itemprop="name">Yuri</p>
+            <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#需不需要升级"><span class="nav-number">1.</span> <span class="nav-text">需不需要升级</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#技术选型标准"><span class="nav-number">1.1.</span> <span class="nav-text">技术选型标准</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#webpack能解决什么"><span class="nav-number">1.2.</span> <span class="nav-text">webpack能解决什么</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#速度"><span class="nav-number">1.2.1.</span> <span class="nav-text">速度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#体积"><span class="nav-number">1.2.2.</span> <span class="nav-text">体积</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#webapck到底优化了什么"><span class="nav-number">1.2.3.</span> <span class="nav-text">webapck到底优化了什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#webpack3的单一闭包模式的问题"><span class="nav-number">1.2.4.</span> <span class="nav-text">webpack3的单一闭包模式的问题</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#相关兼容性"><span class="nav-number">2.</span> <span class="nav-text">相关兼容性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#语法"><span class="nav-number">2.1.</span> <span class="nav-text">语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#插件"><span class="nav-number">2.2.</span> <span class="nav-text">插件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yuri</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.2</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

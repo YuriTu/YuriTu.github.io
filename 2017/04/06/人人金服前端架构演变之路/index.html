@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="RENN,matrix," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="2016年人人公司年刊投稿  2016年是前端技术井喷的一年，大量框架规范逐渐落地，渐渐的推动整个平台格局变化，使整个前端的生态获得了新的发展。人人金服前端团队，也跟随着整个前端的技术发展方向，在今年5月进行了整个前端项目的重构，意在用新技术解决日益增加历史包袱与性能问题。 1.披荆斩棘，开天辟地 在过去的项目中，使用的是比较传统的Jquery + requireJs + gsp 的技术栈，在过">
+<meta name="keywords" content="RENN,matrix">
+<meta property="og:type" content="article">
+<meta property="og:title" content="人人金服前端架构演变之路">
+<meta property="og:url" content="http://tuqiang.website/2017/04/06/人人金服前端架构演变之路/index.html">
+<meta property="og:site_name" content="住何乡">
+<meta property="og:description" content="2016年人人公司年刊投稿  2016年是前端技术井喷的一年，大量框架规范逐渐落地，渐渐的推动整个平台格局变化，使整个前端的生态获得了新的发展。人人金服前端团队，也跟随着整个前端的技术发展方向，在今年5月进行了整个前端项目的重构，意在用新技术解决日益增加历史包袱与性能问题。 1.披荆斩棘，开天辟地 在过去的项目中，使用的是比较传统的Jquery + requireJs + gsp 的技术栈，在过">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-07-19T10:28:17.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="人人金服前端架构演变之路">
+<meta name="twitter:description" content="2016年人人公司年刊投稿  2016年是前端技术井喷的一年，大量框架规范逐渐落地，渐渐的推动整个平台格局变化，使整个前端的生态获得了新的发展。人人金服前端团队，也跟随着整个前端的技术发展方向，在今年5月进行了整个前端项目的重构，意在用新技术解决日益增加历史包袱与性能问题。 1.披荆斩棘，开天辟地 在过去的项目中，使用的是比较传统的Jquery + requireJs + gsp 的技术栈，在过">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://tuqiang.website/2017/04/06/人人金服前端架构演变之路/"/>
+
+
+
+
+
+  <title>人人金服前端架构演变之路 | 住何乡</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">住何乡</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://tuqiang.website/2017/04/06/人人金服前端架构演变之路/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yuri">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://odf9m3avc.bkt.clouddn.com/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="住何乡">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">人人金服前端架构演变之路</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-06T00:00:00+08:00">
+                2017-04-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/随笔/" itemprop="url" rel="index">
+                    <span itemprop="name">随笔</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>2016年人人公司年刊投稿</p>
+</blockquote>
+<p>2016年是前端技术井喷的一年，大量框架规范逐渐落地，渐渐的推动整个平台格局变化，使整个前端的生态获得了新的发展。人人金服前端团队，也跟随着整个前端的技术发展方向，在今年5月进行了整个前端项目的重构，意在用新技术解决日益增加历史包袱与性能问题。</p>
+<p>1.披荆斩棘，开天辟地</p>
+<p>在过去的项目中，使用的是比较传统的Jquery + requireJs + gsp 的技术栈，在过去的开发环境下有着 易于上手、兼容性强、开发规范完备等一些优点，在项目的开拓时期，为整个项目的高速迭代勇敢试错提供了简单高效的解决方案。也同时奠定了整个项目的基础，在对兼容性的踩坑过程中，整个团队积累了很多的经验，也有对组件化的需求和尝试。</p>
+<p>但是在业务日渐庞大的过程中，曾经的技术选型渐渐与新的业务环境有了不兼容性，最明显的就是性能的瓶颈。金融项目的前端页面作为进行数据可视化的桥梁，有着数据来源多，数据量大，巨额的渲染性能耗费，交互复杂等特点。</p>
+<p>团队在业务开发的过程中发现，业务逻辑异常复杂臃肿，模块颗粒度大，复用程度差的种种问题，以及为了IE8兼容所作出的针对各平台“使用共性而放弃特性”的做法都在进一步加剧上述问题的优化难度，种种的历史包袱与性能瓶颈让前端团队意识到重构的必要性。</p>
+<p>2.凤凰涅槃，锐意革新</p>
+<p>此时，谷歌出品Angular风头正盛，有着脸书做信任背书的React也逐步进入我们的视野，主打轻量的Vue也非常有吸引力。最后，在React与Vue的选择中，团队选择了React，主要是因为：1.React本身的虚拟DOM对高性能的有力支持，单一数据流对数据交互的友好 2.React本身的跨端能力、更方便的组件化 3.丰富的polyfil能达到对IE8兼容的需要。</p>
+<p>在今年5月，整个团队对前端项目进行了重构，采用了ES6 + React + webpack的技术栈。使用新技术对整个团队是编程方式上的革新，首先是从传统的面对对象向函数式编程过渡，在新的框架中，因为采用单一数据流，从而对状态的设计关乎整个组件的质量，关注点从业务逻辑分离，而是关注于数据的变化，摆脱了Jquery时代复杂的交互管理与DOM操作，从而提升了性能；其次，是编程思维的转变，对于每个组件力求抽象化构建而是不是采用暴力算法进行开发，完备的组件文档，数据设计，从而让复用的小伙伴减少学习成本，提高了整个项目的组价复用率，缩短了项目开发时间。</p>
+<p>选择了React，也就是选择了React全家桶，在对性能的优化中，逐步试水Redux框架来进行进一步mvc分离，统一管理state；弃用臃肿缓慢的npm而改用更加轻量快速的yarn来管理依赖；使用eslint来规范团队代码风格，开发中进行review机制，降低新人的学习成本。在对项目进行逐步的工程化、规范化、模块化。</p>
+<p>3.批隙导窾，竿头日进</p>
+<p>在这一年中我们对项目进行了凤凰涅槃般的革新，取得了丰厚的硕果，也发现了自身的不足，在开发过程渐渐步入稳健之时，我们也对自己提出了新的要求，自动化测试、打包优化、自动化部署、前后端进一步分离，都是整个团队着力解决的问题。以在接下来的一年为人人金服提供更稳定、高效的技术支持。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/RENN/" rel="tag"># RENN</a>
+          
+            <a href="/tags/matrix/" rel="tag"># matrix</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/09/译注-React最佳实践/" rel="next" title="译注React最佳实践">
+                <i class="fa fa-chevron-left"></i> 译注React最佳实践
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/08/私募页动画重构思路/" rel="prev" title="私募页动画重构思路">
+                私募页动画重构思路 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="http://odf9m3avc.bkt.clouddn.com/avatar.jpg"
+              alt="Yuri" />
+          
+            <p class="site-author-name" itemprop="name">Yuri</p>
+            <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yuri</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.2</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
