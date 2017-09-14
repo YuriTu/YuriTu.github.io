@@ -79,7 +79,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="js,webpack,canvas,frontend,前端，博客" />
 
 
 
@@ -275,178 +275,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://tuqiang.website/2016/09/07/Jquery源码学习计划——ready揭秘/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Yuri">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://odf9m3avc.bkt.clouddn.com/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="住何乡">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016/09/07/Jquery源码学习计划——ready揭秘/" itemprop="url">Jquery源码学习计划——ready揭秘</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-07T00:00:00+08:00">
-                2016-09-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/技术/" itemprop="url" rel="index">
-                    <span itemprop="name">技术</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="jQuery（document）-ready-funtion"><a href="#jQuery（document）-ready-funtion" class="headerlink" title="jQuery（document）.ready(funtion($){})"></a>jQuery（document）.ready(funtion($){})</h1><p>进入JQ的入口即是 jQuery（document）.ready(funtion($){})<br>1.在Document上绑定了ready事件，与window.onload的区别是<br>ready ： DOM加载完成<br>load : 文档加载完成<br>2.需要改为load的情况 ： 获得图片的长度</p>
-<hr>
-<h2 id="ready-funtion"><a href="#ready-funtion" class="headerlink" title=".ready( funtion($){} )"></a>.ready( funtion($){} )</h2><p>1.7</p>
-<p>在建立JQ对象的时候,rootjQuery 是作为一个参数存在的</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> jQuery = <span class="function"><span class="keyword">function</span>(<span class="params"> selector, context </span>) </span>&#123;</div><div class="line"></div><div class="line">		<span class="comment">// The jQuery object is actually just the init constructor 'enhanced'</span></div><div class="line">		</div><div class="line">		<span class="keyword">return</span> <span class="keyword">new</span> jQuery.fn.init( selector, context, rootjQuery );</div><div class="line">	&#125;,</div></pre></td></tr></table></figure>
-<h3 id="关于rootjQuery"><a href="#关于rootjQuery" class="headerlink" title="关于rootjQuery"></a>关于rootjQuery</h3><p>rootjQuery默认是指向jq(document),<br>其他的作用还有在context没有被指定的情况下，进行的代替，对选择器进行一种范围的界定，达到$(“#div”,document)的效果</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> ( !context || context.jquery ) &#123;</div><div class="line">	<span class="keyword">return</span> ( context || rootjQuery ).find( selector );</div></pre></td></tr></table></figure>
-<p>init中的方法会先对传入的参数进行判断，如果是字符串作用可能是判断某个元素图片等是否载入完成；如果在确定传入的是函数之后，作用是一系列的动作执行,进入到jQuery.prototype的方法ready中</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// All jQuery objects should point back to these</span></div><div class="line">rootjQuery = jQuery(<span class="built_in">document</span>);</div><div class="line">jQuery.fn = jQuery.prototype = &#123;</div><div class="line">	<span class="attr">constructor</span>: jQuery,</div><div class="line">	<span class="attr">init</span>: <span class="function"><span class="keyword">function</span>(<span class="params"> selector, context, rootjQuery </span>) </span>&#123;</div><div class="line">			<span class="keyword">if</span> ( <span class="keyword">typeof</span> selector === <span class="string">"string"</span> ) &#123;</div><div class="line">			...</div><div class="line">			&#125; <span class="keyword">else</span> <span class="keyword">if</span> ( jQuery.isFunction( selector ) ) &#123;</div><div class="line">			<span class="keyword">return</span> rootjQuery.ready( selector );</div><div class="line">		&#125;</div><div class="line"><span class="string">``</span><span class="string">`	</span></div><div class="line"></div><div class="line">&gt; 为什么可以使用`$()<span class="string">` 作为逻辑入口？</span></div><div class="line">`$(需要运行的逻辑)<span class="string">`与`</span>$(<span class="string">"div"</span>)<span class="string">`的区别就在于其重载的特性，在对参数进行判断后如果发现是function 就直接走`</span>jQuery(<span class="built_in">document</span>).ready()<span class="string">`</span></div><div class="line"></div><div class="line">进入到ready方法后， 参数为 `<span class="function"><span class="keyword">function</span>(<span class="params"> $ </span>)`</span></div><div class="line"></div><div class="line">我们知道初始化<span class="title">JQ</span>对象的时候就已经定义了`<span class="title">_$</span> = <span class="title">window</span>.<span class="title">$</span>`</div><div class="line"></div><div class="line">```<span class="title">javascript</span></div><div class="line"><span class="title">ready</span>: <span class="title">function</span>(<span class="params"> fn </span>) &#123;</div><div class="line">	<span class="comment">// Attach the listeners</span></div><div class="line">	jQuery.bindReady();</div><div class="line"></div><div class="line">	<span class="comment">// Add the callback</span></div><div class="line">	readyList.add( fn );</div><div class="line"></div><div class="line">	<span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">&#125;,</div></pre></td></tr></table></figure>
-<h2 id="bindReady"><a href="#bindReady" class="headerlink" title="bindReady()"></a>bindReady()</h2><p>bindReady 定义在jQuery.extend中，作用是初始化readylist,如果readylist已经存在，那么就会直接退出函数,否则初始化事件监听的函数列表readylist 参数one 表示只能被初始化一次，memory表示：“记录上一次触发监听函数列表readylist时的参数，之后添加任何监听函数都将用记录的参数值立即调用”</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">bindReady: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">if</span> ( readyList ) &#123;</div><div class="line">		<span class="keyword">return</span>;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	readyList = jQuery.Callbacks( <span class="string">"once memory"</span> );</div></pre></td></tr></table></figure>
-<h3 id="readyList-add-fn"><a href="#readyList-add-fn" class="headerlink" title="readyList.add( fn );"></a>readyList.add( fn );</h3><p>readyList 经过 jQuery.Callbacks 之后，把参数加入到监听列表，返回this，这是一贯的链式操作，直到此处，准备工作就做完啦.</p>
-<p>开始监听DOM结构是否加载完成,一旦完成就开始执行jQuery.ready(wait)函数</p>
-<blockquote>
-<p>为什么readyList有add方法：<code>jQuery.Callbacks</code>。。。<code>C.a.l.l</code>。。。大写C这是个构造函数，是个对象</p>
-</blockquote>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> ( <span class="built_in">document</span>.readyState === <span class="string">"complete"</span> ) &#123;</div><div class="line">	<span class="comment">// Handle it asynchronously to allow scripts the opportunity to delay ready</span></div><div class="line">	<span class="keyword">return</span> setTimeout( jQuery.ready, <span class="number">1</span> );</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>但是这里有一个问题 jQuery对象下有同名的ready函数<br>真实的ready(wait)在jQuery.extend = jQuery.prototype.extend 下</p>
-<blockquote>
-<p>回答extend的存在意义： 我们有<code>$(&quot;div&quot;).click</code> 这样的方法，也有<code>$.ajax</code> 这样的方法，前者需要实例化一个对象，后者不用，那么如果全放在init里面那么不需要实例化对象的方法也必须要一个对象作为“牵引”才能触发，这显然是不合理的。</p>
-</blockquote>
-<h3 id="jQuery-ready-wait"><a href="#jQuery-ready-wait" class="headerlink" title="jQuery.ready(wait)"></a>jQuery.ready(wait)</h3><p>作用是执行readylist里面的函数，只有在设定延迟的情况，参数wait为true</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ready: <span class="function"><span class="keyword">function</span>(<span class="params"> wait </span>) </span>&#123;</div><div class="line">	<span class="comment">// Either a released hold or an DOMready/load event and not yet ready</span></div><div class="line">	<span class="keyword">if</span> ( (wait === <span class="literal">true</span> &amp;&amp; !--jQuery.readyWait) || (wait !== <span class="literal">true</span> &amp;&amp; !jQuery.isReady) ) &#123;</div></pre></td></tr></table></figure>
-<p>isReady 是初始化时的一个boolean变量，用于表明没有执行过之后的if块的代码</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Make sure body exists, at least, in case IE gets a little overzealous (ticket #5443).</span></div><div class="line"><span class="keyword">if</span> ( !<span class="built_in">document</span>.body ) &#123;</div><div class="line">	<span class="keyword">return</span> setTimeout( jQuery.ready, <span class="number">1</span> );</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// Remember that the DOM is ready</span></div><div class="line">jQuery.isReady = <span class="literal">true</span>;</div><div class="line"></div><div class="line"><span class="comment">// If a normal DOM Ready event fired, decrement, and wait if need be</span></div><div class="line"><span class="keyword">if</span> ( wait !== <span class="literal">true</span> &amp;&amp; --jQuery.readyWait &gt; <span class="number">0</span> ) &#123;</div><div class="line">	<span class="keyword">return</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>用于确认之前是否被延迟设定</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// If there are functions bound, to execute</span></div><div class="line">readyList.fireWith( <span class="built_in">document</span>, [ jQuery ] );</div></pre></td></tr></table></figure>
-<p>执行列表的函数 fireWirh(context,listener)</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Trigger any bound ready events</span></div><div class="line"><span class="keyword">if</span> ( jQuery.fn.trigger ) &#123;</div><div class="line">	jQuery( <span class="built_in">document</span> ).trigger( <span class="string">"ready"</span> ).off( <span class="string">"ready"</span> );</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>trigger 用于触发由on(‘ready’,function) 设置的函数</p>
-<h2 id="一句话总结："><a href="#一句话总结：" class="headerlink" title="一句话总结："></a>一句话总结：</h2><p>IE9- 是对DOMContentLoaded事件的封装<br>IE9+ 对onreadystatechange事件的封装</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://tuqiang.website/2016/09/07/MATRIX项目中的React组件通信小结/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -622,6 +450,178 @@
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://tuqiang.website/2016/09/07/Jquery源码学习计划——ready揭秘/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yuri">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://odf9m3avc.bkt.clouddn.com/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="住何乡">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/09/07/Jquery源码学习计划——ready揭秘/" itemprop="url">Jquery源码学习计划——ready揭秘</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-07T00:00:00+08:00">
+                2016-09-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="jQuery（document）-ready-funtion"><a href="#jQuery（document）-ready-funtion" class="headerlink" title="jQuery（document）.ready(funtion($){})"></a>jQuery（document）.ready(funtion($){})</h1><p>进入JQ的入口即是 jQuery（document）.ready(funtion($){})<br>1.在Document上绑定了ready事件，与window.onload的区别是<br>ready ： DOM加载完成<br>load : 文档加载完成<br>2.需要改为load的情况 ： 获得图片的长度</p>
+<hr>
+<h2 id="ready-funtion"><a href="#ready-funtion" class="headerlink" title=".ready( funtion($){} )"></a>.ready( funtion($){} )</h2><p>1.7</p>
+<p>在建立JQ对象的时候,rootjQuery 是作为一个参数存在的</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> jQuery = <span class="function"><span class="keyword">function</span>(<span class="params"> selector, context </span>) </span>&#123;</div><div class="line"></div><div class="line">		<span class="comment">// The jQuery object is actually just the init constructor 'enhanced'</span></div><div class="line">		</div><div class="line">		<span class="keyword">return</span> <span class="keyword">new</span> jQuery.fn.init( selector, context, rootjQuery );</div><div class="line">	&#125;,</div></pre></td></tr></table></figure>
+<h3 id="关于rootjQuery"><a href="#关于rootjQuery" class="headerlink" title="关于rootjQuery"></a>关于rootjQuery</h3><p>rootjQuery默认是指向jq(document),<br>其他的作用还有在context没有被指定的情况下，进行的代替，对选择器进行一种范围的界定，达到$(“#div”,document)的效果</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> ( !context || context.jquery ) &#123;</div><div class="line">	<span class="keyword">return</span> ( context || rootjQuery ).find( selector );</div></pre></td></tr></table></figure>
+<p>init中的方法会先对传入的参数进行判断，如果是字符串作用可能是判断某个元素图片等是否载入完成；如果在确定传入的是函数之后，作用是一系列的动作执行,进入到jQuery.prototype的方法ready中</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// All jQuery objects should point back to these</span></div><div class="line">rootjQuery = jQuery(<span class="built_in">document</span>);</div><div class="line">jQuery.fn = jQuery.prototype = &#123;</div><div class="line">	<span class="attr">constructor</span>: jQuery,</div><div class="line">	<span class="attr">init</span>: <span class="function"><span class="keyword">function</span>(<span class="params"> selector, context, rootjQuery </span>) </span>&#123;</div><div class="line">			<span class="keyword">if</span> ( <span class="keyword">typeof</span> selector === <span class="string">"string"</span> ) &#123;</div><div class="line">			...</div><div class="line">			&#125; <span class="keyword">else</span> <span class="keyword">if</span> ( jQuery.isFunction( selector ) ) &#123;</div><div class="line">			<span class="keyword">return</span> rootjQuery.ready( selector );</div><div class="line">		&#125;</div><div class="line"><span class="string">``</span><span class="string">`	</span></div><div class="line"></div><div class="line">&gt; 为什么可以使用`$()<span class="string">` 作为逻辑入口？</span></div><div class="line">`$(需要运行的逻辑)<span class="string">`与`</span>$(<span class="string">"div"</span>)<span class="string">`的区别就在于其重载的特性，在对参数进行判断后如果发现是function 就直接走`</span>jQuery(<span class="built_in">document</span>).ready()<span class="string">`</span></div><div class="line"></div><div class="line">进入到ready方法后， 参数为 `<span class="function"><span class="keyword">function</span>(<span class="params"> $ </span>)`</span></div><div class="line"></div><div class="line">我们知道初始化<span class="title">JQ</span>对象的时候就已经定义了`<span class="title">_$</span> = <span class="title">window</span>.<span class="title">$</span>`</div><div class="line"></div><div class="line">```<span class="title">javascript</span></div><div class="line"><span class="title">ready</span>: <span class="title">function</span>(<span class="params"> fn </span>) &#123;</div><div class="line">	<span class="comment">// Attach the listeners</span></div><div class="line">	jQuery.bindReady();</div><div class="line"></div><div class="line">	<span class="comment">// Add the callback</span></div><div class="line">	readyList.add( fn );</div><div class="line"></div><div class="line">	<span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">&#125;,</div></pre></td></tr></table></figure>
+<h2 id="bindReady"><a href="#bindReady" class="headerlink" title="bindReady()"></a>bindReady()</h2><p>bindReady 定义在jQuery.extend中，作用是初始化readylist,如果readylist已经存在，那么就会直接退出函数,否则初始化事件监听的函数列表readylist 参数one 表示只能被初始化一次，memory表示：“记录上一次触发监听函数列表readylist时的参数，之后添加任何监听函数都将用记录的参数值立即调用”</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">bindReady: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">if</span> ( readyList ) &#123;</div><div class="line">		<span class="keyword">return</span>;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	readyList = jQuery.Callbacks( <span class="string">"once memory"</span> );</div></pre></td></tr></table></figure>
+<h3 id="readyList-add-fn"><a href="#readyList-add-fn" class="headerlink" title="readyList.add( fn );"></a>readyList.add( fn );</h3><p>readyList 经过 jQuery.Callbacks 之后，把参数加入到监听列表，返回this，这是一贯的链式操作，直到此处，准备工作就做完啦.</p>
+<p>开始监听DOM结构是否加载完成,一旦完成就开始执行jQuery.ready(wait)函数</p>
+<blockquote>
+<p>为什么readyList有add方法：<code>jQuery.Callbacks</code>。。。<code>C.a.l.l</code>。。。大写C这是个构造函数，是个对象</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> ( <span class="built_in">document</span>.readyState === <span class="string">"complete"</span> ) &#123;</div><div class="line">	<span class="comment">// Handle it asynchronously to allow scripts the opportunity to delay ready</span></div><div class="line">	<span class="keyword">return</span> setTimeout( jQuery.ready, <span class="number">1</span> );</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>但是这里有一个问题 jQuery对象下有同名的ready函数<br>真实的ready(wait)在jQuery.extend = jQuery.prototype.extend 下</p>
+<blockquote>
+<p>回答extend的存在意义： 我们有<code>$(&quot;div&quot;).click</code> 这样的方法，也有<code>$.ajax</code> 这样的方法，前者需要实例化一个对象，后者不用，那么如果全放在init里面那么不需要实例化对象的方法也必须要一个对象作为“牵引”才能触发，这显然是不合理的。</p>
+</blockquote>
+<h3 id="jQuery-ready-wait"><a href="#jQuery-ready-wait" class="headerlink" title="jQuery.ready(wait)"></a>jQuery.ready(wait)</h3><p>作用是执行readylist里面的函数，只有在设定延迟的情况，参数wait为true</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ready: <span class="function"><span class="keyword">function</span>(<span class="params"> wait </span>) </span>&#123;</div><div class="line">	<span class="comment">// Either a released hold or an DOMready/load event and not yet ready</span></div><div class="line">	<span class="keyword">if</span> ( (wait === <span class="literal">true</span> &amp;&amp; !--jQuery.readyWait) || (wait !== <span class="literal">true</span> &amp;&amp; !jQuery.isReady) ) &#123;</div></pre></td></tr></table></figure>
+<p>isReady 是初始化时的一个boolean变量，用于表明没有执行过之后的if块的代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Make sure body exists, at least, in case IE gets a little overzealous (ticket #5443).</span></div><div class="line"><span class="keyword">if</span> ( !<span class="built_in">document</span>.body ) &#123;</div><div class="line">	<span class="keyword">return</span> setTimeout( jQuery.ready, <span class="number">1</span> );</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// Remember that the DOM is ready</span></div><div class="line">jQuery.isReady = <span class="literal">true</span>;</div><div class="line"></div><div class="line"><span class="comment">// If a normal DOM Ready event fired, decrement, and wait if need be</span></div><div class="line"><span class="keyword">if</span> ( wait !== <span class="literal">true</span> &amp;&amp; --jQuery.readyWait &gt; <span class="number">0</span> ) &#123;</div><div class="line">	<span class="keyword">return</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>用于确认之前是否被延迟设定</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// If there are functions bound, to execute</span></div><div class="line">readyList.fireWith( <span class="built_in">document</span>, [ jQuery ] );</div></pre></td></tr></table></figure>
+<p>执行列表的函数 fireWirh(context,listener)</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Trigger any bound ready events</span></div><div class="line"><span class="keyword">if</span> ( jQuery.fn.trigger ) &#123;</div><div class="line">	jQuery( <span class="built_in">document</span> ).trigger( <span class="string">"ready"</span> ).off( <span class="string">"ready"</span> );</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>trigger 用于触发由on(‘ready’,function) 设置的函数</p>
+<h2 id="一句话总结："><a href="#一句话总结：" class="headerlink" title="一句话总结："></a>一句话总结：</h2><p>IE9- 是对DOMContentLoaded事件的封装<br>IE9+ 对onreadystatechange事件的封装</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
   </section>
 
   
@@ -685,10 +685,10 @@
             
             
             <div class="site-state-item site-state-categories">
-              
+              <a href="/categories/index.html">
                 <span class="site-state-item-count">2</span>
                 <span class="site-state-item-name">分类</span>
-              
+              </a>
             </div>
           
 
@@ -696,10 +696,10 @@
             
             
             <div class="site-state-item site-state-tags">
-              
+              <a href="/tags/index.html">
                 <span class="site-state-item-count">9</span>
                 <span class="site-state-item-name">标签</span>
-              
+              </a>
             </div>
           
 
