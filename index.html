@@ -275,6 +275,216 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://tuqiang.website/2017/10/17/Make React Great Again —— React v16 新特性/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yuri">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://odf9m3avc.bkt.clouddn.com/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="住何乡">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/17/Make React Great Again —— React v16 新特性/" itemprop="url">Make React Great Again —— React v16 新特性</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-17T00:00:00+08:00">
+                2017-10-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>tl;dr  对于开发者而言最大的影响是MIT协议的改变，其次是传送门对开发方式的优化以及ssr方面的巨大提升。</p>
+<hr>
+<p>React16 在国庆前发布了，这次版本迭代带来了许多令人激动的新特性。</p>
+<h1 id="协议的改变"><a href="#协议的改变" class="headerlink" title="协议的改变"></a>协议的改变</h1><p>前不久的React在业界引起了不小的波澜，更有国外WordPress与国内大厂百度的封杀React，以至于不少开发者认为Vue或成最大赢家。<br>终于FB将React16改为MIT协议，对于不升级的开发者也有MIT协议的15.6.2的旧版本可以选择。不过之前此举多少伤害了开发者对其的信任，FB是否再会出尔反尔，也影响这技术负责人对技术栈的选取。</p>
+<h1 id="传送门-（Portal）"><a href="#传送门-（Portal）" class="headerlink" title="传送门 （Portal）"></a>传送门 （Portal）</h1><p>长久以来全局的模态框、dialog、tooltips等等全局组件的DOM位置问题，终于有了优雅的解决方案。</p>
+<p>当我们需要一个全局的提示框时，作为通用组件，它是脱离我们当前开发的业务组件的，因为从state的设计上，提示框的显隐是一个私有变量，而文案内容等一般由当前业务组件的props来决定，这就导致在业务组件中添加了一个无关组件，一来影响我们关注点分离的思想，二来难以复用。</p>
+<p>另一方面由于DOM层级的影响css的规则与书写有会造成困难，你无法控制Module父元素的css状态，从而导致无法良好的抽象。</p>
+<p>举个栗子：</p>
+<p>理想的状态是这样</p>
+<p>我们的模态框可以复用，等待数据流灌入即可。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> = jsx = (</div><div class="line">&lt;body&gt;</div><div class="line">	&lt;Main/&gt;</div><div class="line">	&lt;Other/&gt;</div><div class="line">	&lt;Module/&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">)</div></pre></td></tr></table></figure>
+<p>可是实际上开发却是这样<br><figure class="highlight jsx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> jsx = (</div><div class="line">&lt;body&gt;</div><div class="line">	&lt;Main&gt;</div><div class="line">		&lt;components/&gt;</div><div class="line">		&lt;Module/&gt;</div><div class="line">	&lt;/Main&gt;</div><div class="line">	&lt;Other&gt;</div><div class="line">		&lt;components/&gt;</div><div class="line">		&lt;Module&gt;</div><div class="line">	&lt;/Other&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">)</div></pre></td></tr></table></figure></p>
+<p>当然是用Redux可以完成第一种的设计，可是单单为了一个提示框就如此大弄干戈真的有必要吗？</p>
+<p>React16提供了一种 将组件内部一些DOM元素绑定在外部组件的DOM上的方法，简单来说就是 在组件内部render一个组件，却能把这个render 的结果挂载在别的DOM上。从而完成我们所说的组件结构的优化与复用。</p>
+<p>而如果我们使用portals 开发时组件结构就可以不变<br><figure class="highlight jsx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> jsx = (</div><div class="line">&lt;body&gt;</div><div class="line">	&lt;Main&gt;</div><div class="line">		&lt;components/&gt;</div><div class="line">		&lt;Module/ ...props&gt; // 接受数据与事件冒泡</div><div class="line">	&lt;/Main&gt;</div><div class="line">	&lt;Other&gt;</div><div class="line">		&lt;components/&gt;</div><div class="line">		&lt;Module ...props&gt; // 接受数据与事件冒泡</div><div class="line">	&lt;/Other&gt;</div><div class="line">	&lt;Module&gt;// 真实渲染 选择挂载位置为根元素</div><div class="line">&lt;/body&gt;</div><div class="line">)</div></pre></td></tr></table></figure></p>
+<p>我们在业务组件中，控制公共组件的state数据，进而指定公共组件的渲染位置，最后达到良好的复用。</p>
+<p>从代码上来说，我们的业务组件可以这么写<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//以前我们渲染会这么写</span></div><div class="line">render() &#123;</div><div class="line">	reutrn (</div><div class="line">		&lt;div&gt;&#123;this.props.children&#125;&lt;/div&gt;</div><div class="line">	)</div><div class="line">&#125;</div><div class="line"><span class="comment">//如果我们需要制定Module的挂载位置</span></div><div class="line">render () &#123;</div><div class="line">	<span class="keyword">return</span> ReactDOM.createPortal(</div><div class="line">		&lt;Module ...props.module&gt;,//这里是我们要给传送门的东西</div><div class="line">		this.props.node//需要挂载的地方</div><div class="line">	)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>而且传送门能够实现事件的冒泡，你不用担心开发时的父组件无法监听相关的事件，它的表现会像一个正常的组件一样，无论你把全局组件挂载到哪里。</p>
+<h1 id="异步渲染-（async-rendering）"><a href="#异步渲染-（async-rendering）" class="headerlink" title="异步渲染 （async rendering）"></a>异步渲染 （async rendering）</h1><p>这东西厉害了，这是react提出的一个很先进的概念，由于React16使用了新的Fiber架构来进行项目构建(这个Fiber架构具体是什么，<a href="https://code.facebook.com/posts/1716776591680069/react-16-a-look-inside-an-api-compatible-rewrite-of-our-frontend-ui-library/" target="_blank" rel="external">博客</a>里说的很难我没看懂)，从而开发了异步渲染。</p>
+<p>异步渲染是一种 与浏览器进行协作 以 定期执行对渲染任务的排序的策略（这块不太好理解 原文是 a strategy for cooperatively scheduling rendering work by periodically yielding execution to the browser. ）</p>
+<p>通过异步渲染，以及避免react占用主线程，从而让页面动画更加流畅，可以看一下这个例子 <a href="https://build-mbfootjxoo.now.sh/" target="_blank" rel="external">demo</a></p>
+<p>主要注意右上角那个黑方块，他一直在旋转占用着主线程，然后我们去进行请求，请求后会渲染页面，导致进程占用，页面重新渲染，方块旋转停止。</p>
+<p>如果我们采用异步渲染就可以完成 在不占用主进程的情况进行渲染操作，从而不影响其他的元素。</p>
+<p>这个功能并没有在React16实装，但是在博客中提到了未来几个月后可能会推出。</p>
+<h1 id="碎片DOM-（fragments）"><a href="#碎片DOM-（fragments）" class="headerlink" title="碎片DOM （fragments）"></a>碎片DOM （fragments）</h1><p>你再也不用给jsx带套了，<code>render</code>函数接受更加多样的数据结构。<br>一般我们写一个列表可能是这样</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> renderChildren = <span class="function">(<span class="params">arr</span>) =&gt;</span> (</div><div class="line">	&lt;ul&gt;</div><div class="line">		&#123;arr.map( i =&gt; (&lt;li&gt;&#123;i&#125;&lt;/li&gt;)  )&#125;</div><div class="line">	&lt;/ul&gt;</div><div class="line">)</div></pre></td></tr></table></figure>
+<p>我们干什么都要给加个父元素的contianer，这样一方面结构不明朗，另一面有可能会有多余的元素，而现在我们可以直接输出数组或者字符串了。<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">render() &#123;</div><div class="line">  return [</div><div class="line">    &lt;li key="A"&gt;First item&lt;/li&gt;,</div><div class="line">    &lt;li key="B"&gt;Second item&lt;/li&gt;,</div><div class="line">    &lt;li key="C"&gt;Third item&lt;/li&gt;,</div><div class="line">  ];</div><div class="line">&#125;</div><div class="line">// or</div><div class="line">render() &#123;</div><div class="line">  return 'Look ma, no spans!';</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h1 id="文件体积优化"><a href="#文件体积优化" class="headerlink" title="文件体积优化"></a>文件体积优化</h1><p>相对于上个版本有30%的减少</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>新版本（kb）</th>
+<th>压缩后（kb）</th>
+<th>旧版本（kb）</th>
+<th>压缩后 （kb）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>react</td>
+<td>5.3</td>
+<td>2.2</td>
+<td>20.7</td>
+<td>6.9</td>
+</tr>
+<tr>
+<td>react-dom</td>
+<td>103.7</td>
+<td>32.6</td>
+<td>141</td>
+<td>42.9</td>
+</tr>
+<tr>
+<td>react+react-dom</td>
+<td>109</td>
+<td>34.8</td>
+<td>161.7</td>
+<td>49.8</td>
+</tr>
+</tbody>
+</table>
+<p>React文档上说由于对打包方式的改变，React 采用 Rollup打包，所产生的bundle不会受到工具的影响，比如webpack、Browserify、UMD或者其他的工具。这个Rollup是一个模块打包器，它能把小的代码打进比较大的或者更加复杂的库，是一个比较新的库。</p>
+<p>另一个方面是 react自持自定义DOM属性了，由于不用再设置属性的白名单，一定程度上减少了文件大小。这个特性主要是为ssr服务的。</p>
+<h1 id="提升服务端渲染性能"><a href="#提升服务端渲染性能" class="headerlink" title="提升服务端渲染性能"></a>提升服务端渲染性能</h1><p>这是新版本重点更新的特性之一，笔者SSR经验比较少，体会不是很深，感觉React16比较明显的提升是性能上的。</p>
+<p>React16对ssr主要是性能提升了3倍以上，如果是最新版本node实验环境下提升更是达到了数量级的提升。</p>
+<p>还有一个比较大的区别是在html到达客户端之后，react并不会去比较初次的渲染结果与服务端结果，react会尽量去重用相同的DOM元素，这也是为了优化ssr中的“注水”过程，从而提升ssr的性能。因为一般情况下我们的服务端与客户端也不会渲染不同的内容，除非是做时间戳的一些东西。</p>
+<p>笔者认为对开发者影响比较大的特性就是以上这些了，总体来说新的特性能够解决一些日常开发的痛点，开发体验也越来越好了，不过React16因为用了ES6的一些集合数据结构例如<code>Map</code> 和<code>Set</code>所以，兼容性要求比较高，如果需要兼容老式浏览器需要上polyfill比如<code>core.js</code>和 <code>babel-polyfill</code>。</p>
+<p>还有一些特性比如 错误捕捉的优化、api更新与打包的改变有兴趣的同学可以关注一下<a href="https://reactjs.org/blog/2017/09/26/react-v16.0.html" target="_blank" rel="external">React的博客</a>来了解。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://tuqiang.website/2017/07/21/webpack 3.0 上车指北/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2000,185 +2210,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://tuqiang.website/2016/09/08/如何设计一个React组件 —— 我的react编年史（一）/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Yuri">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://odf9m3avc.bkt.clouddn.com/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="住何乡">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016/09/08/如何设计一个React组件 —— 我的react编年史（一）/" itemprop="url">如何设计一个React组件 —— 我的react编年史（一）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-08T00:00:00+08:00">
-                2016-09-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/技术/" itemprop="url" rel="index">
-                    <span itemprop="name">技术</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>开始用react以来，最大的问题就是如何设计一个组件，使用react以来，对一个组件的设计方式也多次更迭，因为一步一步的更迭，也对react本身的机制有了一些感悟，反思自己曾经犯下的错误，总结经验。粗鄙之言，莫要见笑。</p>
-<h1 id="一、尧舜时代"><a href="#一、尧舜时代" class="headerlink" title="一、尧舜时代"></a>一、尧舜时代</h1><p>空有react的壳子，这个时候的理解是 react无非是 Html in JS，把willMount当$()一样用，里面写了一大堆事件绑定。</p>
-<p>这里的问题是很显然的，完全没有利用上react的特性，把react仅仅当做了一个mvc中的view模板用了而已。</p>
-<h1 id="二、春秋战国"><a href="#二、春秋战国" class="headerlink" title="二、春秋战国"></a>二、春秋战国</h1><p>一个特点就是乱</p>
-<p>开始对state了有了一定的认识，事件驱动，简单的交互开始以来state。</p>
-<p>这个时候还是一知半解的状态，在一个组件中，混杂了react的事件逻辑，也混杂着jq的事件绑定。</p>
-<p>子组件里有自己的state，也有组件的props，对state和props的使用是混乱的<br>导致的问题是：1.完全没有组件化的思想 2.逻辑混乱debugger非常困难</p>
-<h1 id="三、秦汉时代"><a href="#三、秦汉时代" class="headerlink" title="三、秦汉时代"></a>三、秦汉时代</h1><p>完全摒弃了jq，所有的state以及逻辑集中于祖先组件，父组件完成一切的mvc，子组件只有v层的作用。</p>
-<p>活生生的君主集权专治，带来的问题也是相似的，上令下达非常困难，一个数据，一个逻辑处理函数，传3、4层，这还只是父-子、子-父 传递，同级通信更是要命，子-父-子，在传递过程中，深层次嵌套的问题会非常棘手。</p>
-<blockquote>
-<p>其实深层次嵌套的问题一直在react中存在，react全家桶也没有解决，redux的store说白了也就是一个大的祖先组件，在之后的无状态组件的开发模式中有一些改善</p>
-</blockquote>
-<h1 id="四、三国时代"><a href="#四、三国时代" class="headerlink" title="四、三国时代"></a>四、三国时代</h1><p>开始尝试mvc中vc分离。</p>
-<p>因为集权统治导致的中央过于臃肿的问题是不可避免的。</p>
-<p>我在工作中需要写一个类似列表筛选的组件，满打满4个筛选项目，我的祖先组件足足1200行…WTF!!!</p>
-<p>这显然不能忍，我尝试把事件处理逻辑和本身的V层分开。</p>
-<h3 id="一次不成熟的尝试"><a href="#一次不成熟的尝试" class="headerlink" title="一次不成熟的尝试"></a>一次不成熟的尝试</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">const</span> RenderFilter = <span class="built_in">require</span>(<span class="string">"../controller/common/renderFilterResultList"</span>);</div><div class="line"><span class="keyword">const</span> Render = <span class="keyword">new</span> RenderFilter();</div><div class="line"><span class="comment">// 开放四项筛选逻辑</span></div><div class="line"><span class="keyword">const</span> OpenFilter = <span class="built_in">require</span>(<span class="string">"../controller/open/openFilter"</span>);</div><div class="line"><span class="comment">//......</span></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 清除所有</div><div class="line"> * @param &#123;object&#125; e event</div><div class="line"> * @returns &#123;null&#125; null</div><div class="line"> */</div><div class="line">handleClickClearAll(e)&#123;</div><div class="line">    e.preventDefault();</div><div class="line">    Clear.handleClickAny.call(<span class="keyword">this</span>, <span class="number">0</span>);</div><div class="line">    Clear.handleClickAny.call(<span class="keyword">this</span>, <span class="number">1</span>);</div><div class="line"><span class="comment">//......</span></div><div class="line"><span class="comment">//in render function</span></div><div class="line">&lt;FundAchieve</div><div class="line">    ref = <span class="string">"fundAchieve"</span></div><div class="line">    config = &#123;<span class="keyword">this</span>.basicConfig.achieve&#125;</div><div class="line">    fundAchieveParam = &#123;<span class="keyword">this</span>.state.fundAchieveParam&#125;</div><div class="line">    handleCilck = &#123;AF.handleClickAchieveList.bind(<span class="keyword">this</span>)&#125;</div><div class="line">    handleClickAny=&#123;Clear.handleClickAny.bind(<span class="keyword">this</span>)&#125;</div><div class="line">    warning = &#123;<span class="keyword">this</span>.state.warningAch&#125;</div><div class="line">&gt;&lt;/FundAchieve&gt;</div></pre></td></tr></table></figure>
-<p>没错…我想出来的方法是传this</p>
-<p>我把所有逻辑封装成一个类，每次事件处理调用的时候，把其本身的this传递进去，<br>为什么？为了能在 逻辑层里面修改state</p>
-<blockquote>
-<p>（这时候问题就很明显了，MC你没分开啊），</p>
-</blockquote>
-<p>之后带来的问题是之前设计组件的数据结构没有设计好，光state的定义就300行….</p>
-<p>于是…把state代表的M层又封装了。</p>
-<h3 id="这只是看起开很美好"><a href="#这只是看起开很美好" class="headerlink" title="这只是看起开很美好"></a>这只是看起开很美好</h3><p>是啊，祖先组件只有300行嘞，eslint也能过了， QA也回测了，要啥自行车啊。</p>
-<p>这是运气好罢了，差点循环引用，debugger困难，巨无霸函数，运行效率低，都充斥着这一团翔一般的代码。</p>
-<blockquote>
-<p>最明显的问题<br>this的混乱，造成其可读性不好<br>本质上没有解决复用性差的问题，需要联代引用</p>
-</blockquote>
-<p>以前的中央集权的state设计方式在react0.14之后已经不提倡了。</p>
-<p>三国还是要归一啊。</p>
-<h1 id="五、盛唐时代"><a href="#五、盛唐时代" class="headerlink" title="五、盛唐时代"></a>五、盛唐时代</h1><p><code>事件处理函数是干嘛的？</code><br>为了复用，事件处理函数应该是想一个管道一样，我给你数据，你输出数据就好，我怎么用，不是你管的。—— 数据处理者的身份</p>
-<p><code>组件嵌套 臃肿</code><br>使用stateless component<br>虽然依然没有解决嵌套的问题，但是其结构更加明了props通过结构赋值也能够更好传递，解放生产力。</p>
-<p>因为没有附加的state 事件处理也是不直接改变state的，module层我们自己控制，复用性好了很多</p>
-<p><code>数据结构是主心骨</code></p>
-<p>组件是数据驱动的，单向数据流就要求我们对module层的设计必须合理，否则VC层都要跟着复杂起来，这东西不好说，有点看理论知识积累和经验总结，我本身不过一个空油瓶，能力有限。</p>
-<p>所以目前情况下，设计组件的最佳实践是</p>
-<p><code>stateless component</code> + <code>函数式编程思想</code>  + <code>良好的数据结构</code></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2232,7 +2263,7 @@
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -2254,7 +2285,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

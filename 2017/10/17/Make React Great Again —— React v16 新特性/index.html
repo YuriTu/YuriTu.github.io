@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="技术,react," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="tl;dr  对于开发者而言最大的影响是MIT协议的改变，其次是传送门对开发方式的优化以及ssr方面的巨大提升。  React16 在国庆前发布了，这次版本迭代带来了许多令人激动的新特性。 协议的改变前不久的React在业界引起了不小的波澜，更有国外WordPress与国内大厂百度的封杀React，以至于不少开发者认为Vue或成最大赢家。终于FB将React16改为MIT协议，对于不升级的开发者也">
+<meta name="keywords" content="技术,react">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Make React Great Again —— React v16 新特性">
+<meta property="og:url" content="http://tuqiang.website/2017/10/17/Make React Great Again —— React v16 新特性/index.html">
+<meta property="og:site_name" content="住何乡">
+<meta property="og:description" content="tl;dr  对于开发者而言最大的影响是MIT协议的改变，其次是传送门对开发方式的优化以及ssr方面的巨大提升。  React16 在国庆前发布了，这次版本迭代带来了许多令人激动的新特性。 协议的改变前不久的React在业界引起了不小的波澜，更有国外WordPress与国内大厂百度的封杀React，以至于不少开发者认为Vue或成最大赢家。终于FB将React16改为MIT协议，对于不升级的开发者也">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-10-17T05:02:44.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Make React Great Again —— React v16 新特性">
+<meta name="twitter:description" content="tl;dr  对于开发者而言最大的影响是MIT协议的改变，其次是传送门对开发方式的优化以及ssr方面的巨大提升。  React16 在国庆前发布了，这次版本迭代带来了许多令人激动的新特性。 协议的改变前不久的React在业界引起了不小的波澜，更有国外WordPress与国内大厂百度的封杀React，以至于不少开发者认为Vue或成最大赢家。终于FB将React16改为MIT协议，对于不升级的开发者也">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://tuqiang.website/2017/10/17/Make React Great Again —— React v16 新特性/"/>
+
+
+
+
+
+  <title>Make React Great Again —— React v16 新特性 | 住何乡</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">住何乡</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://tuqiang.website/2017/10/17/Make React Great Again —— React v16 新特性/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yuri">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://odf9m3avc.bkt.clouddn.com/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="住何乡">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Make React Great Again —— React v16 新特性</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-17T00:00:00+08:00">
+                2017-10-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>tl;dr  对于开发者而言最大的影响是MIT协议的改变，其次是传送门对开发方式的优化以及ssr方面的巨大提升。</p>
+<hr>
+<p>React16 在国庆前发布了，这次版本迭代带来了许多令人激动的新特性。</p>
+<h1 id="协议的改变"><a href="#协议的改变" class="headerlink" title="协议的改变"></a>协议的改变</h1><p>前不久的React在业界引起了不小的波澜，更有国外WordPress与国内大厂百度的封杀React，以至于不少开发者认为Vue或成最大赢家。<br>终于FB将React16改为MIT协议，对于不升级的开发者也有MIT协议的15.6.2的旧版本可以选择。不过之前此举多少伤害了开发者对其的信任，FB是否再会出尔反尔，也影响这技术负责人对技术栈的选取。</p>
+<h1 id="传送门-（Portal）"><a href="#传送门-（Portal）" class="headerlink" title="传送门 （Portal）"></a>传送门 （Portal）</h1><p>长久以来全局的模态框、dialog、tooltips等等全局组件的DOM位置问题，终于有了优雅的解决方案。</p>
+<p>当我们需要一个全局的提示框时，作为通用组件，它是脱离我们当前开发的业务组件的，因为从state的设计上，提示框的显隐是一个私有变量，而文案内容等一般由当前业务组件的props来决定，这就导致在业务组件中添加了一个无关组件，一来影响我们关注点分离的思想，二来难以复用。</p>
+<p>另一方面由于DOM层级的影响css的规则与书写有会造成困难，你无法控制Module父元素的css状态，从而导致无法良好的抽象。</p>
+<p>举个栗子：</p>
+<p>理想的状态是这样</p>
+<p>我们的模态框可以复用，等待数据流灌入即可。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> = jsx = (</div><div class="line">&lt;body&gt;</div><div class="line">	&lt;Main/&gt;</div><div class="line">	&lt;Other/&gt;</div><div class="line">	&lt;Module/&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">)</div></pre></td></tr></table></figure>
+<p>可是实际上开发却是这样<br><figure class="highlight jsx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> jsx = (</div><div class="line">&lt;body&gt;</div><div class="line">	&lt;Main&gt;</div><div class="line">		&lt;components/&gt;</div><div class="line">		&lt;Module/&gt;</div><div class="line">	&lt;/Main&gt;</div><div class="line">	&lt;Other&gt;</div><div class="line">		&lt;components/&gt;</div><div class="line">		&lt;Module&gt;</div><div class="line">	&lt;/Other&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">)</div></pre></td></tr></table></figure></p>
+<p>当然是用Redux可以完成第一种的设计，可是单单为了一个提示框就如此大弄干戈真的有必要吗？</p>
+<p>React16提供了一种 将组件内部一些DOM元素绑定在外部组件的DOM上的方法，简单来说就是 在组件内部render一个组件，却能把这个render 的结果挂载在别的DOM上。从而完成我们所说的组件结构的优化与复用。</p>
+<p>而如果我们使用portals 开发时组件结构就可以不变<br><figure class="highlight jsx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> jsx = (</div><div class="line">&lt;body&gt;</div><div class="line">	&lt;Main&gt;</div><div class="line">		&lt;components/&gt;</div><div class="line">		&lt;Module/ ...props&gt; // 接受数据与事件冒泡</div><div class="line">	&lt;/Main&gt;</div><div class="line">	&lt;Other&gt;</div><div class="line">		&lt;components/&gt;</div><div class="line">		&lt;Module ...props&gt; // 接受数据与事件冒泡</div><div class="line">	&lt;/Other&gt;</div><div class="line">	&lt;Module&gt;// 真实渲染 选择挂载位置为根元素</div><div class="line">&lt;/body&gt;</div><div class="line">)</div></pre></td></tr></table></figure></p>
+<p>我们在业务组件中，控制公共组件的state数据，进而指定公共组件的渲染位置，最后达到良好的复用。</p>
+<p>从代码上来说，我们的业务组件可以这么写<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//以前我们渲染会这么写</span></div><div class="line">render() &#123;</div><div class="line">	reutrn (</div><div class="line">		&lt;div&gt;&#123;this.props.children&#125;&lt;/div&gt;</div><div class="line">	)</div><div class="line">&#125;</div><div class="line"><span class="comment">//如果我们需要制定Module的挂载位置</span></div><div class="line">render () &#123;</div><div class="line">	<span class="keyword">return</span> ReactDOM.createPortal(</div><div class="line">		&lt;Module ...props.module&gt;,//这里是我们要给传送门的东西</div><div class="line">		this.props.node//需要挂载的地方</div><div class="line">	)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>而且传送门能够实现事件的冒泡，你不用担心开发时的父组件无法监听相关的事件，它的表现会像一个正常的组件一样，无论你把全局组件挂载到哪里。</p>
+<h1 id="异步渲染-（async-rendering）"><a href="#异步渲染-（async-rendering）" class="headerlink" title="异步渲染 （async rendering）"></a>异步渲染 （async rendering）</h1><p>这东西厉害了，这是react提出的一个很先进的概念，由于React16使用了新的Fiber架构来进行项目构建(这个Fiber架构具体是什么，<a href="https://code.facebook.com/posts/1716776591680069/react-16-a-look-inside-an-api-compatible-rewrite-of-our-frontend-ui-library/" target="_blank" rel="external">博客</a>里说的很难我没看懂)，从而开发了异步渲染。</p>
+<p>异步渲染是一种 与浏览器进行协作 以 定期执行对渲染任务的排序的策略（这块不太好理解 原文是 a strategy for cooperatively scheduling rendering work by periodically yielding execution to the browser. ）</p>
+<p>通过异步渲染，以及避免react占用主线程，从而让页面动画更加流畅，可以看一下这个例子 <a href="https://build-mbfootjxoo.now.sh/" target="_blank" rel="external">demo</a></p>
+<p>主要注意右上角那个黑方块，他一直在旋转占用着主线程，然后我们去进行请求，请求后会渲染页面，导致进程占用，页面重新渲染，方块旋转停止。</p>
+<p>如果我们采用异步渲染就可以完成 在不占用主进程的情况进行渲染操作，从而不影响其他的元素。</p>
+<p>这个功能并没有在React16实装，但是在博客中提到了未来几个月后可能会推出。</p>
+<h1 id="碎片DOM-（fragments）"><a href="#碎片DOM-（fragments）" class="headerlink" title="碎片DOM （fragments）"></a>碎片DOM （fragments）</h1><p>你再也不用给jsx带套了，<code>render</code>函数接受更加多样的数据结构。<br>一般我们写一个列表可能是这样</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> renderChildren = <span class="function">(<span class="params">arr</span>) =&gt;</span> (</div><div class="line">	&lt;ul&gt;</div><div class="line">		&#123;arr.map( i =&gt; (&lt;li&gt;&#123;i&#125;&lt;/li&gt;)  )&#125;</div><div class="line">	&lt;/ul&gt;</div><div class="line">)</div></pre></td></tr></table></figure>
+<p>我们干什么都要给加个父元素的contianer，这样一方面结构不明朗，另一面有可能会有多余的元素，而现在我们可以直接输出数组或者字符串了。<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">render() &#123;</div><div class="line">  return [</div><div class="line">    &lt;li key="A"&gt;First item&lt;/li&gt;,</div><div class="line">    &lt;li key="B"&gt;Second item&lt;/li&gt;,</div><div class="line">    &lt;li key="C"&gt;Third item&lt;/li&gt;,</div><div class="line">  ];</div><div class="line">&#125;</div><div class="line">// or</div><div class="line">render() &#123;</div><div class="line">  return 'Look ma, no spans!';</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h1 id="文件体积优化"><a href="#文件体积优化" class="headerlink" title="文件体积优化"></a>文件体积优化</h1><p>相对于上个版本有30%的减少</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>新版本（kb）</th>
+<th>压缩后（kb）</th>
+<th>旧版本（kb）</th>
+<th>压缩后 （kb）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>react</td>
+<td>5.3</td>
+<td>2.2</td>
+<td>20.7</td>
+<td>6.9</td>
+</tr>
+<tr>
+<td>react-dom</td>
+<td>103.7</td>
+<td>32.6</td>
+<td>141</td>
+<td>42.9</td>
+</tr>
+<tr>
+<td>react+react-dom</td>
+<td>109</td>
+<td>34.8</td>
+<td>161.7</td>
+<td>49.8</td>
+</tr>
+</tbody>
+</table>
+<p>React文档上说由于对打包方式的改变，React 采用 Rollup打包，所产生的bundle不会受到工具的影响，比如webpack、Browserify、UMD或者其他的工具。这个Rollup是一个模块打包器，它能把小的代码打进比较大的或者更加复杂的库，是一个比较新的库。</p>
+<p>另一个方面是 react自持自定义DOM属性了，由于不用再设置属性的白名单，一定程度上减少了文件大小。这个特性主要是为ssr服务的。</p>
+<h1 id="提升服务端渲染性能"><a href="#提升服务端渲染性能" class="headerlink" title="提升服务端渲染性能"></a>提升服务端渲染性能</h1><p>这是新版本重点更新的特性之一，笔者SSR经验比较少，体会不是很深，感觉React16比较明显的提升是性能上的。</p>
+<p>React16对ssr主要是性能提升了3倍以上，如果是最新版本node实验环境下提升更是达到了数量级的提升。</p>
+<p>还有一个比较大的区别是在html到达客户端之后，react并不会去比较初次的渲染结果与服务端结果，react会尽量去重用相同的DOM元素，这也是为了优化ssr中的“注水”过程，从而提升ssr的性能。因为一般情况下我们的服务端与客户端也不会渲染不同的内容，除非是做时间戳的一些东西。</p>
+<p>笔者认为对开发者影响比较大的特性就是以上这些了，总体来说新的特性能够解决一些日常开发的痛点，开发体验也越来越好了，不过React16因为用了ES6的一些集合数据结构例如<code>Map</code> 和<code>Set</code>所以，兼容性要求比较高，如果需要兼容老式浏览器需要上polyfill比如<code>core.js</code>和 <code>babel-polyfill</code>。</p>
+<p>还有一些特性比如 错误捕捉的优化、api更新与打包的改变有兴趣的同学可以关注一下<a href="https://reactjs.org/blog/2017/09/26/react-v16.0.html" target="_blank" rel="external">React的博客</a>来了解。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/技术/" rel="tag"># 技术</a>
+          
+            <a href="/tags/react/" rel="tag"># react</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/21/webpack 3.0 上车指北/" rel="next" title="webpack 3.0 上车指北">
+                <i class="fa fa-chevron-left"></i> webpack 3.0 上车指北
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="http://odf9m3avc.bkt.clouddn.com/avatar.jpg"
+              alt="Yuri" />
+          
+            <p class="site-author-name" itemprop="name">Yuri</p>
+            <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#协议的改变"><span class="nav-number">1.</span> <span class="nav-text">协议的改变</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#传送门-（Portal）"><span class="nav-number">2.</span> <span class="nav-text">传送门 （Portal）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#异步渲染-（async-rendering）"><span class="nav-number">3.</span> <span class="nav-text">异步渲染 （async rendering）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#碎片DOM-（fragments）"><span class="nav-number">4.</span> <span class="nav-text">碎片DOM （fragments）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文件体积优化"><span class="nav-number">5.</span> <span class="nav-text">文件体积优化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#提升服务端渲染性能"><span class="nav-number">6.</span> <span class="nav-text">提升服务端渲染性能</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yuri</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.2</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
