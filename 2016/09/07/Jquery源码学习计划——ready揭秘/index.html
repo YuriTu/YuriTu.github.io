@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next pisces use-motion" lang="zh-Hans">
+<html class="theme-next gemini use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -45,50 +45,28 @@
 
 
 
-  
-  
-  
-  
-
-  
-    
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-    
-    
-    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
-  
-
-
-
 
 
 
 <link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="js,jq," />
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
 
 
 
 
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico?v=5.1.4">
 
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+  <meta name="keywords" content="jq,js," />
+
+
+
+
 
 
 
@@ -96,14 +74,14 @@
 
 
 <meta name="description" content="jQuery（document）.ready(funtion($){})进入JQ的入口即是 jQuery（document）.ready(funtion($){})1.在Document上绑定了ready事件，与window.onload的区别是ready ： DOM加载完成load : 文档加载完成2.需要改为load的情况 ： 获得图片的长度  .ready( funtion($){} )1.">
-<meta name="keywords" content="js,jq">
+<meta name="keywords" content="jq,js">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Jquery源码学习计划——ready揭秘">
 <meta property="og:url" content="http://tuqiang.website/2016/09/07/Jquery源码学习计划——ready揭秘/index.html">
 <meta property="og:site_name" content="住何乡">
 <meta property="og:description" content="jQuery（document）.ready(funtion($){})进入JQ的入口即是 jQuery（document）.ready(funtion($){})1.在Document上绑定了ready事件，与window.onload的区别是ready ： DOM加载完成load : 文档加载完成2.需要改为load的情况 ： 获得图片的长度  .ready( funtion($){} )1.">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-14T12:37:37.000Z">
+<meta property="og:updated_time" content="2017-10-25T12:10:42.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Jquery源码学习计划——ready揭秘">
 <meta name="twitter:description" content="jQuery（document）.ready(funtion($){})进入JQ的入口即是 jQuery（document）.ready(funtion($){})1.在Document上绑定了ready事件，与window.onload的区别是ready ： DOM加载完成load : 文档加载完成2.需要改为load的情况 ： 获得图片的长度  .ready( funtion($){} )1.">
@@ -114,12 +92,12 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Pisces',
-    version: '5.1.2',
-    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
     tabs: true,
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     duoshuo: {
       userId: '0',
       author: '博主'
@@ -149,6 +127,16 @@
 
 
 
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?2577307c02362ff403e4ea6931bf024b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
 
 
 
@@ -177,7 +165,7 @@
       </a>
     </div>
       
-        <p class="site-subtitle"></p>
+        <h1 class="site-subtitle" itemprop="description"></h1>
       
   </div>
 
@@ -207,22 +195,22 @@
         </li>
       
         
-        <li class="menu-item menu-item-archives">
-          <a href="/archives/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
-            
-            归档
-          </a>
-        </li>
-      
-        
         <li class="menu-item menu-item-categories">
           <a href="/categories/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
             
             分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
           </a>
         </li>
       
@@ -284,7 +272,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Yuri">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://odf9m3avc.bkt.clouddn.com/avatar.jpg">
+      <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -296,7 +284,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Jquery源码学习计划——ready揭秘</h1>
+          <h2 class="post-title" itemprop="name headline">Jquery源码学习计划——ready揭秘</h2>
         
 
         <div class="post-meta">
@@ -344,6 +332,16 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/09/07/Jquery源码学习计划——ready揭秘/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2016/09/07/Jquery源码学习计划——ready揭秘/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -372,31 +370,31 @@
 <hr>
 <h2 id="ready-funtion"><a href="#ready-funtion" class="headerlink" title=".ready( funtion($){} )"></a>.ready( funtion($){} )</h2><p>1.7</p>
 <p>在建立JQ对象的时候,rootjQuery 是作为一个参数存在的</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> jQuery = <span class="function"><span class="keyword">function</span>(<span class="params"> selector, context </span>) </span>&#123;</div><div class="line"></div><div class="line">		<span class="comment">// The jQuery object is actually just the init constructor 'enhanced'</span></div><div class="line">		</div><div class="line">		<span class="keyword">return</span> <span class="keyword">new</span> jQuery.fn.init( selector, context, rootjQuery );</div><div class="line">	&#125;,</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> jQuery = <span class="function"><span class="keyword">function</span>(<span class="params"> selector, context </span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// The jQuery object is actually just the init constructor 'enhanced'</span></span><br><span class="line">		</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> jQuery.fn.init( selector, context, rootjQuery );</span><br><span class="line">	&#125;,</span><br></pre></td></tr></table></figure>
 <h3 id="关于rootjQuery"><a href="#关于rootjQuery" class="headerlink" title="关于rootjQuery"></a>关于rootjQuery</h3><p>rootjQuery默认是指向jq(document),<br>其他的作用还有在context没有被指定的情况下，进行的代替，对选择器进行一种范围的界定，达到$(“#div”,document)的效果</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> ( !context || context.jquery ) &#123;</div><div class="line">	<span class="keyword">return</span> ( context || rootjQuery ).find( selector );</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> ( !context || context.jquery ) &#123;</span><br><span class="line">	<span class="keyword">return</span> ( context || rootjQuery ).find( selector );</span><br></pre></td></tr></table></figure>
 <p>init中的方法会先对传入的参数进行判断，如果是字符串作用可能是判断某个元素图片等是否载入完成；如果在确定传入的是函数之后，作用是一系列的动作执行,进入到jQuery.prototype的方法ready中</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// All jQuery objects should point back to these</span></div><div class="line">rootjQuery = jQuery(<span class="built_in">document</span>);</div><div class="line">jQuery.fn = jQuery.prototype = &#123;</div><div class="line">	<span class="attr">constructor</span>: jQuery,</div><div class="line">	<span class="attr">init</span>: <span class="function"><span class="keyword">function</span>(<span class="params"> selector, context, rootjQuery </span>) </span>&#123;</div><div class="line">			<span class="keyword">if</span> ( <span class="keyword">typeof</span> selector === <span class="string">"string"</span> ) &#123;</div><div class="line">			...</div><div class="line">			&#125; <span class="keyword">else</span> <span class="keyword">if</span> ( jQuery.isFunction( selector ) ) &#123;</div><div class="line">			<span class="keyword">return</span> rootjQuery.ready( selector );</div><div class="line">		&#125;</div><div class="line"><span class="string">``</span><span class="string">`	</span></div><div class="line"></div><div class="line">&gt; 为什么可以使用`$()<span class="string">` 作为逻辑入口？</span></div><div class="line">`$(需要运行的逻辑)<span class="string">`与`</span>$(<span class="string">"div"</span>)<span class="string">`的区别就在于其重载的特性，在对参数进行判断后如果发现是function 就直接走`</span>jQuery(<span class="built_in">document</span>).ready()<span class="string">`</span></div><div class="line"></div><div class="line">进入到ready方法后， 参数为 `<span class="function"><span class="keyword">function</span>(<span class="params"> $ </span>)`</span></div><div class="line"></div><div class="line">我们知道初始化<span class="title">JQ</span>对象的时候就已经定义了`<span class="title">_$</span> = <span class="title">window</span>.<span class="title">$</span>`</div><div class="line"></div><div class="line">```<span class="title">javascript</span></div><div class="line"><span class="title">ready</span>: <span class="title">function</span>(<span class="params"> fn </span>) &#123;</div><div class="line">	<span class="comment">// Attach the listeners</span></div><div class="line">	jQuery.bindReady();</div><div class="line"></div><div class="line">	<span class="comment">// Add the callback</span></div><div class="line">	readyList.add( fn );</div><div class="line"></div><div class="line">	<span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">&#125;,</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// All jQuery objects should point back to these</span></span><br><span class="line">rootjQuery = jQuery(<span class="built_in">document</span>);</span><br><span class="line">jQuery.fn = jQuery.prototype = &#123;</span><br><span class="line">	<span class="keyword">constructor</span>: jQuery,</span><br><span class="line">	init: function( selector, context, rootjQuery ) &#123;</span><br><span class="line">			<span class="keyword">if</span> ( <span class="keyword">typeof</span> selector === <span class="string">"string"</span> ) &#123;</span><br><span class="line">			...</span><br><span class="line">			&#125; <span class="keyword">else</span> <span class="keyword">if</span> ( jQuery.isFunction( selector ) ) &#123;</span><br><span class="line">			<span class="keyword">return</span> rootjQuery.ready( selector );</span><br><span class="line">		&#125;</span><br><span class="line"><span class="string">``</span><span class="string">`	</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&gt; 为什么可以使用`</span>$()<span class="string">` 作为逻辑入口？</span></span><br><span class="line"><span class="string">`</span>$(需要运行的逻辑)<span class="string">`与`</span>$(<span class="string">"div"</span>)<span class="string">`的区别就在于其重载的特性，在对参数进行判断后如果发现是function 就直接走`</span>jQuery(<span class="built_in">document</span>).ready()<span class="string">`</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">进入到ready方法后， 参数为 `</span><span class="function"><span class="keyword">function</span>(<span class="params"> $ </span>)`</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">我们知道初始化<span class="title">JQ</span>对象的时候就已经定义了`<span class="title">_$</span> = <span class="title">window</span>.<span class="title">$</span>`</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">```<span class="title">javascript</span></span></span><br><span class="line"><span class="function"><span class="title">ready</span>: <span class="title">function</span>(<span class="params"> fn </span>) </span>&#123;</span><br><span class="line">	<span class="comment">// Attach the listeners</span></span><br><span class="line">	jQuery.bindReady();</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Add the callback</span></span><br><span class="line">	readyList.add( fn );</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
 <h2 id="bindReady"><a href="#bindReady" class="headerlink" title="bindReady()"></a>bindReady()</h2><p>bindReady 定义在jQuery.extend中，作用是初始化readylist,如果readylist已经存在，那么就会直接退出函数,否则初始化事件监听的函数列表readylist 参数one 表示只能被初始化一次，memory表示：“记录上一次触发监听函数列表readylist时的参数，之后添加任何监听函数都将用记录的参数值立即调用”</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">bindReady: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">if</span> ( readyList ) &#123;</div><div class="line">		<span class="keyword">return</span>;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	readyList = jQuery.Callbacks( <span class="string">"once memory"</span> );</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">bindReady: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> ( readyList ) &#123;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	readyList = jQuery.Callbacks( <span class="string">"once memory"</span> );</span><br></pre></td></tr></table></figure>
 <h3 id="readyList-add-fn"><a href="#readyList-add-fn" class="headerlink" title="readyList.add( fn );"></a>readyList.add( fn );</h3><p>readyList 经过 jQuery.Callbacks 之后，把参数加入到监听列表，返回this，这是一贯的链式操作，直到此处，准备工作就做完啦.</p>
 <p>开始监听DOM结构是否加载完成,一旦完成就开始执行jQuery.ready(wait)函数</p>
 <blockquote>
 <p>为什么readyList有add方法：<code>jQuery.Callbacks</code>。。。<code>C.a.l.l</code>。。。大写C这是个构造函数，是个对象</p>
 </blockquote>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> ( <span class="built_in">document</span>.readyState === <span class="string">"complete"</span> ) &#123;</div><div class="line">	<span class="comment">// Handle it asynchronously to allow scripts the opportunity to delay ready</span></div><div class="line">	<span class="keyword">return</span> setTimeout( jQuery.ready, <span class="number">1</span> );</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ( <span class="built_in">document</span>.readyState === <span class="string">"complete"</span> ) &#123;</span><br><span class="line">	<span class="comment">// Handle it asynchronously to allow scripts the opportunity to delay ready</span></span><br><span class="line">	<span class="keyword">return</span> setTimeout( jQuery.ready, <span class="number">1</span> );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>但是这里有一个问题 jQuery对象下有同名的ready函数<br>真实的ready(wait)在jQuery.extend = jQuery.prototype.extend 下</p>
 <blockquote>
 <p>回答extend的存在意义： 我们有<code>$(&quot;div&quot;).click</code> 这样的方法，也有<code>$.ajax</code> 这样的方法，前者需要实例化一个对象，后者不用，那么如果全放在init里面那么不需要实例化对象的方法也必须要一个对象作为“牵引”才能触发，这显然是不合理的。</p>
 </blockquote>
 <h3 id="jQuery-ready-wait"><a href="#jQuery-ready-wait" class="headerlink" title="jQuery.ready(wait)"></a>jQuery.ready(wait)</h3><p>作用是执行readylist里面的函数，只有在设定延迟的情况，参数wait为true</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ready: <span class="function"><span class="keyword">function</span>(<span class="params"> wait </span>) </span>&#123;</div><div class="line">	<span class="comment">// Either a released hold or an DOMready/load event and not yet ready</span></div><div class="line">	<span class="keyword">if</span> ( (wait === <span class="literal">true</span> &amp;&amp; !--jQuery.readyWait) || (wait !== <span class="literal">true</span> &amp;&amp; !jQuery.isReady) ) &#123;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ready: <span class="function"><span class="keyword">function</span>(<span class="params"> wait </span>) </span>&#123;</span><br><span class="line">	<span class="comment">// Either a released hold or an DOMready/load event and not yet ready</span></span><br><span class="line">	<span class="keyword">if</span> ( (wait === <span class="literal">true</span> &amp;&amp; !--jQuery.readyWait) || (wait !== <span class="literal">true</span> &amp;&amp; !jQuery.isReady) ) &#123;</span><br></pre></td></tr></table></figure>
 <p>isReady 是初始化时的一个boolean变量，用于表明没有执行过之后的if块的代码</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Make sure body exists, at least, in case IE gets a little overzealous (ticket #5443).</span></div><div class="line"><span class="keyword">if</span> ( !<span class="built_in">document</span>.body ) &#123;</div><div class="line">	<span class="keyword">return</span> setTimeout( jQuery.ready, <span class="number">1</span> );</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// Remember that the DOM is ready</span></div><div class="line">jQuery.isReady = <span class="literal">true</span>;</div><div class="line"></div><div class="line"><span class="comment">// If a normal DOM Ready event fired, decrement, and wait if need be</span></div><div class="line"><span class="keyword">if</span> ( wait !== <span class="literal">true</span> &amp;&amp; --jQuery.readyWait &gt; <span class="number">0</span> ) &#123;</div><div class="line">	<span class="keyword">return</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Make sure body exists, at least, in case IE gets a little overzealous (ticket #5443).</span></span><br><span class="line"><span class="keyword">if</span> ( !<span class="built_in">document</span>.body ) &#123;</span><br><span class="line">	<span class="keyword">return</span> setTimeout( jQuery.ready, <span class="number">1</span> );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Remember that the DOM is ready</span></span><br><span class="line">jQuery.isReady = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// If a normal DOM Ready event fired, decrement, and wait if need be</span></span><br><span class="line"><span class="keyword">if</span> ( wait !== <span class="literal">true</span> &amp;&amp; --jQuery.readyWait &gt; <span class="number">0</span> ) &#123;</span><br><span class="line">	<span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>用于确认之前是否被延迟设定</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// If there are functions bound, to execute</span></div><div class="line">readyList.fireWith( <span class="built_in">document</span>, [ jQuery ] );</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// If there are functions bound, to execute</span></span><br><span class="line">readyList.fireWith( <span class="built_in">document</span>, [ jQuery ] );</span><br></pre></td></tr></table></figure>
 <p>执行列表的函数 fireWirh(context,listener)</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Trigger any bound ready events</span></div><div class="line"><span class="keyword">if</span> ( jQuery.fn.trigger ) &#123;</div><div class="line">	jQuery( <span class="built_in">document</span> ).trigger( <span class="string">"ready"</span> ).off( <span class="string">"ready"</span> );</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Trigger any bound ready events</span></span><br><span class="line"><span class="keyword">if</span> ( jQuery.fn.trigger ) &#123;</span><br><span class="line">	jQuery( <span class="built_in">document</span> ).trigger( <span class="string">"ready"</span> ).off( <span class="string">"ready"</span> );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>trigger 用于触发由on(‘ready’,function) 设置的函数</p>
 <h2 id="一句话总结："><a href="#一句话总结：" class="headerlink" title="一句话总结："></a>一句话总结：</h2><p>IE9- 是对DOMContentLoaded事件的封装<br>IE9+ 对onreadystatechange事件的封装</p>
 
@@ -416,14 +414,29 @@
       
         <div class="post-tags">
           
-            <a href="/tags/js/" rel="tag"># js</a>
-          
             <a href="/tags/jq/" rel="tag"># jq</a>
+          
+            <a href="/tags/js/" rel="tag"># js</a>
           
         </div>
       
 
       
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div id="needsharebutton-postbottom">
+            <span class="btn">
+              <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </span>
+          </div>
+        
+        </div>
       
       
 
@@ -467,9 +480,16 @@
 
 
           
-  <div class="comments" id="comments">
-    
-  </div>
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
 
 
         </div>
@@ -492,78 +512,93 @@
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
             站点概览
           </li>
         </ul>
       
 
-      <section class="site-overview sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Yuri" />
+            
+              <p class="site-author-name" itemprop="name">Yuri</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
           
-            <img class="site-author-image" itemprop="image"
-              src="http://odf9m3avc.bkt.clouddn.com/avatar.jpg"
-              alt="Yuri" />
+
           
-            <p class="site-author-name" itemprop="name">Yuri</p>
-            <p class="site-description motion-element" itemprop="description"></p>
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Yuritu" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:tuqiang_ru@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
         </div>
-
-        <nav class="site-state motion-element">
-
-          
-            <div class="site-state-item site-state-posts">
-            
-              <a href="/archives/">
-            
-                <span class="site-state-item-count">13</span>
-                <span class="site-state-item-name">日志</span>
-              </a>
-            </div>
-          
-
-          
-            
-            
-            <div class="site-state-item site-state-categories">
-              <a href="/categories/index.html">
-                <span class="site-state-item-count">2</span>
-                <span class="site-state-item-name">分类</span>
-              </a>
-            </div>
-          
-
-          
-            
-            
-            <div class="site-state-item site-state-tags">
-              <a href="/tags/index.html">
-                <span class="site-state-item-count">10</span>
-                <span class="site-state-item-name">标签</span>
-              </a>
-            </div>
-          
-
-        </nav>
-
-        
-
-        <div class="links-of-author motion-element">
-          
-        </div>
-
-        
-        
-
-        
-        
-
-        
-
-
       </section>
 
       
@@ -596,12 +631,9 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
-  
-  &copy; 
-  <span itemprop="copyrightYear">2017</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
-    <i class="fa fa-heart"></i>
+    <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Yuri</span>
 
@@ -609,11 +641,17 @@
 </div>
 
 
-  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
 
   <span class="post-meta-divider">|</span>
 
-  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.2</div>
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a></div>
+
+
 
 
         
@@ -633,6 +671,8 @@
         <i class="fa fa-arrow-up"></i>
         
       </div>
+    
+
     
 
   </div>
@@ -667,57 +707,65 @@
 
 
   
-  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
-
   
-  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
   
-  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
-
-
 
   
   
-
-
-  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
-
-  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
-
-
-
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
-
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
 
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
 
 
   
 
 
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
 
 
 
@@ -749,6 +797,47 @@
 
 
 
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'YuriTu',
+            repo: 'blog',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: 'c64e22874384bc1197b1cec60b63ddb1abe057f1',
+            
+                client_id: '91bb8fa224e5687b3d2e'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
 
   
 
@@ -759,6 +848,34 @@
   
 
   
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+      pbOptions = {};
+      
+          pbOptions.iconStyle = "box";
+      
+          pbOptions.boxForm = "horizontal";
+      
+          pbOptions.position = "bottomCenter";
+      
+          pbOptions.networks = "Weibo,Wechat";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+  </script>
 
   
 

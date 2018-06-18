@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next pisces use-motion" lang="zh-Hans">
+<html class="theme-next gemini use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -45,38 +45,21 @@
 
 
 
-  
-  
-  
-  
-
-  
-    
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-    
-    
-    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
-  
-
-
-
 
 
 
 <link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico?v=5.1.4">
+
+
+
+
 
 
   <meta name="keywords" content="js,react," />
@@ -84,11 +67,6 @@
 
 
 
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
 
 
 
@@ -103,7 +81,7 @@
 <meta property="og:site_name" content="住何乡">
 <meta property="og:description" content="2017/03注：这是初期的探索，一些方式已经不适用在我们的开发过程中，会出现复杂的组件交互，而主要的组件交互关系为  1.组件内部的通信2.父子关系的通信3.同级关系的通信   组件内的通信最简单的一种形式，使用事件函数进行监听即可。  父子关系的通信父子关系的思想核心是props的传递  父子关系一般有三种情况：1.父——子2.子——父3.多层嵌套  一 父-子 通信父子间的通信一般多由pro">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-14T12:37:11.000Z">
+<meta property="og:updated_time" content="2017-10-25T12:10:42.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MATRIX项目中的React组件通信小结">
 <meta name="twitter:description" content="2017/03注：这是初期的探索，一些方式已经不适用在我们的开发过程中，会出现复杂的组件交互，而主要的组件交互关系为  1.组件内部的通信2.父子关系的通信3.同级关系的通信   组件内的通信最简单的一种形式，使用事件函数进行监听即可。  父子关系的通信父子关系的思想核心是props的传递  父子关系一般有三种情况：1.父——子2.子——父3.多层嵌套  一 父-子 通信父子间的通信一般多由pro">
@@ -114,12 +92,12 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Pisces',
-    version: '5.1.2',
-    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
     tabs: true,
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     duoshuo: {
       userId: '0',
       author: '博主'
@@ -149,6 +127,16 @@
 
 
 
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?2577307c02362ff403e4ea6931bf024b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
 
 
 
@@ -177,7 +165,7 @@
       </a>
     </div>
       
-        <p class="site-subtitle"></p>
+        <h1 class="site-subtitle" itemprop="description"></h1>
       
   </div>
 
@@ -207,22 +195,22 @@
         </li>
       
         
-        <li class="menu-item menu-item-archives">
-          <a href="/archives/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
-            
-            归档
-          </a>
-        </li>
-      
-        
         <li class="menu-item menu-item-categories">
           <a href="/categories/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
             
             分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
           </a>
         </li>
       
@@ -284,7 +272,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Yuri">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://odf9m3avc.bkt.clouddn.com/avatar.jpg">
+      <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -296,7 +284,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">MATRIX项目中的React组件通信小结</h1>
+          <h2 class="post-title" itemprop="name headline">MATRIX项目中的React组件通信小结</h2>
         
 
         <div class="post-meta">
@@ -344,6 +332,16 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/09/07/MATRIX项目中的React组件通信小结/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2016/09/07/MATRIX项目中的React组件通信小结/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -380,20 +378,20 @@
 <p>父子关系一般有三种情况：<br>1.父——子<br>2.子——父<br>3.多层嵌套</p>
 </blockquote>
 <h2 id="一-父-子-通信"><a href="#一-父-子-通信" class="headerlink" title="一 父-子 通信"></a>一 父-子 通信</h2><p>父子间的通信一般多由props属性携带数据完成功能。<br>结合我们的项目,<code>父-子通信</code>最典型的是Lever写的搜索框。这里import了react-typeahead组件</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&lt;div className=<span class="string">"input-box"</span>&gt;</div><div class="line">    &lt;Typeahead </div><div class="line">    data=&#123; this.state.fundList &#125; </div><div class="line">    highlight="true" </div><div class="line">    placeholder="请输入基金名称、代码或拼音"</div><div class="line">    queryChange=&#123;this.getQueryList.bind(this)&#125;</div><div class="line">    onFocus=&#123;this.getList.bind(this)&#125;&gt;</div><div class="line">    &lt;/Typeahead&gt;</div><div class="line">&lt;<span class="regexp">/div&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;div className=<span class="string">"input-box"</span>&gt;</span><br><span class="line">    &lt;Typeahead </span><br><span class="line">    data=&#123; <span class="keyword">this</span>.state.fundList &#125; </span><br><span class="line">    highlight=<span class="string">"true"</span> </span><br><span class="line">    placeholder=<span class="string">"请输入基金名称、代码或拼音"</span></span><br><span class="line">    queryChange=&#123;<span class="keyword">this</span>.getQueryList.bind(<span class="keyword">this</span>)&#125;</span><br><span class="line">    onFocus=&#123;<span class="keyword">this</span>.getList.bind(<span class="keyword">this</span>)&#125;&gt;</span><br><span class="line">    &lt;<span class="regexp">/Typeahead&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>div&gt;</span><br></pre></td></tr></table></figure>
 <p>在这里加载了 react-typeahead 在header组件中的state.fundList 作为了 Typeahead 的props.data属性。</p>
 <h2 id="二-子-父-关系"><a href="#二-子-父-关系" class="headerlink" title="二 子-父 关系"></a>二 子-父 关系</h2><p>同样是依靠props进行通信，但是子父关系则需要通过在父级组件中设置方法，在子组件中调用this.props.somefunction来实现。</p>
-<p>结合我们的项目。<br>我在Footer组件中制造了假数据，在App中建立了用于存储的state以及改变state的方法<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// In App Components</span></div><div class="line"><span class="keyword">constructor</span>()&#123;</div><div class="line">    <span class="keyword">super</span>();</div><div class="line">    <span class="keyword">this</span>.state = &#123;</div><div class="line">        <span class="attr">scoreNotes</span> : []<span class="comment">//这个数组里面是一堆的对象</span></div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">addScore(newItem)&#123;</div><div class="line">    <span class="keyword">this</span>.setState(&#123;</div><div class="line">        <span class="attr">scoreNotes</span> : newItem</div><div class="line">    &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>给于 Footer.props.addScore方法，拿到数据后会存储在state里面<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//In app render</span></div><div class="line">&lt;Footer scoreNotes = &#123;<span class="keyword">this</span>.addScore.bind(<span class="keyword">this</span>)&#125;&gt;&lt;/Footer&gt;</div></pre></td></tr></table></figure></p>
-<p>在组件Footer的DOM中进行了一次触发<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//In Footer Compoents</span></div><div class="line"><span class="keyword">var</span> _score = [</div><div class="line">    &#123;<span class="attr">name</span>: <span class="string">'nico'</span>,<span class="attr">code</span> : <span class="string">'000000'</span>&#125;,</div><div class="line">    &#123;<span class="attr">name</span>: <span class="string">'honoka'</span>,<span class="attr">code</span> : <span class="string">'000001'</span>&#125;,</div><div class="line">    &#123;<span class="attr">name</span>: <span class="string">'eli'</span>,<span class="attr">code</span> : <span class="string">'000002'</span>&#125;,</div><div class="line">    &#123;<span class="attr">name</span>: <span class="string">'nozomi'</span>,<span class="attr">code</span> : <span class="string">'000003'</span>&#125;,</div><div class="line">    &#123;<span class="attr">name</span>: <span class="string">'maki'</span>,<span class="attr">code</span> : <span class="string">'000004'</span>&#125;,</div><div class="line">];</div><div class="line"></div><div class="line">...</div><div class="line"></div><div class="line"><span class="comment">//并在组件的DOM中进行了一次触发</span></div><div class="line">&lt;button onClick = &#123;<span class="keyword">this</span>.props.scoreNotes(<span class="keyword">this</span>.state.data)&#125;&gt;&lt;/button&gt;</div></pre></td></tr></table></figure></p>
+<p>结合我们的项目。<br>我在Footer组件中制造了假数据，在App中建立了用于存储的state以及改变state的方法<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// In App Components</span></span><br><span class="line"><span class="keyword">constructor</span>()&#123;</span><br><span class="line">    <span class="keyword">super</span>();</span><br><span class="line">    <span class="keyword">this</span>.state = &#123;</span><br><span class="line">        scoreNotes : []<span class="comment">//这个数组里面是一堆的对象</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">addScore(newItem)&#123;</span><br><span class="line">    <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">        scoreNotes : newItem</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>给于 Footer.props.addScore方法，拿到数据后会存储在state里面<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//In app render</span></span><br><span class="line">&lt;Footer scoreNotes = &#123;<span class="keyword">this</span>.addScore.bind(<span class="keyword">this</span>)&#125;&gt;&lt;/Footer&gt;</span><br></pre></td></tr></table></figure></p>
+<p>在组件Footer的DOM中进行了一次触发<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//In Footer Compoents</span></span><br><span class="line"><span class="keyword">var</span> _score = [</span><br><span class="line">    &#123;<span class="attr">name</span>: <span class="string">'nico'</span>,<span class="attr">code</span> : <span class="string">'000000'</span>&#125;,</span><br><span class="line">    &#123;<span class="attr">name</span>: <span class="string">'honoka'</span>,<span class="attr">code</span> : <span class="string">'000001'</span>&#125;,</span><br><span class="line">    &#123;<span class="attr">name</span>: <span class="string">'eli'</span>,<span class="attr">code</span> : <span class="string">'000002'</span>&#125;,</span><br><span class="line">    &#123;<span class="attr">name</span>: <span class="string">'nozomi'</span>,<span class="attr">code</span> : <span class="string">'000003'</span>&#125;,</span><br><span class="line">    &#123;<span class="attr">name</span>: <span class="string">'maki'</span>,<span class="attr">code</span> : <span class="string">'000004'</span>&#125;,</span><br><span class="line">];</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="comment">//并在组件的DOM中进行了一次触发</span></span><br><span class="line">&lt;button onClick = &#123;<span class="keyword">this</span>.props.scoreNotes(<span class="keyword">this</span>.state.data)&#125;&gt;&lt;/button&gt;</span><br></pre></td></tr></table></figure></p>
 <h2 id="小tips"><a href="#小tips" class="headerlink" title="小tips"></a>小tips</h2><p>在开发过程中我发现，很多的bug都是this的指向判断错误了，而总部能在每次写this之前都顺一遍this是什么，太费劲了.不开心-.-….<br>所以我决定放弃this，在 <code>构造函数</code> 中显式指定this…</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">getInitialState: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">        _StudentScoreTable = <span class="keyword">this</span>;</div><div class="line">        <span class="comment">// 把StudentScoreTable组件赋值给一个变量，以便在其它组件中可以使用此组件的方法</span></div><div class="line">        <span class="keyword">return</span> &#123;</div><div class="line">            <span class="comment">//something...</span></div><div class="line">        &#125;</div><div class="line">    &#125;,</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">getInitialState: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        _StudentScoreTable = <span class="keyword">this</span>;</span><br><span class="line">        <span class="comment">// 把StudentScoreTable组件赋值给一个变量，以便在其它组件中可以使用此组件的方法</span></span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">            <span class="comment">//something...</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br></pre></td></tr></table></figure>
 <p>呼…这个世界安静了…妈妈再也不怕我找不到this是啥了O(∩_∩)O~</p>
 <p>而且如果在一个文件中有多个类，通过全局变量也很容易访问其他类的方法与字段，非常方便。可以实现<code>单个文件</code>中的多层嵌套的类的通信，直接去除中间部分通信。</p>
 <hr>
 <h1 id="同级关系"><a href="#同级关系" class="headerlink" title="同级关系()"></a>同级关系()</h1><p>同级关系有以下的的解决思路</p>
 <p>##1.设置父级state——通过对父级state的监听来解决<br>这种方法实际上就是 父子关系的多次利用，这样就把同级关系转化为了<code>子1 —— 父 —— 子2</code>，两次的父子关系。</p>
-<p>结合上面的例子<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//In App component render</span></div><div class="line">&lt;RightNav scoreNotes = &#123;<span class="keyword">this</span>.state.scoreNotes&#125;&gt;&lt;/RightNav&gt;</div></pre></td></tr></table></figure></p>
+<p>结合上面的例子<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//In App component render</span></span><br><span class="line">&lt;RightNav scoreNotes = &#123;<span class="keyword">this</span>.state.scoreNotes&#125;&gt;&lt;/RightNav&gt;</span><br></pre></td></tr></table></figure></p>
 <p>在从Footer拿到数据了之后，存储在了App.state.scoreNotes中，之后在传给了RightNav，这样Footer与RightNav就完成了一次通信</p>
 <p>好处：简单、好写、学习成本低。<br>弊端：各组件间有耦合，内聚差，违反了react组件化的思想。总是要构建一个父级组件来通信，如果嵌套关系很复杂就没有办法使用。</p>
 <h2 id="2-观察者模式"><a href="#2-观察者模式" class="headerlink" title="2.观察者模式"></a>2.观察者模式</h2><blockquote>
@@ -401,20 +399,20 @@
 </blockquote>
 <h3 id="Event-Emitter-Target-Dispatcher-模式，类似以前的事件绑定机制"><a href="#Event-Emitter-Target-Dispatcher-模式，类似以前的事件绑定机制" class="headerlink" title="Event Emitter/Target/Dispatcher 模式，类似以前的事件绑定机制"></a>Event Emitter/Target/Dispatcher 模式，类似以前的事件绑定机制</h3><p>我们需要一个handle来绑定与触发</p>
 <p>结合项目，我在Footer中创建了一个用于触发的 testbtn，并在Footer渲染完成后绑定了一个click事件：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// In Footer Component  |this is Footer.js</span></div><div class="line"><span class="comment">//_score是测试数据，前面有</span></div><div class="line">componentDidMount()&#123;</div><div class="line">    $(<span class="string">'.testbtn'</span>).on(<span class="string">'click'</span>,<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">        $(<span class="string">'.testbtn'</span>).__proto__.datalist = _score</div><div class="line">        <span class="built_in">console</span>.log($(<span class="string">'.testbtn'</span>).__proto__.datalist)</div><div class="line">        <span class="keyword">return</span> $(<span class="string">'.testbtn'</span>)</div><div class="line">    &#125;)</div><div class="line">&#125;</div><div class="line"><span class="comment">//In Footer render </span></div><div class="line">&lt;button className=<span class="string">"testbtn"</span>&gt;testbtn&lt;<span class="regexp">/button&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// In Footer Component  |this is Footer.js</span></span><br><span class="line"><span class="comment">//_score是测试数据，前面有</span></span><br><span class="line">componentDidMount()&#123;</span><br><span class="line">    $(<span class="string">'.testbtn'</span>).on(<span class="string">'click'</span>,<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        $(<span class="string">'.testbtn'</span>).__proto__.datalist = _score</span><br><span class="line">        <span class="built_in">console</span>.log($(<span class="string">'.testbtn'</span>).__proto__.datalist)</span><br><span class="line">        <span class="keyword">return</span> $(<span class="string">'.testbtn'</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//In Footer render </span></span><br><span class="line">&lt;button className=<span class="string">"testbtn"</span>&gt;testbtn&lt;<span class="regexp">/button&gt;</span></span><br></pre></td></tr></table></figure>
 <p>把数据绑定在原型链上，接收数据的组件只要访问原型链就可以拿到数据完成通信。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//In RightNav component |this is RightNav.js</span></div><div class="line">componentDidUpdate()&#123;</div><div class="line">    <span class="built_in">console</span>.log($(<span class="string">'.testbtn'</span>))<span class="comment">//</span></div><div class="line">    <span class="keyword">var</span> data = $(<span class="string">'.testbtn'</span>).__proto__.datalist</div><div class="line">    <span class="built_in">console</span>.log(data)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//In RightNav component |this is RightNav.js</span></span><br><span class="line">componentDidUpdate()&#123;</span><br><span class="line">    <span class="built_in">console</span>.log($(<span class="string">'.testbtn'</span>))<span class="comment">//</span></span><br><span class="line">    <span class="keyword">var</span> data = $(<span class="string">'.testbtn'</span>).__proto__.datalist</span><br><span class="line">    <span class="built_in">console</span>.log(data)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="PubSub模式-Signals——全局事件系统"><a href="#PubSub模式-Signals——全局事件系统" class="headerlink" title="PubSub模式/Signals——全局事件系统"></a>PubSub模式/Signals——全局事件系统</h3><p>个人发现其实就是在最大的父级组件中设置了多个全局的事件，根据事件的名字，所有子组件进行调用，还是要和其他组件耦合…还不如我们直接用JQ的on来的更简单实用。。<br>最关键的是….它还得引入其他库文件和依靠flux架构…项目不涉及，所以这里不多说。仅贴出来实例，研究flux架构的同学可以试试</p>
 <blockquote>
-<p>(2) Publish / Subscribe<br>特点：触发事件的时候，你不需要指定一个特定的源，因为它是使用一个全局对象来处理事件（其实就是一个全局<br>广播的方式来处理事件）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">// to subscribe</div><div class="line">globalBroadcaster.subscribe(‘click’, function() &#123; alert(‘click!’); &#125;);</div><div class="line">// to dispatch</div><div class="line">globalBroadcaster.publish(‘click’);</div></pre></td></tr></table></figure></p>
+<p>(2) Publish / Subscribe<br>特点：触发事件的时候，你不需要指定一个特定的源，因为它是使用一个全局对象来处理事件（其实就是一个全局<br>广播的方式来处理事件）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// to subscribe</span><br><span class="line">globalBroadcaster.subscribe(‘click’, function() &#123; alert(‘click!’); &#125;);</span><br><span class="line">// to dispatch</span><br><span class="line">globalBroadcaster.publish(‘click’);</span><br></pre></td></tr></table></figure></p>
 </blockquote>
 <p>(3) Signals</p>
 <p>特点：与Event Emitter/Target/Dispatcher相似，但是你不要使用随机的字符串作为事件触发的引用。触发事件的每一个对象都需要一个确切的名字（就是类似硬编码类的去写事件名字），并且在触发的时候，也必须要指定确切的事件。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">// to subscribe</div><div class="line">otherObject.clicked.add(function() &#123; alert(‘click’); &#125;);</div><div class="line">// to dispatch</div><div class="line">this.clicked.dispatch();</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// to subscribe</span><br><span class="line">otherObject.clicked.add(function() &#123; alert(‘click’); &#125;);</span><br><span class="line">// to dispatch</span><br><span class="line">this.clicked.dispatch();</span><br></pre></td></tr></table></figure>
 <p>###没关系、不知道什么关系.. 组件的通信<br>复杂的情况往往都可以转化为简单情况，归根结底所有的关系都能转化成<code>父子或同级</code>的关系，再结合我们上述的方法，进行套用即可~ </p>
 <h1 id="坑"><a href="#坑" class="headerlink" title="坑"></a>坑</h1><p>1.ReactDom.findDOMNodes（this.refs.element）可以得到目标的元素节点。但是它的使用需要<code>const ReactDom = require(&quot;react-dom&quot;);</code>,多个节点只能拿到第一个。<br>2.一般情况下，想要render的更新，需要触发<br>setState\setProps<br>forceUpdate<br>如果在render中触发以上情况…可能该显示的该拿到的数据都没问题，但是一会就报堆栈溢出了…因为在无限循环的调用render</p>
 <hr>
-<p>引用文献<br><a href="http://i1.buimg.com/e35cb968770dde90.gif" target="_blank" rel="external">1</a> How to communicate between React components<br><a href="http://ctheu.com/2015/02/12/how-to-communicate-between-react-components/" target="_blank" rel="external">http://ctheu.com/2015/02/12/how-to-communicate-between-react-components/</a><br>[2]React 组件之间如何交流<br><a href="https://segmentfault.com/a/1190000004044592#articleHeader5" target="_blank" rel="external">https://segmentfault.com/a/1190000004044592#articleHeader5</a><br>[3]react组件间通信<br><a href="http://www.alloyteam.com/2015/07/react-zu-jian-jian-tong-xin/#prettyPhoto" target="_blank" rel="external">http://www.alloyteam.com/2015/07/react-zu-jian-jian-tong-xin/#prettyPhoto</a></p>
+<p>引用文献<br><a href="http://i1.buimg.com/e35cb968770dde90.gif" target="_blank" rel="noopener">1</a> How to communicate between React components<br><a href="http://ctheu.com/2015/02/12/how-to-communicate-between-react-components/" target="_blank" rel="noopener">http://ctheu.com/2015/02/12/how-to-communicate-between-react-components/</a><br>[2]React 组件之间如何交流<br><a href="https://segmentfault.com/a/1190000004044592#articleHeader5" target="_blank" rel="noopener">https://segmentfault.com/a/1190000004044592#articleHeader5</a><br>[3]react组件间通信<br><a href="http://www.alloyteam.com/2015/07/react-zu-jian-jian-tong-xin/#prettyPhoto" target="_blank" rel="noopener">http://www.alloyteam.com/2015/07/react-zu-jian-jian-tong-xin/#prettyPhoto</a></p>
 
       
     </div>
@@ -440,6 +438,21 @@
       
 
       
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div id="needsharebutton-postbottom">
+            <span class="btn">
+              <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </span>
+          </div>
+        
+        </div>
       
       
 
@@ -487,9 +500,16 @@
 
 
           
-  <div class="comments" id="comments">
-    
-  </div>
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
 
 
         </div>
@@ -512,78 +532,93 @@
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
             站点概览
           </li>
         </ul>
       
 
-      <section class="site-overview sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Yuri" />
+            
+              <p class="site-author-name" itemprop="name">Yuri</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
           
-            <img class="site-author-image" itemprop="image"
-              src="http://odf9m3avc.bkt.clouddn.com/avatar.jpg"
-              alt="Yuri" />
+
           
-            <p class="site-author-name" itemprop="name">Yuri</p>
-            <p class="site-description motion-element" itemprop="description"></p>
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Yuritu" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:tuqiang_ru@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
         </div>
-
-        <nav class="site-state motion-element">
-
-          
-            <div class="site-state-item site-state-posts">
-            
-              <a href="/archives/">
-            
-                <span class="site-state-item-count">13</span>
-                <span class="site-state-item-name">日志</span>
-              </a>
-            </div>
-          
-
-          
-            
-            
-            <div class="site-state-item site-state-categories">
-              <a href="/categories/index.html">
-                <span class="site-state-item-count">2</span>
-                <span class="site-state-item-name">分类</span>
-              </a>
-            </div>
-          
-
-          
-            
-            
-            <div class="site-state-item site-state-tags">
-              <a href="/tags/index.html">
-                <span class="site-state-item-count">10</span>
-                <span class="site-state-item-name">标签</span>
-              </a>
-            </div>
-          
-
-        </nav>
-
-        
-
-        <div class="links-of-author motion-element">
-          
-        </div>
-
-        
-        
-
-        
-        
-
-        
-
-
       </section>
 
       
@@ -616,12 +651,9 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
-  
-  &copy; 
-  <span itemprop="copyrightYear">2017</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
-    <i class="fa fa-heart"></i>
+    <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Yuri</span>
 
@@ -629,11 +661,17 @@
 </div>
 
 
-  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
 
   <span class="post-meta-divider">|</span>
 
-  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.2</div>
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a></div>
+
+
 
 
         
@@ -653,6 +691,8 @@
         <i class="fa fa-arrow-up"></i>
         
       </div>
+    
+
     
 
   </div>
@@ -687,57 +727,65 @@
 
 
   
-  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
-
   
-  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
   
-  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
-
-
 
   
   
-
-
-  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
-
-  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
-
-
-
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
-
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
 
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
 
 
   
 
 
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
 
 
 
@@ -769,6 +817,47 @@
 
 
 
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'YuriTu',
+            repo: 'blog',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: 'c64e22874384bc1197b1cec60b63ddb1abe057f1',
+            
+                client_id: '91bb8fa224e5687b3d2e'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
 
   
 
@@ -779,6 +868,34 @@
   
 
   
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+      pbOptions = {};
+      
+          pbOptions.iconStyle = "box";
+      
+          pbOptions.boxForm = "horizontal";
+      
+          pbOptions.position = "bottomCenter";
+      
+          pbOptions.networks = "Weibo,Wechat";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+  </script>
 
   
 

@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next pisces use-motion" lang="zh-Hans">
+<html class="theme-next gemini use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -45,38 +45,21 @@
 
 
 
-  
-  
-  
-  
-
-  
-    
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-    
-    
-    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
-  
-
-
-
 
 
 
 <link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico?v=5.1.4">
+
+
+
+
 
 
   <meta name="keywords" content="js,react,工程思想," />
@@ -84,11 +67,6 @@
 
 
 
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
 
 
 
@@ -103,7 +81,7 @@
 <meta property="og:site_name" content="住何乡">
 <meta property="og:description" content="开始用react以来，最大的问题就是如何设计一个组件，使用react以来，对一个组件的设计方式也多次更迭，因为一步一步的更迭，也对react本身的机制有了一些感悟，反思自己曾经犯下的错误，总结经验。粗鄙之言，莫要见笑。 一、尧舜时代空有react的壳子，这个时候的理解是 react无非是 Html in JS，把willMount当$()一样用，里面写了一大堆事件绑定。 这里的问题是很显然的，完全">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-07-19T10:28:17.000Z">
+<meta property="og:updated_time" content="2017-10-25T12:10:42.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何设计一个React组件 —— 我的react编年史（一）">
 <meta name="twitter:description" content="开始用react以来，最大的问题就是如何设计一个组件，使用react以来，对一个组件的设计方式也多次更迭，因为一步一步的更迭，也对react本身的机制有了一些感悟，反思自己曾经犯下的错误，总结经验。粗鄙之言，莫要见笑。 一、尧舜时代空有react的壳子，这个时候的理解是 react无非是 Html in JS，把willMount当$()一样用，里面写了一大堆事件绑定。 这里的问题是很显然的，完全">
@@ -114,12 +92,12 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Pisces',
-    version: '5.1.2',
-    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
     tabs: true,
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     duoshuo: {
       userId: '0',
       author: '博主'
@@ -149,6 +127,16 @@
 
 
 
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?2577307c02362ff403e4ea6931bf024b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
 
 
 
@@ -177,7 +165,7 @@
       </a>
     </div>
       
-        <p class="site-subtitle"></p>
+        <h1 class="site-subtitle" itemprop="description"></h1>
       
   </div>
 
@@ -207,22 +195,22 @@
         </li>
       
         
-        <li class="menu-item menu-item-archives">
-          <a href="/archives/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
-            
-            归档
-          </a>
-        </li>
-      
-        
         <li class="menu-item menu-item-categories">
           <a href="/categories/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
             
             分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
           </a>
         </li>
       
@@ -284,7 +272,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Yuri">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://odf9m3avc.bkt.clouddn.com/avatar.jpg">
+      <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -296,7 +284,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">如何设计一个React组件 —— 我的react编年史（一）</h1>
+          <h2 class="post-title" itemprop="name headline">如何设计一个React组件 —— 我的react编年史（一）</h2>
         
 
         <div class="post-meta">
@@ -344,6 +332,16 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/09/08/如何设计一个React组件 —— 我的react编年史（一）/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2016/09/08/如何设计一个React组件 —— 我的react编年史（一）/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -384,7 +382,7 @@
 <p>因为集权统治导致的中央过于臃肿的问题是不可避免的。</p>
 <p>我在工作中需要写一个类似列表筛选的组件，满打满4个筛选项目，我的祖先组件足足1200行…WTF!!!</p>
 <p>这显然不能忍，我尝试把事件处理逻辑和本身的V层分开。</p>
-<h3 id="一次不成熟的尝试"><a href="#一次不成熟的尝试" class="headerlink" title="一次不成熟的尝试"></a>一次不成熟的尝试</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">const</span> RenderFilter = <span class="built_in">require</span>(<span class="string">"../controller/common/renderFilterResultList"</span>);</div><div class="line"><span class="keyword">const</span> Render = <span class="keyword">new</span> RenderFilter();</div><div class="line"><span class="comment">// 开放四项筛选逻辑</span></div><div class="line"><span class="keyword">const</span> OpenFilter = <span class="built_in">require</span>(<span class="string">"../controller/open/openFilter"</span>);</div><div class="line"><span class="comment">//......</span></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 清除所有</div><div class="line"> * @param &#123;object&#125; e event</div><div class="line"> * @returns &#123;null&#125; null</div><div class="line"> */</div><div class="line">handleClickClearAll(e)&#123;</div><div class="line">    e.preventDefault();</div><div class="line">    Clear.handleClickAny.call(<span class="keyword">this</span>, <span class="number">0</span>);</div><div class="line">    Clear.handleClickAny.call(<span class="keyword">this</span>, <span class="number">1</span>);</div><div class="line"><span class="comment">//......</span></div><div class="line"><span class="comment">//in render function</span></div><div class="line">&lt;FundAchieve</div><div class="line">    ref = <span class="string">"fundAchieve"</span></div><div class="line">    config = &#123;<span class="keyword">this</span>.basicConfig.achieve&#125;</div><div class="line">    fundAchieveParam = &#123;<span class="keyword">this</span>.state.fundAchieveParam&#125;</div><div class="line">    handleCilck = &#123;AF.handleClickAchieveList.bind(<span class="keyword">this</span>)&#125;</div><div class="line">    handleClickAny=&#123;Clear.handleClickAny.bind(<span class="keyword">this</span>)&#125;</div><div class="line">    warning = &#123;<span class="keyword">this</span>.state.warningAch&#125;</div><div class="line">&gt;&lt;/FundAchieve&gt;</div></pre></td></tr></table></figure>
+<h3 id="一次不成熟的尝试"><a href="#一次不成熟的尝试" class="headerlink" title="一次不成熟的尝试"></a>一次不成熟的尝试</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">const</span> RenderFilter = <span class="built_in">require</span>(<span class="string">"../controller/common/renderFilterResultList"</span>);</span><br><span class="line"><span class="keyword">const</span> Render = <span class="keyword">new</span> RenderFilter();</span><br><span class="line"><span class="comment">// 开放四项筛选逻辑</span></span><br><span class="line"><span class="keyword">const</span> OpenFilter = <span class="built_in">require</span>(<span class="string">"../controller/open/openFilter"</span>);</span><br><span class="line"><span class="comment">//......</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 清除所有</span></span><br><span class="line"><span class="comment"> * @param &#123;object&#125; e event</span></span><br><span class="line"><span class="comment"> * @returns &#123;null&#125; null</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">handleClickClearAll(e)&#123;</span><br><span class="line">    e.preventDefault();</span><br><span class="line">    Clear.handleClickAny.call(<span class="keyword">this</span>, <span class="number">0</span>);</span><br><span class="line">    Clear.handleClickAny.call(<span class="keyword">this</span>, <span class="number">1</span>);</span><br><span class="line"><span class="comment">//......</span></span><br><span class="line"><span class="comment">//in render function</span></span><br><span class="line">&lt;FundAchieve</span><br><span class="line">    ref = <span class="string">"fundAchieve"</span></span><br><span class="line">    config = &#123;<span class="keyword">this</span>.basicConfig.achieve&#125;</span><br><span class="line">    fundAchieveParam = &#123;<span class="keyword">this</span>.state.fundAchieveParam&#125;</span><br><span class="line">    handleCilck = &#123;AF.handleClickAchieveList.bind(<span class="keyword">this</span>)&#125;</span><br><span class="line">    handleClickAny=&#123;Clear.handleClickAny.bind(<span class="keyword">this</span>)&#125;</span><br><span class="line">    warning = &#123;<span class="keyword">this</span>.state.warningAch&#125;</span><br><span class="line">&gt;&lt;/FundAchieve&gt;</span><br></pre></td></tr></table></figure>
 <p>没错…我想出来的方法是传this</p>
 <p>我把所有逻辑封装成一个类，每次事件处理调用的时候，把其本身的this传递进去，<br>为什么？为了能在 逻辑层里面修改state</p>
 <blockquote>
@@ -434,6 +432,21 @@
 
       
       
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div id="needsharebutton-postbottom">
+            <span class="btn">
+              <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </span>
+          </div>
+        
+        </div>
+      
       
 
       
@@ -480,9 +493,16 @@
 
 
           
-  <div class="comments" id="comments">
-    
-  </div>
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
 
 
         </div>
@@ -505,78 +525,93 @@
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
             站点概览
           </li>
         </ul>
       
 
-      <section class="site-overview sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Yuri" />
+            
+              <p class="site-author-name" itemprop="name">Yuri</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
           
-            <img class="site-author-image" itemprop="image"
-              src="http://odf9m3avc.bkt.clouddn.com/avatar.jpg"
-              alt="Yuri" />
+
           
-            <p class="site-author-name" itemprop="name">Yuri</p>
-            <p class="site-description motion-element" itemprop="description"></p>
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Yuritu" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:tuqiang_ru@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
         </div>
-
-        <nav class="site-state motion-element">
-
-          
-            <div class="site-state-item site-state-posts">
-            
-              <a href="/archives/">
-            
-                <span class="site-state-item-count">13</span>
-                <span class="site-state-item-name">日志</span>
-              </a>
-            </div>
-          
-
-          
-            
-            
-            <div class="site-state-item site-state-categories">
-              <a href="/categories/index.html">
-                <span class="site-state-item-count">2</span>
-                <span class="site-state-item-name">分类</span>
-              </a>
-            </div>
-          
-
-          
-            
-            
-            <div class="site-state-item site-state-tags">
-              <a href="/tags/index.html">
-                <span class="site-state-item-count">10</span>
-                <span class="site-state-item-name">标签</span>
-              </a>
-            </div>
-          
-
-        </nav>
-
-        
-
-        <div class="links-of-author motion-element">
-          
-        </div>
-
-        
-        
-
-        
-        
-
-        
-
-
       </section>
 
       
@@ -609,12 +644,9 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
-  
-  &copy; 
-  <span itemprop="copyrightYear">2017</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
-    <i class="fa fa-heart"></i>
+    <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Yuri</span>
 
@@ -622,11 +654,17 @@
 </div>
 
 
-  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
 
   <span class="post-meta-divider">|</span>
 
-  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.2</div>
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a></div>
+
+
 
 
         
@@ -646,6 +684,8 @@
         <i class="fa fa-arrow-up"></i>
         
       </div>
+    
+
     
 
   </div>
@@ -680,57 +720,65 @@
 
 
   
-  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
-
   
-  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
   
-  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
-
-
 
   
   
-
-
-  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
-
-  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
-
-
-
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
-
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
 
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
 
 
   
 
 
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
 
 
 
@@ -762,6 +810,47 @@
 
 
 
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'YuriTu',
+            repo: 'blog',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: 'c64e22874384bc1197b1cec60b63ddb1abe057f1',
+            
+                client_id: '91bb8fa224e5687b3d2e'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
 
   
 
@@ -772,6 +861,34 @@
   
 
   
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+      pbOptions = {};
+      
+          pbOptions.iconStyle = "box";
+      
+          pbOptions.boxForm = "horizontal";
+      
+          pbOptions.position = "bottomCenter";
+      
+          pbOptions.networks = "Weibo,Wechat";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+  </script>
 
   
 

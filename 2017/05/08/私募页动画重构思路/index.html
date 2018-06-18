@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next pisces use-motion" lang="zh-Hans">
+<html class="theme-next gemini use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -45,38 +45,21 @@
 
 
 
-  
-  
-  
-  
-
-  
-    
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-    
-    
-    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
-  
-
-
-
 
 
 
 <link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico?v=5.1.4">
+
+
+
+
 
 
   <meta name="keywords" content="canvas," />
@@ -84,11 +67,6 @@
 
 
 
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
 
 
 
@@ -105,7 +83,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://odf9m3avc.bkt.clouddn.com/index.gif">
 <meta property="og:image" content="http://odf9m3avc.bkt.clouddn.com/QQ20170508-0.png">
-<meta property="og:updated_time" content="2017-09-14T12:35:05.000Z">
+<meta property="og:updated_time" content="2017-10-25T12:10:42.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="私募页动画重构思路">
 <meta name="twitter:description" content="私募页动画是一个很有意思的需求在开发时有很多稚嫩和值得反思的地方在重构的过程中，也逐步反思之前的写法 预览：人人智慧私募之前的版本是：原版动画重构后版本：新版动画 虽然很吃藕，但是毕竟是自己设计的，我觉得还是挺酷炫的我又不是UI ┑(￣Д ￣)┍ （逃… 寻找问题然后我发现它是非常卡顿的，主要表现在  cpu耗费，烧得我整个mac都烫了….当时没看，我估计cpu得有70% 区区一个网页，chrom">
@@ -117,12 +95,12 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Pisces',
-    version: '5.1.2',
-    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
     tabs: true,
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     duoshuo: {
       userId: '0',
       author: '博主'
@@ -152,6 +130,16 @@
 
 
 
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?2577307c02362ff403e4ea6931bf024b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
 
 
 
@@ -180,7 +168,7 @@
       </a>
     </div>
       
-        <p class="site-subtitle"></p>
+        <h1 class="site-subtitle" itemprop="description"></h1>
       
   </div>
 
@@ -210,22 +198,22 @@
         </li>
       
         
-        <li class="menu-item menu-item-archives">
-          <a href="/archives/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
-            
-            归档
-          </a>
-        </li>
-      
-        
         <li class="menu-item menu-item-categories">
           <a href="/categories/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
             
             分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
           </a>
         </li>
       
@@ -287,7 +275,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Yuri">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://odf9m3avc.bkt.clouddn.com/avatar.jpg">
+      <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -299,7 +287,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">私募页动画重构思路</h1>
+          <h2 class="post-title" itemprop="name headline">私募页动画重构思路</h2>
         
 
         <div class="post-meta">
@@ -347,6 +335,16 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/05/08/私募页动画重构思路/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2017/05/08/私募页动画重构思路/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -372,7 +370,7 @@
 
       
         <p>私募页动画是一个很有意思的需求<br>在开发时有很多稚嫩和值得反思的地方<br>在重构的过程中，也逐步反思之前的写法</p>
-<p>预览：<a href="http://118.186.218.30" target="_blank" rel="external">人人智慧私募</a><br>之前的版本是：<a href="https://github.com/YuriTu/In-RENN/tree/master/canvas" target="_blank" rel="external">原版动画</a><br>重构后版本：<a href="https://github.com/YuriTu/In-RENN/tree/master/newPEcanvas" target="_blank" rel="external">新版动画</a></p>
+<p>预览：<a href="http://118.186.218.30" target="_blank" rel="noopener">人人智慧私募</a><br>之前的版本是：<a href="https://github.com/YuriTu/In-RENN/tree/master/canvas" target="_blank" rel="noopener">原版动画</a><br>重构后版本：<a href="https://github.com/YuriTu/In-RENN/tree/master/newPEcanvas" target="_blank" rel="noopener">新版动画</a></p>
 <p>虽然很吃藕，但是毕竟是自己设计的，我觉得还是挺酷炫的<br>我又不是UI ┑(￣Д ￣)┍ （逃…</p>
 <h1 id="寻找问题"><a href="#寻找问题" class="headerlink" title="寻找问题"></a>寻找问题</h1><p>然后我发现它是非常卡顿的，主要表现在</p>
 <ol>
@@ -393,7 +391,7 @@
 <h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>不动的光环背景，我本来是打算使用分层处理的，那么只需要渲染一遍，就把其所在的canvas作为背景，不需要再渲染。<br>不可行的原因有二，<br>canvas画布本身的支出，两个canvas画布对性能又是一个大支出。<br>二者，我需要背景的旋转，旋转速度与上层画布同步，那么还是要渲染-擦除，仅仅减少了后续的计算支持，本质问题没有解决。</p>
 <p>于是，我打算使用css，css的transform中的3dAPI也可以使用GPU加速。<br>于是我，通过使用一张离屏Canvas，将背景绘制完成，离屏Canvas因为在内存中，绘制速度比在DOM中的canvas快得多，不过记得用完记得干掉，免得内存泄露。<br><img src="http://odf9m3avc.bkt.clouddn.com/QQ20170508-0.png" alt="enter description here"></p>
 <p>通过toDataURL把整个canvas抽成base64，（当然你也可以用toBlob，不过他兼容性不好，）再直接加一个img标签就完成了canvas画布的背景。这个性能支持由canvas转嫁给了css，提高了很多性能。</p>
-<p>另一个可以减少计算的地方就是动态的条纹，以前是每帧计算每个条纹的四个坐标点的，还包括三角函数、浮点计算，这个计算强度一下就上去了。<br>经过大牛指点，我才用了遮罩的方式，<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">this</span>.stripeList.forEach(<span class="function">(<span class="params">item</span>) =&gt;</span> &#123;</div><div class="line">                ctx.beginPath();</div><div class="line">                ctx.rect(<span class="keyword">this</span>.initLB.x + <span class="number">3</span>, item.stepLB.y, <span class="number">40</span>, <span class="number">10</span>);</div><div class="line">                ctx.closePath();</div><div class="line">                ctx.fill();</div><div class="line">                item.stepLB.y -= <span class="number">2</span>;</div><div class="line">                <span class="keyword">if</span> ( item.stepLB.y &lt; <span class="number">40</span>)&#123;</div><div class="line">                    item.stepLB.y = <span class="number">600</span>;</div><div class="line">                &#125;</div><div class="line">            &#125;);</div></pre></td></tr></table></figure></p>
+<p>另一个可以减少计算的地方就是动态的条纹，以前是每帧计算每个条纹的四个坐标点的，还包括三角函数、浮点计算，这个计算强度一下就上去了。<br>经过大牛指点，我才用了遮罩的方式，<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">this</span>.stripeList.forEach(<span class="function">(<span class="params">item</span>) =&gt;</span> &#123;</span><br><span class="line">                ctx.beginPath();</span><br><span class="line">                ctx.rect(<span class="keyword">this</span>.initLB.x + <span class="number">3</span>, item.stepLB.y, <span class="number">40</span>, <span class="number">10</span>);</span><br><span class="line">                ctx.closePath();</span><br><span class="line">                ctx.fill();</span><br><span class="line">                item.stepLB.y -= <span class="number">2</span>;</span><br><span class="line">                <span class="keyword">if</span> ( item.stepLB.y &lt; <span class="number">40</span>)&#123;</span><br><span class="line">                    item.stepLB.y = <span class="number">600</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br></pre></td></tr></table></figure></p>
 <p>因为我绘制背景的时候，已经计算完成了其可见范围的坐标，这相当于已经有了他的遮罩，我其实不用管具体的宽度，给予最大宽度，通过clip进行展示就可以的。<br>这样也就是减少了这部分的计算支出。</p>
 <h2 id="计算分步"><a href="#计算分步" class="headerlink" title="计算分步"></a>计算分步</h2><p>我所有的计算都是在中心圆变成光环进行计算的，导致一进入这一步，把进程就阻塞完了。我觉得这个计算应该是可以转移到其他部分的，比如刚开始</p>
 <h3 id="web-worker"><a href="#web-worker" class="headerlink" title="web worker"></a>web worker</h3><p>终于不用兼容IE8啦！！！！！<br>那还犹豫什么，黑科技往上怼。<br>诚然把计算量大的步骤，均摊给整个动画流程是个不错的办法，但是一个是写起来麻烦，另一个是数据管理费劲。<br>干脆交给另一个进程好了，这样本质上把MVC完全分开，worker和配置文件作为数据层，动画逻辑负责控制渲染流程，渲染文件仅接受数据，整体作为单一数据流，就像React的思想一样，非常方便控制。</p>
@@ -423,6 +421,21 @@
       
 
       
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div id="needsharebutton-postbottom">
+            <span class="btn">
+              <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </span>
+          </div>
+        
+        </div>
       
       
 
@@ -470,9 +483,16 @@
 
 
           
-  <div class="comments" id="comments">
-    
-  </div>
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
 
 
         </div>
@@ -495,78 +515,93 @@
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
             站点概览
           </li>
         </ul>
       
 
-      <section class="site-overview sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Yuri" />
+            
+              <p class="site-author-name" itemprop="name">Yuri</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
           
-            <img class="site-author-image" itemprop="image"
-              src="http://odf9m3avc.bkt.clouddn.com/avatar.jpg"
-              alt="Yuri" />
+
           
-            <p class="site-author-name" itemprop="name">Yuri</p>
-            <p class="site-description motion-element" itemprop="description"></p>
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Yuritu" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:tuqiang_ru@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
         </div>
-
-        <nav class="site-state motion-element">
-
-          
-            <div class="site-state-item site-state-posts">
-            
-              <a href="/archives/">
-            
-                <span class="site-state-item-count">13</span>
-                <span class="site-state-item-name">日志</span>
-              </a>
-            </div>
-          
-
-          
-            
-            
-            <div class="site-state-item site-state-categories">
-              <a href="/categories/index.html">
-                <span class="site-state-item-count">2</span>
-                <span class="site-state-item-name">分类</span>
-              </a>
-            </div>
-          
-
-          
-            
-            
-            <div class="site-state-item site-state-tags">
-              <a href="/tags/index.html">
-                <span class="site-state-item-count">10</span>
-                <span class="site-state-item-name">标签</span>
-              </a>
-            </div>
-          
-
-        </nav>
-
-        
-
-        <div class="links-of-author motion-element">
-          
-        </div>
-
-        
-        
-
-        
-        
-
-        
-
-
       </section>
 
       
@@ -599,12 +634,9 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
-  
-  &copy; 
-  <span itemprop="copyrightYear">2017</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
-    <i class="fa fa-heart"></i>
+    <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Yuri</span>
 
@@ -612,11 +644,17 @@
 </div>
 
 
-  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
 
   <span class="post-meta-divider">|</span>
 
-  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.2</div>
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a></div>
+
+
 
 
         
@@ -636,6 +674,8 @@
         <i class="fa fa-arrow-up"></i>
         
       </div>
+    
+
     
 
   </div>
@@ -670,57 +710,65 @@
 
 
   
-  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
-
   
-  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
   
-  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
-
-
 
   
   
-
-
-  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
-
-  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
-
-
-
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
-
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
 
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
 
 
   
 
 
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
 
 
 
@@ -752,6 +800,47 @@
 
 
 
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'YuriTu',
+            repo: 'blog',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: 'c64e22874384bc1197b1cec60b63ddb1abe057f1',
+            
+                client_id: '91bb8fa224e5687b3d2e'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
 
   
 
@@ -762,6 +851,34 @@
   
 
   
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+      pbOptions = {};
+      
+          pbOptions.iconStyle = "box";
+      
+          pbOptions.boxForm = "horizontal";
+      
+          pbOptions.position = "bottomCenter";
+      
+          pbOptions.networks = "Weibo,Wechat";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+  </script>
 
   
 
