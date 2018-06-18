@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico?v=5.1.4">
+
+
+
+
+
+
+  <meta name="keywords" content="js,canvas," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="本文章尝试解决以下问题：  canvas的卡顿原因 分析性能瓶颈的思路  Canvas是HTML5的新增特性之一，其允许我们来进行酷炫的图形绘制，从而完成渲染动画的需求。渲染动画的本质就是擦除与重绘，其频率就是帧速率，帧速率决定了留给每帧动画的渲染时间。如果消耗的时间稍微多了一些，就会产生卡顿。 卡顿的原因卡顿有两种：我们在一帧中需要完成两件事情 1.计算 2. 渲染这两个阶段都可以引起卡顿。">
+<meta name="keywords" content="js,canvas">
+<meta property="og:type" content="article">
+<meta property="og:title" content="EffectiveCanvas - 2Dcanvas优化思路">
+<meta property="og:url" content="http://tuqiang.website/2017/05/10/EffectiveCanvas - 2Dcanvas优化思路/index.html">
+<meta property="og:site_name" content="住何乡">
+<meta property="og:description" content="本文章尝试解决以下问题：  canvas的卡顿原因 分析性能瓶颈的思路  Canvas是HTML5的新增特性之一，其允许我们来进行酷炫的图形绘制，从而完成渲染动画的需求。渲染动画的本质就是擦除与重绘，其频率就是帧速率，帧速率决定了留给每帧动画的渲染时间。如果消耗的时间稍微多了一些，就会产生卡顿。 卡顿的原因卡顿有两种：我们在一帧中需要完成两件事情 1.计算 2. 渲染这两个阶段都可以引起卡顿。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-10-25T12:10:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="EffectiveCanvas - 2Dcanvas优化思路">
+<meta name="twitter:description" content="本文章尝试解决以下问题：  canvas的卡顿原因 分析性能瓶颈的思路  Canvas是HTML5的新增特性之一，其允许我们来进行酷炫的图形绘制，从而完成渲染动画的需求。渲染动画的本质就是擦除与重绘，其频率就是帧速率，帧速率决定了留给每帧动画的渲染时间。如果消耗的时间稍微多了一些，就会产生卡顿。 卡顿的原因卡顿有两种：我们在一帧中需要完成两件事情 1.计算 2. 渲染这两个阶段都可以引起卡顿。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://tuqiang.website/2017/05/10/EffectiveCanvas - 2Dcanvas优化思路/"/>
+
+
+
+
+
+  <title>EffectiveCanvas - 2Dcanvas优化思路 | 住何乡</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?2577307c02362ff403e4ea6931bf024b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">住何乡</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://tuqiang.website/2017/05/10/EffectiveCanvas - 2Dcanvas优化思路/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yuri">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="住何乡">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">EffectiveCanvas - 2Dcanvas优化思路</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-10T00:00:00+08:00">
+                2017-05-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/05/10/EffectiveCanvas - 2Dcanvas优化思路/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2017/05/10/EffectiveCanvas - 2Dcanvas优化思路/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文章尝试解决以下问题：</p>
+<ol>
+<li>canvas的卡顿原因</li>
+<li>分析性能瓶颈的思路</li>
+</ol>
+<p>Canvas是HTML5的新增特性之一，其允许我们来进行酷炫的图形绘制，从而完成渲染动画的需求。渲染动画的本质就是擦除与重绘，其频率就是帧速率，帧速率决定了留给每帧动画的渲染时间。如果消耗的时间稍微多了一些，就会产生卡顿。</p>
+<h1 id="卡顿的原因"><a href="#卡顿的原因" class="headerlink" title="卡顿的原因"></a>卡顿的原因</h1><p>卡顿有两种：<br>我们在一帧中需要完成两件事情 1.计算 2. 渲染<br>这两个阶段都可以引起卡顿。</p>
+<ol>
+<li><p>由计算过程产生的卡顿，一般是一次性发生的。</p>
+<p> 计算过程做了什么呢？业务逻辑、坐标计算、对象状态等。</p>
+</li>
+<li><p>由渲染过程产生的卡顿，一般称之为掉帧，它是周期性发生的。</p>
+<p> 渲染过程本质上也有两个过程。</p>
+<ol>
+<li><p>js调用DOM API 及 Canvas API 进行渲染。</p>
+</li>
+<li><p>GPU渲染进程把渲染后的结果呈现在屏幕上的过程。</p>
+</li>
+</ol>
+</li>
+</ol>
+<p>那么问题来了，我们以60FPS帧速率为例，每帧16ms，那么在这短短的16ms中你需要完成 ：上面的步骤1与2.1。如果不能完成，就会导致浏览器js主线程的阻塞。<br>但是渲染的开支比计算大几个数量级，那么其实我们的目标就缩小了，除非你的算法非常耗时，那么主要优化渲染性能。</p>
+<p>那么时间都去哪儿了？</p>
+<h1 id="渲染"><a href="#渲染" class="headerlink" title="渲染"></a>渲染</h1><p>我们来看渲染耗费时间都耗哪去了。</p>
+<h2 id="API操作"><a href="#API操作" class="headerlink" title="API操作"></a>API操作</h2><p>与我们平时感觉到的不同，在canvas中对context赋值的操作是一个非常费时的行为，我简单做了个实验。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> n = <span class="number">1000000</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i &lt; n;i++)&#123;</span><br><span class="line">    a.b = <span class="number">2</span>;<span class="comment">//普通对象赋值 2ms</span></span><br><span class="line">    ctx.lineWidth = <span class="literal">null</span>;     <span class="comment">//40ms    非法70-400</span></span><br><span class="line">    ctx.fillStyle = <span class="literal">null</span>      <span class="comment">//130ms+  非法500-1000+</span></span><br><span class="line">    ctx.textAlign = &#123;&#125;;       <span class="comment">//70ms+   非法300+</span></span><br><span class="line">    ctx.shadowBlur = <span class="literal">null</span>;    <span class="comment">//30+     非法100+</span></span><br><span class="line">    ctx.shadowColor = <span class="number">1</span>       <span class="comment">//200+    非法350+</span></span><br><span class="line">    ctx.font = <span class="literal">null</span>;          <span class="comment">//1000+   非法2000+</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>而且如果这些行为在save/restore中，会使s/r的时间开销增加600ms+；<br>虽然和真正的绘制相比，赋值开销是微不足道的，但是也架不住多啊，往往滥用赋值的情况在对象遍历，动画流程中会发生。<br>在我们对一个精灵对象进行绘制的时候，可能很多实例都是同样的状态，如果我们直接在渲染流程中进行状态赋值，那么就导致了遍历过程中的重复赋值；<br>在动画流程中，我们善用save/restore可以有效避免重复赋值，但也要小心的是不要滥用s/r，他们也是有开销的。<br>所以在开发中，为了减少渲染开销，尽量减少对ctx的赋值操作，可以考虑把功能实现转嫁给计算解决。</p>
+<h2 id="渲染呈现"><a href="#渲染呈现" class="headerlink" title="渲染呈现"></a>渲染呈现</h2><p>减少渲染开销主要是：离屏、双缓冲、分层，这三种方法也经常混淆。</p>
+<h3 id="离屏"><a href="#离屏" class="headerlink" title="离屏"></a>离屏</h3><p>离屏本质上是我们在内存里又开了一块canvas画布，但是又不把他插入到DOM中去，因为在内存中进行渲染和绘制略快于我们视野内的canvas。（我做了个实验，同样的10万次绘制内存要快1500ms左右）而且通过和drawImage使用能把多次绘制合并为一次绘制，减少了2.2步骤的开支。这就是双缓冲了。</p>
+<h3 id="双缓冲"><a href="#双缓冲" class="headerlink" title="双缓冲"></a>双缓冲</h3><p>双缓冲机制并不是银弹。<br>如果你实际去使用双缓冲，把画好的整个离屏canvas绘制到视野canvas，你会发现性能反而比之前差得多。</p>
+<p>为什么？</p>
+<p><strong>因为各大浏览器厂商在实现canvas元素的时候，已经使用了双缓冲机制，</strong> 开发者再实现一遍反而会导致性能的下降，而且这没有任何的好处。</p>
+<h3 id="浏览器双缓冲机制"><a href="#浏览器双缓冲机制" class="headerlink" title="浏览器双缓冲机制"></a>浏览器双缓冲机制</h3><p>浏览器在处理对Canvas 2D和WebGL的加速时，他们的绘制会直接使用GPU，所以他们一般会有一个<a href="http://www.songho.ca/opengl/gl_fbo.html" target="_blank" rel="noopener">GL FBO</a>（FrameBufferObject）作为自己的缓存（作用上类似离屏），而我们绘制的内容实际上是在FBO上绘制的，你看到的实际上是这个缓冲区的复制。</p>
+<p>那么，该怎么用双缓冲呢？<br>双缓冲的正确兹识应该是配合drawImage将离屏的某个图块复制到视野canvas，这是可以提高绘制效率的。</p>
+<h3 id="分层"><a href="#分层" class="headerlink" title="分层"></a>分层</h3><p>这在游戏开发中很常见，就像PS一样，不同图层负责不同功能，背景层可以只渲染不擦除，来完成减少开销。<br>但是，就我日常更多是web开发，这点我觉得有可以改进地方。<br>我们取其思路，不取其方法。因为web开发背景的变动没有游戏开发那么频繁，再加一块canvas的支出着实是有点杀敌一千自伤八百了。而且我们还有CSS也可以用GPU加速。<br>所以在web开发中，我们完全可以尝试将背景层提取为一个图片，配合CSS来完成我们的需求，我们可以再离屏中进行绘制背景，通过toDataUrl或者toBlob来将离屏canvas图像转化为png/jpg文件，不过blob兼容性只到IE10,但它可以生成jpg图片。<br>我们将不动的图片作为背景，真正需要变化的像素在canvas绘制，这样就可以节省一部分渲染开销。</p>
+<h1 id="计算"><a href="#计算" class="headerlink" title="计算"></a>计算</h1><p>计算优化是个玄学啊（逃…</p>
+<p>计算的卡顿一般出现在动画“生命周期”改变的时候，比如动画某时突然需要绘制非常多的动画，这时在一次raf中造成过大计算量，导致超过16ms，阻塞了raf的执行，这就会早一次性的比较长的一次卡顿，和渲染导致的周期性卡顿完全不一样，也是我们判断瓶颈的思路之一。</p>
+<p>那么一方面，我们需要把 生成 -计算-渲染 分开，就像玩游戏最开始要有loading一样，我们需要把生产对象的过程从渲染周期中抽离出来，减少动画过程中的开销。<br>另一方面如果碰到实在需要复杂计算的地方，如果没有兼容性要求，worker是一个不错的选择</p>
+<h2 id="web-worker"><a href="#web-worker" class="headerlink" title="web worker"></a>web worker</h2><p>worker兼容到IE10，它可以为你开一条系统进程来处理你的计算，从而根本上的解决计算开销，真是好东西啊。而且worker脚本中拿不到window和document ，就算你想搞事情也不是那么容易的。<br>需要注意的是，你的worker脚本可以理解在另一个环境跑的，所以在new Worker（“worker.js”）给脚本的时候，这个脚本不通过require和import加载，不过webpack的loader处理，需要单独作为entry生成。</p>
+<p>另一方面，WebAssembly 也可以配合使用，那时就可以处理更大的数据量了，不过WASM这东西兼容性太差，可以期待一下。</p>
+<h3 id="替代方案：分步"><a href="#替代方案：分步" class="headerlink" title="替代方案：分步"></a>替代方案：分步</h3><p>如果你有兼容性要求，那么大计算量就只能分步处理了，<br>把计算步骤分割到各个raf中，每次完成一部分，来达到消除开销的目的，<br>但是这真的太麻烦了，一方面带来了代码的臃肿，另一方面自己的功力要求有点高。<br>如果真的万不得已到了这步…也许好好和你的PM沟通一下更好。</p>
+<h1 id="道"><a href="#道" class="headerlink" title="道"></a>道</h1><p>说了很多“术”的东西，我想暨越说说“道”的问题。<br>真正阻塞我们的不是技术或知识， 而是我们的思维。<br>当你尝试了各种优化方法还是差强人意的时候，更多该想想是不是又面向过程编码了？<br>是不是又写着一边喝水一边炒菜的函数，自己还觉得很正常？<br>本来可以一个对象解决的事情，你却实例了多个？</p>
+<p>不能用战术上的勤奋掩盖战略上的懒惰。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/js/" rel="tag"># js</a>
+          
+            <a href="/tags/canvas/" rel="tag"># canvas</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div id="needsharebutton-postbottom">
+            <span class="btn">
+              <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </span>
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/08/私募页动画重构思路/" rel="next" title="私募页动画重构思路">
+                <i class="fa fa-chevron-left"></i> 私募页动画重构思路
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/18/re：从零开始构建技术团队/" rel="prev" title="如何构建一个优良的技术团队">
+                如何构建一个优良的技术团队 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Yuri" />
+            
+              <p class="site-author-name" itemprop="name">Yuri</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Yuritu" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:tuqiang_ru@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#卡顿的原因"><span class="nav-number">1.</span> <span class="nav-text">卡顿的原因</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#渲染"><span class="nav-number">2.</span> <span class="nav-text">渲染</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#API操作"><span class="nav-number">2.1.</span> <span class="nav-text">API操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#渲染呈现"><span class="nav-number">2.2.</span> <span class="nav-text">渲染呈现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#离屏"><span class="nav-number">2.2.1.</span> <span class="nav-text">离屏</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#双缓冲"><span class="nav-number">2.2.2.</span> <span class="nav-text">双缓冲</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#浏览器双缓冲机制"><span class="nav-number">2.2.3.</span> <span class="nav-text">浏览器双缓冲机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分层"><span class="nav-number">2.2.4.</span> <span class="nav-text">分层</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#计算"><span class="nav-number">3.</span> <span class="nav-text">计算</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#web-worker"><span class="nav-number">3.1.</span> <span class="nav-text">web worker</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#替代方案：分步"><span class="nav-number">3.1.1.</span> <span class="nav-text">替代方案：分步</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#道"><span class="nav-number">4.</span> <span class="nav-text">道</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yuri</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'YuriTu',
+            repo: 'blog',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: 'c64e22874384bc1197b1cec60b63ddb1abe057f1',
+            
+                client_id: '91bb8fa224e5687b3d2e'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+      pbOptions = {};
+      
+          pbOptions.iconStyle = "box";
+      
+          pbOptions.boxForm = "horizontal";
+      
+          pbOptions.position = "bottomCenter";
+      
+          pbOptions.networks = "Weibo,Wechat";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+  </script>
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

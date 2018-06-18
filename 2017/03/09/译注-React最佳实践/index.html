@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico?v=5.1.4">
+
+
+
+
+
+
+  <meta name="keywords" content="js,react," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="原文地址：react-patterns  这篇文章主要讲的是在React组件开发中的一些规范，我也将其实践于项目中，结合我在项目中的实践进行了一些批注，意欲解释其为什么要这么做，希望能给新开发react的小伙伴有一些帮助。 渣翻见谅…  React最佳实践 目录 概述 组件的组织结构 基础组件结构 规范props格式   推荐模式 Props数据的处理 State数据的处理 在render方法中使">
+<meta name="keywords" content="js,react">
+<meta property="og:type" content="article">
+<meta property="og:title" content="译注React最佳实践">
+<meta property="og:url" content="http://tuqiang.website/2017/03/09/译注-React最佳实践/index.html">
+<meta property="og:site_name" content="住何乡">
+<meta property="og:description" content="原文地址：react-patterns  这篇文章主要讲的是在React组件开发中的一些规范，我也将其实践于项目中，结合我在项目中的实践进行了一些批注，意欲解释其为什么要这么做，希望能给新开发react的小伙伴有一些帮助。 渣翻见谅…  React最佳实践 目录 概述 组件的组织结构 基础组件结构 规范props格式   推荐模式 Props数据的处理 State数据的处理 在render方法中使">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-10-25T12:10:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="译注React最佳实践">
+<meta name="twitter:description" content="原文地址：react-patterns  这篇文章主要讲的是在React组件开发中的一些规范，我也将其实践于项目中，结合我在项目中的实践进行了一些批注，意欲解释其为什么要这么做，希望能给新开发react的小伙伴有一些帮助。 渣翻见谅…  React最佳实践 目录 概述 组件的组织结构 基础组件结构 规范props格式   推荐模式 Props数据的处理 State数据的处理 在render方法中使">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://tuqiang.website/2017/03/09/译注-React最佳实践/"/>
+
+
+
+
+
+  <title>译注React最佳实践 | 住何乡</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?2577307c02362ff403e4ea6931bf024b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">住何乡</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://tuqiang.website/2017/03/09/译注-React最佳实践/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yuri">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="住何乡">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">译注React最佳实践</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-09T00:00:00+08:00">
+                2017-03-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/09/译注-React最佳实践/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2017/03/09/译注-React最佳实践/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>原文地址：<a href="https://github.com/planningcenter/react-patterns" target="_blank" rel="noopener">react-patterns</a></p>
+<hr>
+<p>这篇文章主要讲的是在React组件开发中的一些规范，我也将其实践于项目中，结合我在项目中的实践进行了一些批注，意欲解释其为什么要这么做，希望能给新开发react的小伙伴有一些帮助。</p>
+<p>渣翻见谅…</p>
+<hr>
+<p><em>React最佳实践</em></p>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ol>
+<li><a href="#概述">概述</a></li>
+<li>组件的组织结构<ol>
+<li><a href="#基础组件结构">基础组件结构</a></li>
+<li><a href="#规范props格式">规范props格式</a></li>
+</ol>
+</li>
+<li>推荐模式<ol>
+<li><a href="#props数据的处理">Props数据的处理</a></li>
+<li><a href="#state数据的处理">State数据的处理</a></li>
+<li><a href="#在render方法中使用三元表达式">在render方法中使用三元表达式</a></li>
+<li><a href="#view层组件">View层组件</a></li>
+<li><a href="#容器组件">容器组件</a></li>
+</ol>
+</li>
+<li>反模式<ol>
+<li><a href="#条件判断语句">条件判断语句</a></li>
+<li><a href="#不要在render方法中缓存数据">不要在 render 方法中缓存数据</a></li>
+<li><a href="#存在性检验">存在性检验</a></li>
+<li><a href="#根据props来设置state">根据props来设置state</a></li>
+</ol>
+</li>
+<li>实例<ol>
+<li><a href="#合理命名事件处理函数">合理命名事件处理函数</a></li>
+<li><a href="#对event合理命名">对event合理命名</a></li>
+<li><a href="#使用proptype">使用propType</a></li>
+<li><a href="#使用实体字符">使用实体字符</a></li>
+</ol>
+</li>
+<li>坑<ol>
+<li><a href="#表格">表格</a></li>
+</ol>
+</li>
+<li>工具库<ol>
+<li><a href="#classnames库">classNames库</a></li>
+</ol>
+</li>
+<li>其他<ol>
+<li><a href="#jsx">JSX</a></li>
+<li><a href="#es2015">ES2015</a></li>
+<li><a href="#react-rails">react-rails</a></li>
+<li><a href="#rails-assets">rails-assets</a></li>
+<li><a href="#flux">flux</a></li>
+</ol>
+</li>
+</ol>
+<hr>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本文讨论我们如何正确的在Rails框架中编写<a href="https://facebook.github.io/react/" target="_blank" rel="noopener">React.js</a>。我们一直在努力寻找最优雅的方式去编写React组件，在多次的失败尝试之后，我们得出了以下这些所推荐的方式；如果有的地方看起来不太适合，那么他可能真的不合适。希望你能让我们也知道哪些地方不合适。</p>
+<p>所有的例子基于ES2015语法编写，使用 <a href="http://babeljs.io/" target="_blank" rel="noopener">babel</a>转译以及采用<a href="https://github.com/reactjs/react-rails" target="_blank" rel="noopener">react-rails gem</a>框架。</p>
+<p><strong><a href="#目录">↑ 返回</a></strong></p>
+<hr>
+<h2 id="基础组件结构"><a href="#基础组件结构" class="headerlink" title="基础组件结构"></a>基础组件结构</h2><ul>
+<li>class的定义<ul>
+<li>constructor<ul>
+<li>事件绑定</li>
+</ul>
+</li>
+<li>组件生命周期事件</li>
+<li>get/set 数据处理函数</li>
+<li>render 方法</li>
+</ul>
+</li>
+<li>defaultProps</li>
+<li>proptypes</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span> (props) &#123;</span><br><span class="line">    <span class="keyword">super</span>(props);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.state = &#123; <span class="attr">smiling</span>: <span class="literal">false</span> &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.handleClick = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">this</span>.setState(&#123;<span class="attr">smiling</span>: !<span class="keyword">this</span>.state.smiling&#125;);</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  componentWillMount () &#123;</span><br><span class="line">    <span class="comment">// 事件监听 （flux/reduce 的Store、WebSocket、document等） </span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  componentDidMount () &#123;</span><br><span class="line">    <span class="comment">// React.getDOMNode() DOM操作等相关逻辑</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  componentWillUnmount () &#123;</span><br><span class="line">    <span class="comment">// 移除事件监听 </span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  get smilingMessage () &#123;</span><br><span class="line">    <span class="keyword">return</span> (<span class="keyword">this</span>.state.smiling) ? <span class="string">"is smiling"</span> : <span class="string">""</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render () &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div onClick=&#123;<span class="keyword">this</span>.handleClick&#125;&gt;</span><br><span class="line">        &#123;<span class="keyword">this</span>.props.name&#125; &#123;<span class="keyword">this</span>.smilingMessage&#125;</span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">Person.defaultProps = &#123;</span></span><br><span class="line"><span class="regexp">  name: 'Guest'</span></span><br><span class="line"><span class="regexp">&#125;;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">Person.propTypes = &#123;</span></span><br><span class="line"><span class="regexp">  name: React.PropTypes.string</span></span><br><span class="line"><span class="regexp">&#125;;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>译注：<br>在willMount 生命周期中virtualDom已经完成，所以可以进行事件绑定<br>在DidMount 中组件已经被渲染，此时可以用this.refs了，写canvas的同学要注意这点。</p>
+</blockquote>
+<p><strong><a href="#目录">↑ 返回</a></strong></p>
+<h2 id="规范Props格式"><a href="#规范Props格式" class="headerlink" title="规范Props格式"></a>规范Props格式</h2><p>两个及以上props换行书写。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// bad</span><br><span class="line"><span class="tag">&lt;<span class="name">Person</span></span></span><br><span class="line"><span class="tag"> <span class="attr">firstName</span>=<span class="string">"Michael"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">// good</span><br><span class="line"><span class="tag">&lt;<span class="name">Person</span> <span class="attr">firstName</span>=<span class="string">"Michael"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// bad</span><br><span class="line"><span class="tag">&lt;<span class="name">Person</span> <span class="attr">firstName</span>=<span class="string">"Michael"</span> <span class="attr">lastName</span>=<span class="string">"Chan"</span> <span class="attr">occupation</span>=<span class="string">"Designer"</span> <span class="attr">favoriteFood</span>=<span class="string">"Drunken Noodles"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">// good</span><br><span class="line"><span class="tag">&lt;<span class="name">Person</span></span></span><br><span class="line"><span class="tag"> <span class="attr">firstName</span>=<span class="string">"Michael"</span></span></span><br><span class="line"><span class="tag"> <span class="attr">lastName</span>=<span class="string">"Chan"</span></span></span><br><span class="line"><span class="tag"> <span class="attr">occupation</span>=<span class="string">"Designer"</span></span></span><br><span class="line"><span class="tag"> <span class="attr">favoriteFood</span>=<span class="string">"Drunken Noodles"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong><a href="#目录">↑ 返回</a></strong></p>
+<hr>
+<h2 id="Props数据的处理"><a href="#Props数据的处理" class="headerlink" title="Props数据的处理"></a>Props数据的处理</h2><p>使用 Get/Set访问器属性 来做数据处理。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// bad</span></span><br><span class="line">firstAndLastName () &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">`<span class="subst">$&#123;<span class="keyword">this</span>.props.firstName&#125;</span> <span class="subst">$&#123;<span class="keyword">this</span>.props.lastname&#125;</span>`</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// good</span></span><br><span class="line">get fullName () &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">`<span class="subst">$&#123;<span class="keyword">this</span>.props.firstName&#125;</span> <span class="subst">$&#123;<span class="keyword">this</span>.props.lastname&#125;</span>`</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>参阅：反模式- <a href="#不要在render方法中缓存数据">不要在 render 方法中缓存数据</a></p>
+<p><strong><a href="#目录">↑ 返回</a></strong></p>
+<hr>
+<h2 id="State数据的处理"><a href="#State数据的处理" class="headerlink" title="State数据的处理"></a>State数据的处理</h2><p>数据处理函数的命名应该在开头处添加一个动词，以增加可读性。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// bad</span></span><br><span class="line">happyAndKnowsIt () &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.state.happy &amp;&amp; <span class="keyword">this</span>.state.knowsIt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// good</span></span><br><span class="line">get isHappyAndKnowsIt () &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.state.happy &amp;&amp; <span class="keyword">this</span>.state.knowsIt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里的对象方法<em>必须</em>返回一个<code>布尔值</code>。</p>
+<blockquote>
+<p>译注：<br>这里想表达的是，state做为管理组件状态的数据，数据结构应该尽量简单，清晰的表示组件状态，复杂的业务逻辑应该放在父组件通过props传递的方式来获得，所以作者推荐state的处理必须返回布尔值。</p>
+</blockquote>
+<p>参阅: 反模式-<a href="#条件判断语句">条件判断语句</a></p>
+<p><strong><a href="#目录">↑ 返回</a></strong></p>
+<h2 id="在render方法中使用三元表达式"><a href="#在render方法中使用三元表达式" class="headerlink" title="在render方法中使用三元表达式"></a>在render方法中使用三元表达式</h2><p>在<code>render</code>中使用三元表达式来完成渲染判断。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// bad</span></span><br><span class="line">renderSmilingStatement () &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">strong</span>&gt;</span>&#123;(this.state.isSmiling) ? " is smiling." : ""&#125;<span class="tag">&lt;/<span class="name">strong</span>&gt;</span></span>;</span><br><span class="line">&#125;,</span><br><span class="line"></span><br><span class="line">render () &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>&#123;this.props.name&#125;&#123;this.renderSmilingStatement()&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// good</span></span><br><span class="line">render () &#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &#123;<span class="keyword">this</span>.props.name&#125;</span><br><span class="line">      &#123;(<span class="keyword">this</span>.state.smiling)</span><br><span class="line">        ? <span class="xml"><span class="tag">&lt;<span class="name">span</span>&gt;</span>is smiling<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span><br><span class="line">        : <span class="literal">null</span></span><br><span class="line">      &#125;</span><br><span class="line">    &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">  );</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
+<p><strong><a href="#目录">↑ 返回</a></strong></p>
+<h2 id="View层组件"><a href="#View层组件" class="headerlink" title="View层组件"></a>View层组件</h2><p>以view层为基本最小单元来组织组件。不要创建只能一次性使用的巨无霸组件以及域组件 。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// bad</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PeopleWrappedInBSRow</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  render () &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div className=<span class="string">"row"</span>&gt;</span><br><span class="line">        &lt;People people=&#123;<span class="keyword">this</span>.state.people&#125; /&gt;</span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// good</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BSRow</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  render () &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">"row"</span>&gt;</span>&#123;this.props.children&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SomeView</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  render () &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;BSRow&gt;</span><br><span class="line">        &lt;People people=&#123;<span class="keyword">this</span>.state.people&#125; /&gt;</span><br><span class="line">      &lt;<span class="regexp">/BSRow&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
+<p><strong><a href="#目录">↑ 返回</a></strong></p>
+<h2 id="容器组件"><a href="#容器组件" class="headerlink" title="容器组件"></a>容器组件</h2><blockquote>
+<p>使用一个父级容器来进行数据请求，然后用子级组件来进行对应的渲染 &mdash; Jason Bonta</p>
+</blockquote>
+<h4 id="Bad"><a href="#Bad" class="headerlink" title="Bad"></a>Bad</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// CommentList.js</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CommentList</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  getInitialState () &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123; <span class="attr">comments</span>: [] &#125;;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  componentDidMount () &#123;</span><br><span class="line">    $.ajax(&#123;</span><br><span class="line">      url: <span class="string">"/my-comments.json"</span>,</span><br><span class="line">      dataType: <span class="string">'json'</span>,</span><br><span class="line">      success: <span class="function"><span class="keyword">function</span>(<span class="params">comments</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.setState(&#123;<span class="attr">comments</span>: comments&#125;);</span><br><span class="line">      &#125;.bind(<span class="keyword">this</span>)</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render () &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;ul&gt;</span><br><span class="line">        &#123;<span class="keyword">this</span>.state.comments.map(<span class="function">(<span class="params">&#123;body, author&#125;</span>) =&gt;</span> &#123;</span><br><span class="line">          <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">li</span>&gt;</span>&#123;body&#125;—&#123;author&#125;<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span>;</span><br><span class="line">        &#125;)&#125;</span><br><span class="line">      &lt;<span class="regexp">/ul&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
+<h4 id="Good"><a href="#Good" class="headerlink" title="Good"></a>Good</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// CommentList.js</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CommentList</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;ul&gt;</span><br><span class="line">        &#123;<span class="keyword">this</span>.props.comments.map(<span class="function">(<span class="params">&#123;body, author&#125;</span>) =&gt;</span> &#123;</span><br><span class="line">          <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">li</span>&gt;</span>&#123;body&#125;—&#123;author&#125;<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span>;</span><br><span class="line">        &#125;)&#125;</span><br><span class="line">      &lt;<span class="regexp">/ul&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// CommentListContainer.js</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CommentListContainer</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  getInitialState () &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123; <span class="attr">comments</span>: [] &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  componentDidMount () &#123;</span><br><span class="line">    $.ajax(&#123;</span><br><span class="line">      url: <span class="string">"/my-comments.json"</span>,</span><br><span class="line">      dataType: <span class="string">'json'</span>,</span><br><span class="line">      success: <span class="function"><span class="keyword">function</span>(<span class="params">comments</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.setState(&#123;<span class="attr">comments</span>: comments&#125;);</span><br><span class="line">      &#125;.bind(<span class="keyword">this</span>)</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render () &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">CommentList</span> <span class="attr">comments</span>=<span class="string">&#123;this.state.comments&#125;</span> /&gt;</span>;</span></span><br><span class="line"><span class="xml">  &#125;</span></span><br><span class="line"><span class="xml">&#125;</span></span><br></pre></td></tr></table></figure>
+<p><a href="https://medium.com/@learnreact/container-components-c0e67432e005" target="_blank" rel="noopener">了解更多</a><br><a href="https://www.youtube.com/watch?v=KYzlpRvWZ6c&amp;t=1351" target="_blank" rel="noopener">观看相关视频</a></p>
+<p><strong><a href="#目录">↑ 返回</a></strong></p>
+<hr>
+<h2 id="不要在render方法中缓存数据"><a href="#不要在render方法中缓存数据" class="headerlink" title="不要在render方法中缓存数据"></a>不要在render方法中缓存数据</h2><p>不要在 <code>render</code>方法中进行数据处理、state/props的保存。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// bad</span></span><br><span class="line">render () &#123;</span><br><span class="line">  <span class="keyword">let</span> name = <span class="string">`Mrs. <span class="subst">$&#123;<span class="keyword">this</span>.props.name&#125;</span>`</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>&#123;name&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// good</span></span><br><span class="line">render () &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>&#123;`Mrs. $&#123;this.props.name&#125;`&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// best</span></span><br><span class="line">get fancyName () &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">`Mrs. <span class="subst">$&#123;<span class="keyword">this</span>.props.name&#125;</span>`</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">render () &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>&#123;this.fancyName&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><em>我认为这样的风格是为了性能考量。</em></p>
+<p>参阅：推荐模式- <a href="#props数据的处理">props数据的处理</a></p>
+<p><strong><a href="#目录">↑ 返回</a></strong></p>
+<h2 id="条件判断语句"><a href="#条件判断语句" class="headerlink" title="条件判断语句"></a>条件判断语句</h2><p>不要在 <code>render</code>方法中写判断语句，多采用三元或短路。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// bad</span></span><br><span class="line">render () &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>&#123;if (this.state.happy &amp;&amp; this.state.knowsIt) &#123; return "Clapping hands" &#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// better</span></span><br><span class="line">get isTotesHappy() &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.state.happy &amp;&amp; <span class="keyword">this</span>.state.knowsIt;</span><br><span class="line">&#125;,</span><br><span class="line"></span><br><span class="line">render() &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>&#123;(this.isTotesHappy) &amp;&amp; "Clapping hands"&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个情况最好的方法就是使用 <a href="#容器组件">父组件容器</a>来管理state，新的state数据作为props传给子组件。</p>
+<p>参阅: 推荐模式- <a href="#state数据的处理">State数据的处理</a></p>
+<p><strong><a href="#目录">↑ 返回</a></strong></p>
+<h2 id="存在性检验"><a href="#存在性检验" class="headerlink" title="存在性检验"></a>存在性检验</h2><p>不要在根组件检查存在性。<br>使用函数式编写无状态组件时，返回的数据类型应该恒定。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// bad</span></span><br><span class="line"><span class="keyword">const</span> Person = <span class="function"><span class="params">props</span> =&gt;</span> &#123;</span><br><span class="line"><span class="comment">//原文为this.props.firstName 为原作者笔误，故改正</span></span><br><span class="line">  <span class="keyword">if</span> (props.firstName)</span><br><span class="line">    <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>&#123;props.firstName&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">null</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>所有组件都<em>必须</em>被渲染。<br>所以可以增加一个自己觉得合适的默认值——<code>defaultProps</code>。</p>
+<blockquote>
+<p>译注：<br>所有组件都进行渲染主要是为了方便进行控制和管理。<br>即不需要呈现的组件，渲染为一个空标签即可。</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// better</span></span><br><span class="line"><span class="keyword">const</span> Person = <span class="function"><span class="params">props</span> =&gt;</span></span><br><span class="line"><span class="comment">//原文为this.props.firstName 为作者笔误，故改正</span></span><br><span class="line">  &lt;div&gt;&#123;props.firstName&#125;&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">Person.defaultProps = &#123;</span></span><br><span class="line"><span class="regexp">  firstName: "Guest"</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>如果一个组件通过条件判断来决定渲染与否，那么可以将存在性检验写在其私有的组件语句中。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// best</span></span><br><span class="line"><span class="keyword">const</span> TheOwnerComponent = <span class="function"><span class="params">props</span> =&gt;</span></span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &#123;props.person &amp;&amp; <span class="xml"><span class="tag">&lt;<span class="name">Person</span> &#123;<span class="attr">...props.person</span>&#125; /&gt;</span>&#125;</span></span><br><span class="line"><span class="xml">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+<p>上述的存在性检验主要用于对象或者数组。<br>组件所需要的props中，嵌套的数据类型使用 PropTypes来进行检测。</p>
+<p><strong><a href="#目录">↑ 返回</a></strong></p>
+<h2 id="根据props来设置state"><a href="#根据props来设置state" class="headerlink" title="根据props来设置state"></a>根据props来设置state</h2><p>根据props设置state，并且给予props明确的含义。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// bad</span></span><br><span class="line">getInitialState () &#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    items: <span class="keyword">this</span>.props.items</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// good</span></span><br><span class="line">getInitialState () &#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    items: <span class="keyword">this</span>.props.initialItems</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>了解更多: <a href="http://facebook.github.io/react/tips/props-in-getInitialState-as-anti-pattern.html" target="_blank" rel="noopener">“Props in getInitialState Is an Anti-Pattern”</a></p>
+<p><strong><a href="#目录">↑ 返回</a></strong></p>
+<hr>
+<h2 id="合理命名事件处理函数"><a href="#合理命名事件处理函数" class="headerlink" title="合理命名事件处理函数"></a>合理命名事件处理函数</h2><p>为了让你给事件处理函数起个有意义的名字，先写事件触发的业务逻辑，之后再进行事件命名。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// bad</span></span><br><span class="line">punchABadger () &#123; <span class="comment">/*...*/</span> &#125;,</span><br><span class="line"></span><br><span class="line">render () &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">onClick</span>=<span class="string">&#123;this.punchABadger&#125;</span> /&gt;</span>;</span></span><br><span class="line"><span class="xml">&#125;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// good</span></span><br><span class="line">handleClick () &#123; <span class="comment">/*...*/</span> &#125;,</span><br><span class="line"></span><br><span class="line">render () &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">onClick</span>=<span class="string">&#123;this.handleClick&#125;</span> /&gt;</span>;</span></span><br><span class="line"><span class="xml">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>处理函数的命名应该:</p>
+<ul>
+<li>以<code>handle</code>作为开始</li>
+<li>以其对应的事件作为名字的结束 (例如, <code>Click</code>, <code>Change</code>)</li>
+<li>使用一般现在时</li>
+</ul>
+<p>如果你需要一些消除歧义的名称，你可以在<code>handle</code> 和事件名中间增加一些补充信息，<br>比如说你想要区分<code>onChange</code>事件，就可以是：<code>handleNameChange</code>和 <code>handleAgeChange</code>。不过若真如此，你可能需要想一下是不是需要创造一个新的组件。</p>
+<p><strong><a href="#目录">↑ 返回</a></strong></p>
+<h2 id="对event合理命名"><a href="#对event合理命名" class="headerlink" title="对event合理命名"></a>对event合理命名</h2><p>对于所有者自身的事件使用自定义事件来命名。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Owner</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  handleDelete () &#123;</span><br><span class="line">    <span class="comment">// handle Ownee's onDelete event</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render () &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">Ownee</span> <span class="attr">onDelete</span>=<span class="string">&#123;this.handleDelete&#125;</span> /&gt;</span>;</span></span><br><span class="line"><span class="xml">  &#125;</span></span><br><span class="line"><span class="xml">&#125;</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">class Ownee extends React.Component &#123;</span></span><br><span class="line"><span class="xml">  render () &#123;</span></span><br><span class="line">    return &lt;div onChange=&#123;this.props.onDelete&#125; /&gt;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Ownee.propTypes = &#123;</span><br><span class="line">  onDelete: React.PropTypes.func.isRequired</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><strong><a href="#目录">↑ 返回</a></strong></p>
+<h2 id="使用propType"><a href="#使用propType" class="headerlink" title="使用propType"></a>使用propType</h2><p>proptype表示组件所期望的数据类型，以及用于产生有意义的警告。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">MyValidatedComponent.propTypes = &#123;</span><br><span class="line">  name: React.PropTypes.string</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>如果接受到的<code>name</code>而不是<code>string</code>，<code>MyValidatedComponent</code> 会打出一个警告。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Person</span> <span class="attr">name</span>=<span class="string">1337</span> /&gt;</span></span><br><span class="line">// Warning: Invalid prop `name` of type `number` supplied to `MyValidatedComponent`, expected `string`.</span><br></pre></td></tr></table></figure>
+<p>这个组件要求 所传入的<code>props</code>必须有 name 字段。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">MyValidatedComponent.propTypes = &#123;</span><br><span class="line">  name: React.PropTypes.string.isRequired</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>组件会对要求字段进行验证。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Person</span> /&gt;</span></span><br><span class="line">// Warning: Required prop `name` was not specified in `Person`</span><br></pre></td></tr></table></figure></p>
+<p>了解更多: <a href="http://facebook.github.io/react/docs/reusable-components.html#prop-validation" target="_blank" rel="noopener">Prop Validation</a></p>
+<p><strong><a href="#目录">↑ 返回</a></strong></p>
+<h2 id="使用实体字符"><a href="#使用实体字符" class="headerlink" title="使用实体字符"></a>使用实体字符</h2><p>使用React原生的 <code>String.fromCharCode()</code> 来处理特殊字符。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// bad</span></span><br><span class="line">&lt;div&gt;PiCO · Mascot&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">/ nope</span></span><br><span class="line"><span class="regexp">&lt;div&gt;PiCO &amp;middot; Mascot&lt;/</span>div&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment">// good</span></span><br><span class="line">&lt;div&gt;&#123;<span class="string">'PiCO '</span> + <span class="built_in">String</span>.fromCharCode(<span class="number">183</span>) + <span class="string">' Mascot'</span>&#125;&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">/ better</span></span><br><span class="line"><span class="regexp">&lt;div&gt;&#123;`PiCO $&#123;String.fromCharCode(183)&#125; Mascot`&#125;&lt;/</span>div&gt;</span><br></pre></td></tr></table></figure>
+<p>了解更多: <a href="http://facebook.github.io/react/docs/jsx-gotchas.html#html-entities" target="_blank" rel="noopener">JSX Gotchas</a></p>
+<p><strong><a href="#目录">↑ 返回</a></strong></p>
+<h2 id="表格"><a href="#表格" class="headerlink" title="表格"></a>表格</h2><p>在<code>table</code>标签中要记得使用<code>tbody</code>。</p>
+<p>如果你忘记了<code>tbody</code>标签，虽然React不会像浏览器那样觉得你很ZZ然后帮你加一个，但是React会继续渲染JSX即给<code>table</code>里面直接插入<code>tr</code>，最后的结果可能不可控，使你一脸懵逼，所以记得使用 <code>tbody</code>。 </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// bad</span></span><br><span class="line">render () &#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;table&gt;</span><br><span class="line">      &lt;tr&gt;...&lt;<span class="regexp">/tr&gt;</span></span><br><span class="line"><span class="regexp">    &lt;/</span>table&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// good</span></span><br><span class="line">render () &#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;table&gt;</span><br><span class="line">      &lt;tbody&gt;</span><br><span class="line">        &lt;tr&gt;...&lt;<span class="regexp">/tr&gt;</span></span><br><span class="line"><span class="regexp">      &lt;/</span>tbody&gt;</span><br><span class="line">    &lt;<span class="regexp">/table&gt;</span></span><br><span class="line"><span class="regexp">  );</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
+<p><strong><a href="#目录">↑ 返回</a></strong></p>
+<h2 id="classNames库"><a href="#classNames库" class="headerlink" title="classNames库"></a>classNames库</h2><p>使用 <a href="https://www.npmjs.com/package/classnames" target="_blank" rel="noopener">classNames</a>这个库来做类名判断与管理。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// bad</span></span><br><span class="line">get classes () &#123;</span><br><span class="line">  <span class="keyword">let</span> classes = [<span class="string">'MyComponent'</span>];</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">this</span>.state.active) &#123;</span><br><span class="line">    classes.push(<span class="string">'MyComponent--active'</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> classes.join(<span class="string">' '</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">render () &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&#123;this.classes&#125;</span> /&gt;</span>;</span></span><br><span class="line"><span class="xml">&#125;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// good</span></span><br><span class="line">render () &#123;</span><br><span class="line">  <span class="keyword">let</span> classes = &#123;</span><br><span class="line">    <span class="string">'MyComponent'</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">'MyComponent--active'</span>: <span class="keyword">this</span>.state.active</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&#123;classnames(classes)&#125;</span> /&gt;</span>;</span></span><br><span class="line"><span class="xml">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>了解更多: <a href="https://github.com/JedWatson/classnames/blob/master/README.md" target="_blank" rel="noopener">Class Name Manipulation</a></p>
+<p><strong><a href="#目录">↑ 返回</a></strong></p>
+<h2 id="JSX"><a href="#JSX" class="headerlink" title="JSX"></a>JSX</h2><p>我在的项目组中曾经有一些 CoffeeScript的拥趸，不幸的事情是在写CoffeeScript数据模板的时候，因为JSX进行了抽象导致模板钩子的实现改变了。</p>
+<p>所以我们不推荐使用CoffeeScript来编写render方法。</p>
+<p>当必须使用CoffeeScript时，你可以看一下我们怎么使用CoffeeScript： <a href="https://slack-files.com/T024L9M0Y-F02HP4JM3-80d714" target="_blank" rel="noopener">CoffeeScript and JSX</a>.</p>
+<p><strong><a href="#目录">↑ 返回</a></strong></p>
+<h2 id="ES2015"><a href="#ES2015" class="headerlink" title="ES2015"></a>ES2015</h2><p><a href="https://github.com/reactjs/react-rails" target="_blank" rel="noopener">react-rails</a>现在已经集成了<a href="https://babeljs.io" target="_blank" rel="noopener">babel</a>，所有babel能做的事情，在Rails中也可以，你可以参阅文档来了解其相关配置。</p>
+<p><strong><a href="#目录">↑ 返回</a></strong></p>
+<h2 id="react-rails"><a href="#react-rails" class="headerlink" title="react-rails"></a>react-rails</h2><p><a href="https://github.com/reactjs/react-rails" target="_blank" rel="noopener">react-rails</a>可以用于所有使用React开发的Rails Apps。它使得Rails与React之间可以完美结合。</p>
+<p><strong><a href="#目录">↑ 返回</a></strong></p>
+<h2 id="rails-assets"><a href="#rails-assets" class="headerlink" title="rails-assets"></a>rails-assets</h2><p><a href="https://rails-assets.org" target="_blank" rel="noopener">rails-assets</a>是一个资源管理框架，用于管理项目中的js/css等静态资源。我这里最流行的React库是<a href="http://bower.io" target="_blank" rel="noopener">Bower</a>它其可以非常方便的添加依赖与react资源</p>
+<p><strong>警告：rails-assets 需要 Sprockets来进行 bower项目的访问。这是rails使用js传统的方法的胜利，这种方法不需要借助js模块化管理工具。</strong></p>
+<p><strong><a href="#目录">↑ 返回</a></strong></p>
+<h2 id="flux"><a href="#flux" class="headerlink" title="flux"></a>flux</h2><p>使用<a href="http://alt.js.org" target="_blank" rel="noopener">Alt</a>来进行flux开发。flux 文档提到建议配合Alt开发。</p>
+<p><strong><a href="#目录">↑ 返回</a></strong></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/js/" rel="tag"># js</a>
+          
+            <a href="/tags/react/" rel="tag"># react</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div id="needsharebutton-postbottom">
+            <span class="btn">
+              <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </span>
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/12/11/调教磨人的小妖精 —— canvas.context.save()；sa-res的最佳实践/" rel="next" title="调教磨人的小妖精 —— canvas.context.save()；sa/res的最佳实践">
+                <i class="fa fa-chevron-left"></i> 调教磨人的小妖精 —— canvas.context.save()；sa/res的最佳实践
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/06/人人金服前端架构演变之路/" rel="prev" title="人人金服前端架构演变之路">
+                人人金服前端架构演变之路 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Yuri" />
+            
+              <p class="site-author-name" itemprop="name">Yuri</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Yuritu" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:tuqiang_ru@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#目录"><span class="nav-number">1.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">2.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基础组件结构"><span class="nav-number">3.</span> <span class="nav-text">基础组件结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#规范Props格式"><span class="nav-number">4.</span> <span class="nav-text">规范Props格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Props数据的处理"><span class="nav-number">5.</span> <span class="nav-text">Props数据的处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#State数据的处理"><span class="nav-number">6.</span> <span class="nav-text">State数据的处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在render方法中使用三元表达式"><span class="nav-number">7.</span> <span class="nav-text">在render方法中使用三元表达式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#View层组件"><span class="nav-number">8.</span> <span class="nav-text">View层组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#容器组件"><span class="nav-number">9.</span> <span class="nav-text">容器组件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Bad"><span class="nav-number">9.0.1.</span> <span class="nav-text">Bad</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Good"><span class="nav-number">9.0.2.</span> <span class="nav-text">Good</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#不要在render方法中缓存数据"><span class="nav-number">10.</span> <span class="nav-text">不要在render方法中缓存数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条件判断语句"><span class="nav-number">11.</span> <span class="nav-text">条件判断语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#存在性检验"><span class="nav-number">12.</span> <span class="nav-text">存在性检验</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#根据props来设置state"><span class="nav-number">13.</span> <span class="nav-text">根据props来设置state</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#合理命名事件处理函数"><span class="nav-number">14.</span> <span class="nav-text">合理命名事件处理函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对event合理命名"><span class="nav-number">15.</span> <span class="nav-text">对event合理命名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用propType"><span class="nav-number">16.</span> <span class="nav-text">使用propType</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用实体字符"><span class="nav-number">17.</span> <span class="nav-text">使用实体字符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#表格"><span class="nav-number">18.</span> <span class="nav-text">表格</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#classNames库"><span class="nav-number">19.</span> <span class="nav-text">classNames库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JSX"><span class="nav-number">20.</span> <span class="nav-text">JSX</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ES2015"><span class="nav-number">21.</span> <span class="nav-text">ES2015</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#react-rails"><span class="nav-number">22.</span> <span class="nav-text">react-rails</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rails-assets"><span class="nav-number">23.</span> <span class="nav-text">rails-assets</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#flux"><span class="nav-number">24.</span> <span class="nav-text">flux</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yuri</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'YuriTu',
+            repo: 'blog',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: 'c64e22874384bc1197b1cec60b63ddb1abe057f1',
+            
+                client_id: '91bb8fa224e5687b3d2e'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+      pbOptions = {};
+      
+          pbOptions.iconStyle = "box";
+      
+          pbOptions.boxForm = "horizontal";
+      
+          pbOptions.position = "bottomCenter";
+      
+          pbOptions.networks = "Weibo,Wechat";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+  </script>
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

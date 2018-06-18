@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico?v=5.1.4">
+
+
+
+
+
+
+  <meta name="keywords" content="js,canvas," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="用three.js打造粒子动画最近为了给以后的运营需求做技术积累，对3D动画在组内的落地进行了一些研究。切入点是粒子动画，这是最容易实现的3D动画。 最后做出了一些还可以的效果。把其中的经验与坑记录一下由于只在内网上线，所以暂时用gif来表示（gif掉帧比较大，真实还是非常流畅的）。 基础知识这里不再赘述 webGL底层与图形学，我们这里说three的基础 three.js构成一个物体的本质是三样">
+<meta name="keywords" content="js,canvas">
+<meta property="og:type" content="article">
+<meta property="og:title" content="用three.js打造粒子动画">
+<meta property="og:url" content="http://tuqiang.website/2018/01/14/用three.js打造粒子动画/index.html">
+<meta property="og:site_name" content="住何乡">
+<meta property="og:description" content="用three.js打造粒子动画最近为了给以后的运营需求做技术积累，对3D动画在组内的落地进行了一些研究。切入点是粒子动画，这是最容易实现的3D动画。 最后做出了一些还可以的效果。把其中的经验与坑记录一下由于只在内网上线，所以暂时用gif来表示（gif掉帧比较大，真实还是非常流畅的）。 基础知识这里不再赘述 webGL底层与图形学，我们这里说three的基础 three.js构成一个物体的本质是三样">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://odf9m3avc.bkt.clouddn.com/hi.gif">
+<meta property="og:image" content="http://odf9m3avc.bkt.clouddn.com/%E5%90%83%E6%83%8A.jpg">
+<meta property="og:updated_time" content="2018-01-14T10:40:11.416Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="用three.js打造粒子动画">
+<meta name="twitter:description" content="用three.js打造粒子动画最近为了给以后的运营需求做技术积累，对3D动画在组内的落地进行了一些研究。切入点是粒子动画，这是最容易实现的3D动画。 最后做出了一些还可以的效果。把其中的经验与坑记录一下由于只在内网上线，所以暂时用gif来表示（gif掉帧比较大，真实还是非常流畅的）。 基础知识这里不再赘述 webGL底层与图形学，我们这里说three的基础 three.js构成一个物体的本质是三样">
+<meta name="twitter:image" content="http://odf9m3avc.bkt.clouddn.com/hi.gif">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://tuqiang.website/2018/01/14/用three.js打造粒子动画/"/>
+
+
+
+
+
+  <title>用three.js打造粒子动画 | 住何乡</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?2577307c02362ff403e4ea6931bf024b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">住何乡</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://tuqiang.website/2018/01/14/用three.js打造粒子动画/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yuri">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="住何乡">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">用three.js打造粒子动画</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-14T00:00:00+08:00">
+                2018-01-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/01/14/用three.js打造粒子动画/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2018/01/14/用three.js打造粒子动画/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="用three-js打造粒子动画"><a href="#用three-js打造粒子动画" class="headerlink" title="用three.js打造粒子动画"></a>用three.js打造粒子动画</h1><p>最近为了给以后的运营需求做技术积累，对3D动画在组内的落地进行了一些研究。切入点是粒子动画，这是最容易实现的3D动画。</p>
+<p>最后做出了一些还可以的效果。把其中的经验与坑记录一下<br>由于只在内网上线，所以暂时用gif来表示（gif掉帧比较大，真实还是非常流畅的）。<br><img src="http://odf9m3avc.bkt.clouddn.com/hi.gif" alt="hi"></p>
+<h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><p>这里不再赘述 webGL底层与图形学，我们这里说three的基础</p>
+<p>three.js构成一个物体的本质是三样<br>1.Geometry 几何 负责物体长什么样子<br>2.material 材料 负责物体对光线的交互<br>3.mesh 网格 geo与mat的承载者</p>
+<p>粒子动画的粒子构成有三种思路</p>
+<ol>
+<li>Points + Vector3 </li>
+</ol>
+<p>最常用的一种，一个父级对象作为粒子系统，子为坐标点矢量</p>
+<p>好处是方便建立，开一个随机数组，xyz三值赋值即可</p>
+<p>缺点是不方便为控制每一个粒子，如果想对每个粒子的颜色大小等进行控制无法达到，因为Vector对象本质上是矢量，不包含这些东西，矢量擅长的事情是位移。</p>
+<ol>
+<li>Group + Mesh </li>
+</ol>
+<p>这种方式的优点是</p>
+<p>可以操控所有的粒子属性，大而全，就像一个IDE，你能做的事情都帮你做了，建立起来也和Vector非常相似，十分容易。</p>
+<p>缺点是非常耗费性能，2D动画的性能一般由计算和渲染决定，而由于GPU太擅长矩阵计算了，计算耗费相对于渲染微不足道。渲染性能耗费主要就在于GPU要计算多少面，而每一个Mesh对象又是独立的，如果采用MergeGeometry的方法则无法控制每一个粒子。</p>
+<ol>
+<li>BufferGeometry + ShaderMaterial</li>
+</ol>
+<p>使用缓冲区来降低性能消耗，还能完整控制每个属性。</p>
+<p>就是难写…<br><img src="http://odf9m3avc.bkt.clouddn.com/%E5%90%83%E6%83%8A.jpg" alt=""></p>
+<p><strong>BufferGeometry</strong>要求Float32Array，为3 <em> n矩阵来确定位置信息，颜色与大小等则同样为 1</em> n的矩阵。与上面两种直接给实例的方式不一样。<br>举个🌰<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> v = <span class="keyword">new</span> THREE.Vector3();</span><br><span class="line"><span class="keyword">const</span> length = n;</span><br><span class="line"><span class="keyword">let</span> rs = <span class="keyword">new</span> <span class="built_in">Array</span>(length * <span class="number">3</span>);</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; length; i++) &#123;</span><br><span class="line">    v.x = x</span><br><span class="line">    v.y = y;</span><br><span class="line">    v.z = z;</span><br><span class="line">    v.toArray(rs, i * <span class="number">3</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> rs</span><br></pre></td></tr></table></figure></p>
+<p>这里我们用一个Vector3.toArray来帮我们来完成矩阵排列，当然这样就是要你不要<br>用 index index + 1 index + 2 的方式来表示xyz，因为在真实开发环境中可能有复杂情况让你不是那么好算。</p>
+<p>这里返回一个普通array 你可以直接用 new Float32Array()或者用原型链方法from来进行array 到 float。</p>
+<p><strong>ShaderMaterial</strong>就更麻烦了,因为他涉及到我们需要自己写用GLSL语言来写着色器，它可以让你充分的发挥GPU的威力但是对于习惯了写JS的一些fe来说，突然去写类C的这样一种语言还是会有一些不适应的。</p>
+<h2 id="开发难点处理"><a href="#开发难点处理" class="headerlink" title="开发难点处理"></a>开发难点处理</h2><ol>
+<li>模型算法</li>
+</ol>
+<p>three.js帮你把底层基本上能做的事，都做了，封装的也非常好，虽说官方文档有点云里雾里的但是跟着看看源码也就明白了，作者的源码写的是真心话简单朴实不炫技。</p>
+<p>那么对于我们开发者的难度就在于算法上了，算法有两个问题</p>
+<p>1.1 物体建模</p>
+<p>有UI支撑帮忙建模自然最好，但是从经验来看还是靠不住的；我们需要自己用算法实现物体的效果，比如说一个渐变缩小的金字塔，他的每个粒子之间的的关系方程式，需要我们花费时间去处理。这里面就涉及到调参的问题，如何快速的精确调整与展示结果，直接影响到我们的开发效率，这里three官方用的是 <a href="https://github.com/dataarts/dat.gui" target="_blank" rel="noopener">dat.gui</a>，能解决我们所需要的快速展示结果的需求，问题就是需要花费时间添加代码。理想来说应该可以集成在一个框架中，来减少开发成本，但是目前生态不算完善，可以考虑自己造轮子。</p>
+<p>1.2 数据生成</p>
+<p>随机数据的生成以及对数据状态的变化，也是一个需要解决的部分，建立好的模型，怎么去进行动画。位移、大小、颜色、形变等等，都需要一个规律的算法来实现，简单的补间动画我们可以使用<a href="https://github.com/tweenjs/tween.js" target="_blank" rel="noopener">TWEEN</a>来实现，但是真正那些好看的效果，还是需要我们通过各种三角函数、矩阵变换等来实现，这里暂时没有什么太好的处理方法，只能说是多看实例，积累算法。</p>
+<ol>
+<li>动画思路</li>
+</ol>
+<p>在动画各幕对象差很多的情况该怎么办？</p>
+<p>在我的动画中，四幕粒子数约为 10k, .5k, 2k, 3k ，那么这里涉及到第一幕多出来的粒子怎么处理？让他飞出去在销毁？毕竟多这么多挺费内存的。但是我没有这么干，而是循环原样摆放，也就是说我的10k个粒子，在第二幕其实摆了20遍，只不过他们重合了，看起来像只有很少。</p>
+<p>有两个原因：</p>
+<ol>
+<li>不缺这点性能</li>
+</ol>
+<p>GPU前向算法会将不出现的物体不进行渲染。10k粒子对GPU不算啥事。</p>
+<ol>
+<li>工程难度</li>
+</ol>
+<p>如果我反复操作粒子总量更加困难不说，也容易出bug延误工期，现在都敏捷开发，一天出80分的活，也不会让你一周干到100分，毕竟可以后续再迭代。</p>
+<h2 id="工程化考量"><a href="#工程化考量" class="headerlink" title="工程化考量"></a>工程化考量</h2><p>本质上来说Three.js像是Jq，他的定位是一个库，3D的开发模式还是比较传统，没有React等这样的革新开发模型的框架出现，也不想2D有CreateJS这样的容错很高的框架存在，整个生态还是比较原始的一片处女地，在错误捕捉、性能提升、开发体验上暂时还都需要开发者自己来完成。</p>
+<p>我自己把日常工作中沉淀了一下，做一个专为动画设计的工具库，<a href="https://github.com/YuriTu/Christina" target="_blank" rel="noopener">Christina.js</a>目前还很不完善， 只是集成了一些我觉得常用到的操作与算法，希望能对开发效率上有一定的提升。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>总体上这次开发还是挺仓促的，一共10/人/天，性能上没有任何优化，在内存上也有很多浪费和需要处理的地方，这都需要在后续的开发中再优化，在提高开发效果和快速成果展示上也还需要继续优化。但总体上我还是满意的。</p>
+<p>希望本文能给你一些灵感。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/js/" rel="tag"># js</a>
+          
+            <a href="/tags/canvas/" rel="tag"># canvas</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div id="needsharebutton-postbottom">
+            <span class="btn">
+              <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </span>
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/17/Make React Great Again —— React v16 新特性/" rel="next" title="Make React Great Again —— React v16 新特性">
+                <i class="fa fa-chevron-left"></i> Make React Great Again —— React v16 新特性
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Yuri" />
+            
+              <p class="site-author-name" itemprop="name">Yuri</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Yuritu" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:tuqiang_ru@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#用three-js打造粒子动画"><span class="nav-number">1.</span> <span class="nav-text">用three.js打造粒子动画</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基础知识"><span class="nav-number">1.1.</span> <span class="nav-text">基础知识</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开发难点处理"><span class="nav-number">1.2.</span> <span class="nav-text">开发难点处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工程化考量"><span class="nav-number">1.3.</span> <span class="nav-text">工程化考量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">1.4.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yuri</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'YuriTu',
+            repo: 'blog',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: 'c64e22874384bc1197b1cec60b63ddb1abe057f1',
+            
+                client_id: '91bb8fa224e5687b3d2e'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+      pbOptions = {};
+      
+          pbOptions.iconStyle = "box";
+      
+          pbOptions.boxForm = "horizontal";
+      
+          pbOptions.position = "bottomCenter";
+      
+          pbOptions.networks = "Weibo,Wechat";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+  </script>
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

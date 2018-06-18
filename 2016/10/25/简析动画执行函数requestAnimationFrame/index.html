@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico?v=5.1.4">
+
+
+
+
+
+
+  <meta name="keywords" content="js,canvas," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="我们今天讨论一下： 1.为什么用requestAnimationFrame2.requestAnimationFrame的 作用机制——为什么会更流畅 我们先说 为什么用requestAnimationFrame为什么？主要是为了解决timer导致以下的两个问题 1.跳帧 2.性能 一、跳帧问题帧数在一定程度上能决定画面的流畅，一般动画剪辑等24帧25帧30帧就足够，电视30帧，人眼因为视觉暂留对">
+<meta name="keywords" content="js,canvas">
+<meta property="og:type" content="article">
+<meta property="og:title" content="简析动画执行函数requestAnimationFrame">
+<meta property="og:url" content="http://tuqiang.website/2016/10/25/简析动画执行函数requestAnimationFrame/index.html">
+<meta property="og:site_name" content="住何乡">
+<meta property="og:description" content="我们今天讨论一下： 1.为什么用requestAnimationFrame2.requestAnimationFrame的 作用机制——为什么会更流畅 我们先说 为什么用requestAnimationFrame为什么？主要是为了解决timer导致以下的两个问题 1.跳帧 2.性能 一、跳帧问题帧数在一定程度上能决定画面的流畅，一般动画剪辑等24帧25帧30帧就足够，电视30帧，人眼因为视觉暂留对">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://i-msdn.sec.s-msft.com/dynimg/IC550966.png">
+<meta property="og:updated_time" content="2017-10-25T12:10:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="简析动画执行函数requestAnimationFrame">
+<meta name="twitter:description" content="我们今天讨论一下： 1.为什么用requestAnimationFrame2.requestAnimationFrame的 作用机制——为什么会更流畅 我们先说 为什么用requestAnimationFrame为什么？主要是为了解决timer导致以下的两个问题 1.跳帧 2.性能 一、跳帧问题帧数在一定程度上能决定画面的流畅，一般动画剪辑等24帧25帧30帧就足够，电视30帧，人眼因为视觉暂留对">
+<meta name="twitter:image" content="https://i-msdn.sec.s-msft.com/dynimg/IC550966.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://tuqiang.website/2016/10/25/简析动画执行函数requestAnimationFrame/"/>
+
+
+
+
+
+  <title>简析动画执行函数requestAnimationFrame | 住何乡</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?2577307c02362ff403e4ea6931bf024b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">住何乡</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://tuqiang.website/2016/10/25/简析动画执行函数requestAnimationFrame/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yuri">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="住何乡">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">简析动画执行函数requestAnimationFrame</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-10-25T00:00:00+08:00">
+                2016-10-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/10/25/简析动画执行函数requestAnimationFrame/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2016/10/25/简析动画执行函数requestAnimationFrame/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>我们今天讨论一下：</p>
+<p>1.为什么用requestAnimationFrame<br>2.requestAnimationFrame的 作用机制——为什么会更流畅</p>
+<p>我们先说 为什么用requestAnimationFrame<br>为什么？主要是为了解决timer导致以下的两个问题 1.跳帧 2.性能</p>
+<h1 id="一、跳帧问题"><a href="#一、跳帧问题" class="headerlink" title="一、跳帧问题"></a>一、跳帧问题</h1><p>帧数在一定程度上能决定画面的流畅，一般动画剪辑等24帧25帧30帧就足够，电视30帧，人眼因为视觉暂留对动画的判定最低帧数也就是12帧。而我们平时玩的游戏，一般会固定帧速率（framerate）为60帧。</p>
+<h2 id="1-setTimeout-setInterval"><a href="#1-setTimeout-setInterval" class="headerlink" title="1.setTimeout/setInterval"></a>1.setTimeout/setInterval</h2><p><code>timer有两方面的漏洞1.API本身的缺陷 2.浏览器执行的缺陷</code></p>
+<h3 id="1-API本身达不到毫秒级的精确"><a href="#1-API本身达不到毫秒级的精确" class="headerlink" title="1.API本身达不到毫秒级的精确"></a>1.API本身达不到毫秒级的精确</h3><p>如果使用 setTimeout或者setInterval 那么需要我们制定时间 假设给予 （1000/60）理论上就可以完成60帧速率的动画。实际上我们做个小demo也能跑。</p>
+<p>但是这是很一厢情愿的想法，在HTML5规范中，浏览器为了节省电力消耗可以拉长执行代码的间隔时间<a href="https://www.w3.org/html/ig/zh/wiki/HTML5/timers" target="_blank" rel="noopener">该API不保证计时器将在时间表上精确运行</a>.<br>所以事实是浏览器可以“强制规定时间间隔的下限（clamping th timeout interval）”,一般浏览器所允许的时间再5-10毫秒，也就是说即使你给了某个小于10的数，可能也要等待10毫秒。</p>
+<h3 id="2-浏览器不能完美执行"><a href="#2-浏览器不能完美执行" class="headerlink" title="2.浏览器不能完美执行"></a>2.浏览器不能完美执行</h3><p>我们的显示屏一般是16.7ms（即60FPS）的显示频率，我们看图片的第一行，每次刷新间隔就是黑色箭头的中间。<br><img src="https://i-msdn.sec.s-msft.com/dynimg/IC550966.png" alt="突然插入的帧"></p>
+<p>如果我们突然给了一个10ms的setTimeout，等于在每次刷新间隔中强制插入了一次渲染，超出本身的正常的绘制流程，这种过度绘制的情况会导致动画断续显示，因为会导致部分的第三帧会丢失。（当然显卡超频是另一码事，我们不谈）<br>打个比方，收银一分钟结两个人，你突然要插队进入，别人就要把你扔出来。<br>虽然浏览器厂家对timer做了很多优化，使其丢帧不会太严重，但是还是存在。简单的动画丢帧倒是也无妨，但是如果是复杂动画或者游戏丢帧就是很严重的事了。</p>
+<h2 id="requestAnimationFrame"><a href="#requestAnimationFrame" class="headerlink" title="requestAnimationFrame"></a>requestAnimationFrame</h2><p>我们都知道个人的发展不仅要看自身的努力也要看历史的进程，而request就是按照浏览器的渲染进行走的。</p>
+<p>request不像timer这么粗暴的插入，而是根据浏览器的绘制进行，更多的像是一种同化。<br>request 会把每一帧中的所有DOM操作集中起来，在一次重绘或回流中就完成（这点很像虚拟DOM不是~），并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率，它该是10ms咱们也10ms绘制，该是16.7咱们也16.7。跟随浏览器的绘制进行。</p>
+<p>这样以来，就保证了不会出现过度渲染的问题，保证了流畅的需求以及浏览器的完美渲染。</p>
+<p>二性能<br>性能上的影响有两点，一方面是对当前浏览器的影响，一个是对整个计算机内存的影响。</p>
+<h2 id="timer"><a href="#timer" class="headerlink" title="timer"></a>timer</h2><p>timer的渲染机制<a href="https://msdn.microsoft.com/library/hh920765%28v=vs.85%29.aspx" target="_blank" rel="noopener">导致了动画过度绘制，浪费 CPU 周期以及消耗额外的电能等问题。</a>，<br>而且，即使看不到网站，特别是当网站使用背景选项卡中的页面或浏览器已最小化时，动画都会频繁出现。<br>也就是说，你哪怕最小化了页面，切换到了别的页面，耗费着高资源的动画依然在执行。</p>
+<p>这种计时器分辨率的降低也会对电池使用寿命造成负面影响，并会降低其他应用的性能。</p>
+<h2 id="request"><a href="#request" class="headerlink" title="request"></a>request</h2><p>而request完全没有以上所述方面的性能支出<a href="https://segmentfault.com/a/1190000000386368" target="_blank" rel="noopener">《setInterval与requestAnimationFrame的时间间隔测试》</a>这篇文章很好的佐证了request的高性能。而其本身的避免了过度渲染也规避了cpu的支出。</p>
+<hr>
+<p>参考：<br><a href="https://hacks.mozilla.org/2011/08/animating-with-javascript-from-setinterval-to-requestanimationframe/" target="_blank" rel="noopener">Animating with javascript: from setInterval to requestAnimationFrame</a><br><a href="http://www.zhangxinxu.com/wordpress/2013/09/css3-animation-requestanimationframe-tween-%E5%8A%A8%E7%94%BB%E7%AE%97%E6%B3%95/" target="_blank" rel="noopener">CSS3动画那么强，requestAnimationFrame还有毛线用？</a><br><a href="https://segmentfault.com/a/1190000000386368" target="_blank" rel="noopener">setInterval与requestAnimationFrame的时间间隔测试</a><br><a href="http://creativejs.com/resources/requestanimationframe/" target="_blank" rel="noopener">requestAnimationFrame The secret to silky smooth JavaScript animation!</a><br><a href="http://jinlong.github.io/2013/06/24/better-performance-with-requestanimationframe/" target="_blank" rel="noopener">requestAnimationFrame 性能更好</a><br><a href="https://msdn.microsoft.com/library/hh920765%28v=vs.85%29.aspx" target="_blank" rel="noopener">基于脚本的动画的计时控制（“requestAnimationFrame”）</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/js/" rel="tag"># js</a>
+          
+            <a href="/tags/canvas/" rel="tag"># canvas</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div id="needsharebutton-postbottom">
+            <span class="btn">
+              <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </span>
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/13/简单的粒子动画的实现思路（一）/" rel="next" title="简单的粒子动画的实现思路（一）">
+                <i class="fa fa-chevron-left"></i> 简单的粒子动画的实现思路（一）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/12/11/调教磨人的小妖精 —— canvas.context.save()；sa-res的最佳实践/" rel="prev" title="调教磨人的小妖精 —— canvas.context.save()；sa/res的最佳实践">
+                调教磨人的小妖精 —— canvas.context.save()；sa/res的最佳实践 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Yuri" />
+            
+              <p class="site-author-name" itemprop="name">Yuri</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Yuritu" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:tuqiang_ru@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、跳帧问题"><span class="nav-number">1.</span> <span class="nav-text">一、跳帧问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-setTimeout-setInterval"><span class="nav-number">1.1.</span> <span class="nav-text">1.setTimeout/setInterval</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-API本身达不到毫秒级的精确"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.API本身达不到毫秒级的精确</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-浏览器不能完美执行"><span class="nav-number">1.1.2.</span> <span class="nav-text">2.浏览器不能完美执行</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#requestAnimationFrame"><span class="nav-number">1.2.</span> <span class="nav-text">requestAnimationFrame</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#timer"><span class="nav-number">1.3.</span> <span class="nav-text">timer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#request"><span class="nav-number">1.4.</span> <span class="nav-text">request</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yuri</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'YuriTu',
+            repo: 'blog',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: 'c64e22874384bc1197b1cec60b63ddb1abe057f1',
+            
+                client_id: '91bb8fa224e5687b3d2e'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+      pbOptions = {};
+      
+          pbOptions.iconStyle = "box";
+      
+          pbOptions.boxForm = "horizontal";
+      
+          pbOptions.position = "bottomCenter";
+      
+          pbOptions.networks = "Weibo,Wechat";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+  </script>
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

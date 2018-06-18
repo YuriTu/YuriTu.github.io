@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico?v=5.1.4">
+
+
+
+
+
+
+  <meta name="keywords" content="js,canvas," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="我们在日常借（kao）鉴（bei）别人的代码的时候往往会看到 context.save() || restore()。然后我们看文档就知道了，这是保存当前画布的状态…..个P啊！！！   保存了什么？为什么要保存这些？为什么要使用？何如判断是否需要使用？最佳实践是什么？ 完全啥没有好么！！！！ 定义大家都懂，但是还是过不好一生啊！！！ 然而实际上， save（） restore（）这一对磨人的小妖">
+<meta name="keywords" content="js,canvas">
+<meta property="og:type" content="article">
+<meta property="og:title" content="调教磨人的小妖精 —— canvas.context.save()；sa&#x2F;res的最佳实践">
+<meta property="og:url" content="http://tuqiang.website/2016/12/11/调教磨人的小妖精 —— canvas.context.save()；sa-res的最佳实践/index.html">
+<meta property="og:site_name" content="住何乡">
+<meta property="og:description" content="我们在日常借（kao）鉴（bei）别人的代码的时候往往会看到 context.save() || restore()。然后我们看文档就知道了，这是保存当前画布的状态…..个P啊！！！   保存了什么？为什么要保存这些？为什么要使用？何如判断是否需要使用？最佳实践是什么？ 完全啥没有好么！！！！ 定义大家都懂，但是还是过不好一生啊！！！ 然而实际上， save（） restore（）这一对磨人的小妖">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://odf9m3avc.bkt.clouddn.com/%E6%B5%B7%E6%9C%AA-%E8%BF%99%E4%B8%AA%E4%BA%BA%E6%98%AF%E4%B8%8D%E6%98%AF%E5%82%BB%E4%BA%86.jpg">
+<meta property="og:image" content="http://odf9m3avc.bkt.clouddn.com/test-re-title.png">
+<meta property="og:image" content="http://odf9m3avc.bkt.clouddn.com/test-no-re.png">
+<meta property="og:image" content="http://odf9m3avc.bkt.clouddn.com/%E5%8D%81%E5%85%AD%E5%A4%9C%E5%92%B2%E5%A4%9C.png">
+<meta property="og:updated_time" content="2017-10-25T12:10:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="调教磨人的小妖精 —— canvas.context.save()；sa&#x2F;res的最佳实践">
+<meta name="twitter:description" content="我们在日常借（kao）鉴（bei）别人的代码的时候往往会看到 context.save() || restore()。然后我们看文档就知道了，这是保存当前画布的状态…..个P啊！！！   保存了什么？为什么要保存这些？为什么要使用？何如判断是否需要使用？最佳实践是什么？ 完全啥没有好么！！！！ 定义大家都懂，但是还是过不好一生啊！！！ 然而实际上， save（） restore（）这一对磨人的小妖">
+<meta name="twitter:image" content="http://odf9m3avc.bkt.clouddn.com/%E6%B5%B7%E6%9C%AA-%E8%BF%99%E4%B8%AA%E4%BA%BA%E6%98%AF%E4%B8%8D%E6%98%AF%E5%82%BB%E4%BA%86.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://tuqiang.website/2016/12/11/调教磨人的小妖精 —— canvas.context.save()；sa-res的最佳实践/"/>
+
+
+
+
+
+  <title>调教磨人的小妖精 —— canvas.context.save()；sa/res的最佳实践 | 住何乡</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?2577307c02362ff403e4ea6931bf024b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">住何乡</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://tuqiang.website/2016/12/11/调教磨人的小妖精 —— canvas.context.save()；sa-res的最佳实践/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yuri">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="住何乡">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">调教磨人的小妖精 —— canvas.context.save()；sa/res的最佳实践</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-11T00:00:00+08:00">
+                2016-12-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/12/11/调教磨人的小妖精 —— canvas.context.save()；sa-res的最佳实践/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2016/12/11/调教磨人的小妖精 —— canvas.context.save()；sa-res的最佳实践/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>我们在日常借（kao）鉴（bei）别人的代码的时候往往会看到 context.save() || restore()。<br>然后我们看文档就知道了，这是保存当前画布的状态…..个P啊！！！</p>
+<p><img src="http://odf9m3avc.bkt.clouddn.com/%E6%B5%B7%E6%9C%AA-%E8%BF%99%E4%B8%AA%E4%BA%BA%E6%98%AF%E4%B8%8D%E6%98%AF%E5%82%BB%E4%BA%86.jpg" alt="此处输入图片的描述"></p>
+<hr>
+<p>保存了什么？<br>为什么要保存这些？<br>为什么要使用？<br>何如判断是否需要使用？<br>最佳实践是什么？</p>
+<p>完全啥没有好么！！！！</p>
+<p>定义大家都懂，但是还是过不好一生啊！！！</p>
+<p>然而实际上， save（） restore（）这一对磨人的小妖精在实际开发中非常重要，所以我们就来，好好和她们进行一下深入的<del>交流</del>学习。</p>
+<h2 id="save（）是-将当前状态放入栈中，保存-canvas-全部状态的方法。"><a href="#save（）是-将当前状态放入栈中，保存-canvas-全部状态的方法。" class="headerlink" title="save（）是 将当前状态放入栈中，保存 canvas 全部状态的方法。"></a><strong>save（）是 将当前状态放入栈中，保存 canvas 全部状态的方法。</strong></h2><h3 id="一、那么首先-：canvas状态-是什么？"><a href="#一、那么首先-：canvas状态-是什么？" class="headerlink" title="一、那么首先 ：canvas状态 是什么？"></a>一、那么首先 ：<strong>canvas状态</strong> 是什么？</h3><p>他不是保存canvas画布上画了什么，而是 用一个栈 将  那些你需要在<code>接下来使用</code>(一、3解释)的<code>工具或属性</code>的状态的当前状态定义并保存。</p>
+<h3 id="一、1-保存了哪些工具"><a href="#一、1-保存了哪些工具" class="headerlink" title="一、1 保存了哪些工具"></a>一、1 保存了哪些工具</h3><p>1.确立的<code>变换 矩阵</code> (<strong>敲黑板</strong> 比如 translate、rotate、scale)<br>2.建立的裁剪区域<br>3.创建的虚线列表</p>
+<h3 id="一、2-保存了哪些属性"><a href="#一、2-保存了哪些属性" class="headerlink" title="一、2 保存了哪些属性"></a>一、2 保存了哪些属性</h3><p>常用的有  strokeStyle、 fillStyle、globalAlpha、lineWidth、shadowOffsetX、shadowOffsetY、 shadowBlur,、shadowColor、 font、 textAlign。 </p>
+<h3 id="一、3-为什么用-为什么保存"><a href="#一、3-为什么用-为什么保存" class="headerlink" title="一、3 为什么用 为什么保存"></a>一、3 为什么用 为什么保存</h3><p>上述状态其实是在动画中经常改变的变量，如果每次都要重新赋值…那得多长的代码量啊。。。</p>
+<p>所以<br>接下来<br>如果你需要在你之后的动画中 改变上述的 状态，那么你就需要进行save，除非你要丢弃这些变量曾经的值。</p>
+<p>这里我们看个🌰<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Clock</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(props) &#123;</span><br><span class="line">        <span class="keyword">this</span>.c = props;</span><br><span class="line">        <span class="keyword">this</span>.x = <span class="number">100</span>;</span><br><span class="line">        <span class="keyword">this</span>.y = <span class="number">100</span>;</span><br><span class="line">        <span class="keyword">this</span>.width = <span class="number">30</span>;</span><br><span class="line">        <span class="keyword">this</span>.height = <span class="number">20</span>;</span><br><span class="line">        <span class="keyword">this</span>.degrees = <span class="number">45</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    init()&#123;</span><br><span class="line">        <span class="comment">// c === canvas.context</span></span><br><span class="line">        <span class="keyword">const</span> c = <span class="keyword">this</span>.c;</span><br><span class="line">        c.fillStyle = <span class="string">"reb(80,80,120)"</span>;</span><br><span class="line">        c.strokeStyle = <span class="string">"red"</span>;</span><br><span class="line">        <span class="comment">//两次画矩形参数完全一样</span></span><br><span class="line">        c.fillRect(<span class="keyword">this</span>.x,<span class="keyword">this</span>.y,<span class="keyword">this</span>.width,<span class="keyword">this</span>.height);</span><br><span class="line"></span><br><span class="line">        c.save();</span><br><span class="line"></span><br><span class="line">        c.rotate(<span class="keyword">this</span>.degrees * <span class="built_in">Math</span>.PI / <span class="number">180</span>);</span><br><span class="line">        c.scale(<span class="number">1</span>,<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        c.translate(<span class="number">1</span>,<span class="number">1</span>);</span><br><span class="line">        <span class="comment">// c.restore();</span></span><br><span class="line">        c.fillStyle = <span class="string">"gold"</span>;</span><br><span class="line">        <span class="comment">//两次画矩形参数完全一样</span></span><br><span class="line">        c.fillRect(<span class="keyword">this</span>.x,<span class="keyword">this</span>.y,<span class="keyword">this</span>.width,<span class="keyword">this</span>.height);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在restore被注释的情况下</p>
+<blockquote>
+<p>嗯…意识流画风，将就看</p>
+</blockquote>
+<p><img src="http://odf9m3avc.bkt.clouddn.com/test-re-title.png" alt="此处输入图片的描述"></p>
+<p>在restore生效的情况下<br><img src="http://odf9m3avc.bkt.clouddn.com/test-no-re.png" alt="此处输入图片的描述"></p>
+<p>因为之前save中已经保存了transformations相关信息（rotate、scale等），经过restore，相关数据被推出栈，<code>覆盖</code>原有数据，金色矩形按照正常坐标轴输出，直接甩在黑矩形脸上。</p>
+<p>所以，你可以用任意多次save，但是restore次数要比save少。</p>
+<h2 id="二、最佳实践"><a href="#二、最佳实践" class="headerlink" title="二、最佳实践"></a>二、最佳实践</h2><p>前面我们提到，save最明显的作用是减少代码量，这么单调的API能活到现在，一定有其他的作用。</p>
+<h2 id="小妖精的技能："><a href="#小妖精的技能：" class="headerlink" title="小妖精的技能："></a>小妖精的技能：</h2><h3 id="1-方便的进行初始化-时间回朔-The-World！！"><a href="#1-方便的进行初始化-时间回朔-The-World！！" class="headerlink" title="1.方便的进行初始化 时间回朔 The World！！"></a>1.方便的进行初始化 <del>时间回朔 The World！！</del></h3><p>假定在栈中，你只有一次的状态改变，那么你就可以，在最开始定义初始态的时候进行一次save（），使用restore来重置状态，非常方便。</p>
+<h3 id="2-默认属性的多次使用-咲夜の世界！！"><a href="#2-默认属性的多次使用-咲夜の世界！！" class="headerlink" title="2.默认属性的多次使用 咲夜の世界！！"></a>2.默认属性的多次使用 <del>咲夜の世界！！</del></h3><p>比如有的时候我们会有一套 默认 状态需要被重复利用。</p>
+<p>例如我们要画很多个星星什么的，它有很多细节，我们将一套默认状态保存，以免我们重复的设置 set/get function，角度、旋转、字体等等。因为也许你的每一帧这些属性都在改变。</p>
+<blockquote>
+<p>不是像我们的例子那么简单，这点非常常用</p>
+</blockquote>
+<p>在很多项目中，如果我们看的深一点，我们就可以发现，别人经常会设置默认值，我看过的不少代码都喜欢这么做</p>
+<p>在每一次的 step（你可以理解成一次执行动画或一帧）中， 确定相对新的坐标系，将新到达的绝对坐标点（相对于屏幕），设定为相对初始坐标点，之后使用相对的移动，到达实际绝对定位的坐标。</p>
+<p>因为每一次的transformat都是相对之前坐标的。</p>
+<p>这…有什么用？ 往下看。<br><img src="http://odf9m3avc.bkt.clouddn.com/%E5%8D%81%E5%85%AD%E5%A4%9C%E5%92%B2%E5%A4%9C.png" alt="此处输入图片的描述"></p>
+<h3 id="3-简化计算-光速「C．リコシェ」"><a href="#3-简化计算-光速「C．リコシェ」" class="headerlink" title="3.简化计算 光速「Ｃ．リコシェ」"></a>3.简化计算 <del>光速「Ｃ．リコシェ」</del></h3><blockquote>
+<p>毕竟，在你画图的时候，你也许就不知道x、y值</p>
+</blockquote>
+<p>说~<br>我们要加一张图在h屏幕中间，我们一般会这么写</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">context.drawImage(myImg, x, y, myImg.width, myImg.height);</span><br></pre></td></tr></table></figure>
+<p>当然你可以这么搞，没人阻止你…</p>
+<p>可事实上，往往需要计算相对于 画布的“相机”的真实的x、y值，好吧，那我们就在timer里面算吧。。</p>
+<p>如果你画的是一个人呢？有帽子，有手的位置，裙子的摆动，等等，你要将这些东西与本体人物割裂开做绝对坐标计算？</p>
+<p>当然第一反应是，人物坐标body.x 那么手的坐标就是 body.x - hand.x 或者 + sin（x）….等等等等</p>
+<p>嗯…如果你能搞出来 挺厉害的…草稿写一本子了吧，当年的高数是满分吧？</p>
+<hr>
+<p>所以！！这种情况我们果断采用使用相对默认坐标，改变坐标轴，进行矢量计算就好了。</p>
+<p>比如手相对人物坐标长6个px，与人物夹角20°，那就直接旋转20°坐标轴画6个px，不比计算一大堆三角函数好搞得多？绘制完成restore回默认坐标点，继续下一个。</p>
+<hr>
+<p>所以，save/restore是相当常用也好用的API，好好利用会给我们带来很多的便利，以上的一些最佳实践只是抛砖引玉，欢迎探讨~</p>
+<p>参考：</p>
+<ol>
+<li><a href="http://stackoverflow.com/questions/16409105/whats-the-purpose-of-canvas-context-save-and-restore-in-this-example" target="_blank" rel="noopener">http://stackoverflow.com/questions/16409105/whats-the-purpose-of-canvas-context-save-and-restore-in-this-example</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/save" target="_blank" rel="noopener">https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/save</a></li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/js/" rel="tag"># js</a>
+          
+            <a href="/tags/canvas/" rel="tag"># canvas</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div id="needsharebutton-postbottom">
+            <span class="btn">
+              <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </span>
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/10/25/简析动画执行函数requestAnimationFrame/" rel="next" title="简析动画执行函数requestAnimationFrame">
+                <i class="fa fa-chevron-left"></i> 简析动画执行函数requestAnimationFrame
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/09/译注-React最佳实践/" rel="prev" title="译注React最佳实践">
+                译注React最佳实践 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Yuri" />
+            
+              <p class="site-author-name" itemprop="name">Yuri</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Yuritu" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:tuqiang_ru@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#save（）是-将当前状态放入栈中，保存-canvas-全部状态的方法。"><span class="nav-number">1.</span> <span class="nav-text">save（）是 将当前状态放入栈中，保存 canvas 全部状态的方法。</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、那么首先-：canvas状态-是什么？"><span class="nav-number">1.1.</span> <span class="nav-text">一、那么首先 ：canvas状态 是什么？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一、1-保存了哪些工具"><span class="nav-number">1.2.</span> <span class="nav-text">一、1 保存了哪些工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一、2-保存了哪些属性"><span class="nav-number">1.3.</span> <span class="nav-text">一、2 保存了哪些属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一、3-为什么用-为什么保存"><span class="nav-number">1.4.</span> <span class="nav-text">一、3 为什么用 为什么保存</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、最佳实践"><span class="nav-number">2.</span> <span class="nav-text">二、最佳实践</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小妖精的技能："><span class="nav-number">3.</span> <span class="nav-text">小妖精的技能：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-方便的进行初始化-时间回朔-The-World！！"><span class="nav-number">3.1.</span> <span class="nav-text">1.方便的进行初始化 时间回朔 The World！！</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-默认属性的多次使用-咲夜の世界！！"><span class="nav-number">3.2.</span> <span class="nav-text">2.默认属性的多次使用 咲夜の世界！！</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-简化计算-光速「C．リコシェ」"><span class="nav-number">3.3.</span> <span class="nav-text">3.简化计算 光速「Ｃ．リコシェ」</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yuri</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'YuriTu',
+            repo: 'blog',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: 'c64e22874384bc1197b1cec60b63ddb1abe057f1',
+            
+                client_id: '91bb8fa224e5687b3d2e'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+      pbOptions = {};
+      
+          pbOptions.iconStyle = "box";
+      
+          pbOptions.boxForm = "horizontal";
+      
+          pbOptions.position = "bottomCenter";
+      
+          pbOptions.networks = "Weibo,Wechat";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+  </script>
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

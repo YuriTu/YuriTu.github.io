@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico?v=5.1.4">
+
+
+
+
+
+
+  <meta name="keywords" content="js,canvas," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="一直想给FED的网站做个好看的首页引导图，看到，webQQ JX框架的这种效果很酷炫，决定模仿一个。 demo:粒子动画（一）demo 粒子动画的基本绘画思路我们知道canvas之所以强大的原因是它像素级的操作，在画布中的每一个像素都能被我们所操作，而之所以能被操作的原因就是 ImageData对象，这个对象保存着所有的像素数据。 ImageData对象canvas元素的context中有一个 g">
+<meta name="keywords" content="js,canvas">
+<meta property="og:type" content="article">
+<meta property="og:title" content="简单的粒子动画的实现思路（一）">
+<meta property="og:url" content="http://tuqiang.website/2016/09/13/简单的粒子动画的实现思路（一）/index.html">
+<meta property="og:site_name" content="住何乡">
+<meta property="og:description" content="一直想给FED的网站做个好看的首页引导图，看到，webQQ JX框架的这种效果很酷炫，决定模仿一个。 demo:粒子动画（一）demo 粒子动画的基本绘画思路我们知道canvas之所以强大的原因是它像素级的操作，在画布中的每一个像素都能被我们所操作，而之所以能被操作的原因就是 ImageData对象，这个对象保存着所有的像素数据。 ImageData对象canvas元素的context中有一个 g">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://odf9m3avc.bkt.clouddn.com/image/blog/imagedata.png">
+<meta property="og:image" content="http://odf9m3avc.bkt.clouddn.com/DATA.png">
+<meta property="og:image" content="http://odf9m3avc.bkt.clouddn.com/point.png">
+<meta property="og:updated_time" content="2017-10-25T12:10:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="简单的粒子动画的实现思路（一）">
+<meta name="twitter:description" content="一直想给FED的网站做个好看的首页引导图，看到，webQQ JX框架的这种效果很酷炫，决定模仿一个。 demo:粒子动画（一）demo 粒子动画的基本绘画思路我们知道canvas之所以强大的原因是它像素级的操作，在画布中的每一个像素都能被我们所操作，而之所以能被操作的原因就是 ImageData对象，这个对象保存着所有的像素数据。 ImageData对象canvas元素的context中有一个 g">
+<meta name="twitter:image" content="http://odf9m3avc.bkt.clouddn.com/image/blog/imagedata.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://tuqiang.website/2016/09/13/简单的粒子动画的实现思路（一）/"/>
+
+
+
+
+
+  <title>简单的粒子动画的实现思路（一） | 住何乡</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?2577307c02362ff403e4ea6931bf024b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">住何乡</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://tuqiang.website/2016/09/13/简单的粒子动画的实现思路（一）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yuri">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="住何乡">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">简单的粒子动画的实现思路（一）</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-13T00:00:00+08:00">
+                2016-09-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/09/13/简单的粒子动画的实现思路（一）/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2016/09/13/简单的粒子动画的实现思路（一）/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>一直想给FED的网站做个好看的首页引导图，看到，<a href="http://alloyteam.github.io/JX/" target="_blank" rel="noopener">webQQ JX框架</a>的这种效果很酷炫，决定模仿一个。</p>
+<p>demo:<a href="http://yuritu.github.io/work/canvas/particle/particle.html" target="_blank" rel="noopener">粒子动画（一）demo</a></p>
+<h1 id="粒子动画的基本绘画思路"><a href="#粒子动画的基本绘画思路" class="headerlink" title="粒子动画的基本绘画思路"></a>粒子动画的基本绘画思路</h1><p>我们知道canvas之所以强大的原因是它像素级的操作，在画布中的每一个像素都能被我们所操作，而之所以能被操作的原因就是 ImageData对象，这个对象保存着所有的像素数据。</p>
+<h2 id="ImageData对象"><a href="#ImageData对象" class="headerlink" title="ImageData对象"></a>ImageData对象</h2><p>canvas元素的context中有一个 getImage的api可以拿到当前画布的ImageData，<br>他的结果：<br><img src="http://odf9m3avc.bkt.clouddn.com/image/blog/imagedata.png" alt="image"></p>
+<p>其中的data是一个一维数据，存放着整个二维平面的数据<br><img src="http://odf9m3avc.bkt.clouddn.com/DATA.png" alt="此处输入图片的描述"><br>类似这样的结构，每4个index，组成一个rgba的数据来描述像素点，所以就构成了如下的数据结构<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data = [r,g,b,a,r,b,g,a,........]</span><br></pre></td></tr></table></figure></p>
+<p>和我们在css中使用的rgba不同，其4个数字的有效范围都是0-255，a也是。</p>
+<h2 id="绘制的思路"><a href="#绘制的思路" class="headerlink" title="绘制的思路"></a>绘制的思路</h2><p>一个关键的思路就是，这个动画要逆向去构建，一堆散乱的粒子拼成特定字符是不好做的，但是把一个图片、文字随机打散到画布就不难了。</p>
+<p>3D效果也做好后，就做动画，随机出一个坐标，让粒子先呆在那个坐标，然后通过保存的位置再聚合，然后再随机出坐标再分散，就是这个动画的原理了。</p>
+<p>1.取得文字信息<br>2.创造粒子</p>
+<ol>
+<li>重排粒子</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 取得文字信息</span></span><br><span class="line"><span class="keyword">this</span>.dots = <span class="keyword">this</span>.getImgData(<span class="string">"人人FED"</span>);</span><br><span class="line"><span class="keyword">let</span> dots = <span class="keyword">this</span>.dots;</span><br><span class="line"><span class="comment">// 绘制随机点</span></span><br><span class="line">dots.forEach(<span class="function">(<span class="params">item</span>)=&gt;</span>&#123;</span><br><span class="line">    <span class="comment">//告诉各个粒子现在应该所在的位置</span></span><br><span class="line">    item.x = <span class="built_in">Math</span>.random() * canvas.obj.width;</span><br><span class="line">    item.y = <span class="built_in">Math</span>.random() * canvas.obj.height;</span><br><span class="line">    <span class="comment">// 焦距，利用二维方式模拟三维效果 </span></span><br><span class="line">    item.z = <span class="built_in">Math</span>.random() * <span class="keyword">this</span>.focallength * <span class="number">2</span> - <span class="keyword">this</span>.focallength;</span><br><span class="line">    <span class="comment">//报存粒子飞散后的位置</span></span><br><span class="line">    item.tx = <span class="built_in">Math</span>.random() * canvas.obj.width;</span><br><span class="line">    item.ty = <span class="built_in">Math</span>.random() * canvas.obj.height;</span><br><span class="line">    item.tz = <span class="built_in">Math</span>.random() * <span class="keyword">this</span>.focallength * <span class="number">2</span> - <span class="keyword">this</span>.focallength;</span><br><span class="line">    <span class="comment">//对粒子进行绘制</span></span><br><span class="line">    item.print();</span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">// 动画模拟</span></span><br><span class="line"><span class="keyword">this</span>.animate()</span><br></pre></td></tr></table></figure>
+<h2 id="取得文字信息"><a href="#取得文字信息" class="headerlink" title="取得文字信息"></a>取得文字信息</h2><p>首先取得文字信息<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">getImgData(text)&#123;</span><br><span class="line">    <span class="comment">//使用canvas的api绘制了一个字符在画布上</span></span><br><span class="line">    <span class="keyword">this</span>.drawText(text);</span><br><span class="line">    <span class="keyword">let</span> imgData = c.getImageData(<span class="number">0</span>,<span class="number">0</span>,canvas.obj.width,canvas.obj.height)</span><br><span class="line">    <span class="comment">// 清楚画布，因为要抹去文字，开始粒子化</span></span><br><span class="line">    c.clearRect(<span class="number">0</span>,<span class="number">0</span>,canvas.obj.width,canvas.obj.height)</span><br><span class="line">    <span class="comment">//用于存储所有的粒子</span></span><br><span class="line">    <span class="keyword">let</span> dots = [];</span><br><span class="line">    <span class="comment">//粒子数量的比值 1-&gt;40k+ 5 -&gt;1.4k+</span></span><br><span class="line">    <span class="keyword">let</span> baseNum =<span class="number">5</span>;</span><br><span class="line">    <span class="comment">// 在所有的点中，取1/5 之后筛选出符合要求的点</span></span><br><span class="line">    <span class="comment">//可以理解长i为图片某像素的x坐标，j为y坐标</span></span><br><span class="line">    <span class="keyword">for</span>( <span class="keyword">let</span> i = <span class="number">0</span>;i &lt; imgData.width;i += baseNum)&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">let</span> j = <span class="number">0</span>;j &lt; imgData.height; j += baseNum)&#123;</span><br><span class="line">            <span class="comment">// 记得我们上图的那个excel表格吗？</span></span><br><span class="line">            <span class="comment">//取得img中的a 别忘了我们从0开始所以在加一个x坐标</span></span><br><span class="line">            <span class="keyword">let</span> a = (j * imgData.width + i) * <span class="number">4</span>;</span><br><span class="line">            <span class="comment">//只要透明度&gt;0.5 都是文字的组成像素</span></span><br><span class="line">            <span class="keyword">if</span>(imgData.data[a] &gt;= <span class="number">128</span>)&#123;</span><br><span class="line">                <span class="comment">//创建粒子，并告诉他，他该移动的终点的xyz坐标与小粒子的radius</span></span><br><span class="line">                <span class="keyword">let</span> dot = <span class="keyword">new</span> Dot(i,j,<span class="number">0</span>,<span class="number">2</span>);</span><br><span class="line">                dots.push(dot);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dots;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>二维数组查找的思路如下<br><img src="http://odf9m3avc.bkt.clouddn.com/point.png" alt="datalist"></p>
+<h1 id="动画的绘制"><a href="#动画的绘制" class="headerlink" title="动画的绘制"></a>动画的绘制</h1><p>Dot对象中保存着3对xyz坐标，分别是 粒子目的地位置、飞散后的位置、当前位置<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">constructor</span>(centerX,centerY,centerZ,radius)&#123;</span><br><span class="line"><span class="comment">// 粒子目的地位置   //保存原来的位置</span></span><br><span class="line"><span class="keyword">this</span>.dx = centerX;</span><br><span class="line"><span class="keyword">this</span>.dy = centerY;</span><br><span class="line"><span class="keyword">this</span>.dz = centerZ;</span><br><span class="line"><span class="comment">//保存粒子聚合后又飞散开的位置</span></span><br><span class="line"><span class="keyword">this</span>.tx = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">this</span>.ty = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">this</span>.tz = <span class="number">0</span>;</span><br><span class="line"><span class="comment">// 粒子现在的位置</span></span><br><span class="line"><span class="keyword">this</span>.x = centerX;</span><br><span class="line"><span class="keyword">this</span>.y = centerY;</span><br><span class="line"><span class="keyword">this</span>.z = centerZ;</span><br><span class="line"><span class="keyword">this</span>.radius = radius;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>接下来就该让我们的像素动起来了</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">animate()&#123;</span><br><span class="line"><span class="comment">//每次开始动画时清除前面的画面</span></span><br><span class="line">c.clearRect(<span class="number">0</span>,<span class="number">0</span>,canvas.obj.width,canvas.obj.height);</span><br><span class="line"><span class="comment">//dots保存着所有的粒子</span></span><br><span class="line"><span class="keyword">this</span>.dots.forEach(<span class="function">(<span class="params">item</span>)=&gt;</span>&#123;</span><br><span class="line">    <span class="comment">// 判断飞散的粒子是否回到了原位 判断与目标位置的差距小于0.1，即为约达到了原位置；因为涉及小数对比没法直接用 === </span></span><br><span class="line">    <span class="keyword">let</span> flag = <span class="built_in">Math</span>.abs(item.dx - item.x) &lt; <span class="number">0.1</span> &amp;&amp; <span class="built_in">Math</span>.abs(item.dy - item.y) &lt; <span class="number">0.1</span> &amp;&amp; <span class="built_in">Math</span>.abs(item.dz - item.z) &lt; <span class="number">0.1</span>;</span><br><span class="line">    <span class="comment">// 粒子是否回到了飞散后的位置</span></span><br><span class="line">    <span class="keyword">let</span> flagSecond = <span class="built_in">Math</span>.abs(item.tx - item.x) &lt; <span class="number">0.1</span> &amp;&amp; <span class="built_in">Math</span>.abs(item.ty - item.y)&lt;<span class="number">0.1</span> &amp;&amp; <span class="built_in">Math</span>.abs(item.tz - item.z) &lt; <span class="number">0.1</span>;</span><br><span class="line"><span class="keyword">const</span> speed = <span class="number">0.1</span>;</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">this</span>.derection)&#123;</span><br><span class="line">    <span class="keyword">if</span>(flag)&#123;</span><br><span class="line">        <span class="comment">// 粒子回到了目的地 准备返回</span></span><br><span class="line">        item.x = item.dy;</span><br><span class="line">        item.y = item.dy;</span><br><span class="line">        item.z = item.dz;</span><br><span class="line">        <span class="comment">//到达目的地反向</span></span><br><span class="line">        <span class="keyword">this</span>.derection = <span class="literal">false</span>;</span><br><span class="line">    &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 粒子没到目的地呢，继续走</span></span><br><span class="line">        <span class="comment">// 控制行进的坐标</span></span><br><span class="line">        item.x = item.x + (item.dx -item.x) * speed;</span><br><span class="line">        item.y = item.y + (item.dy -item.y) * speed;</span><br><span class="line">        item.z = item.z + (item.dz -item.z) * speed;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="comment">// 飞回到了飞散后的位置</span></span><br><span class="line">    <span class="keyword">if</span>(flagSecond)&#123;</span><br><span class="line">        item.x = item.tx;</span><br><span class="line">        item.y = item.ty;</span><br><span class="line">        item.z = item.tz;</span><br><span class="line">        <span class="keyword">this</span>.derection = <span class="literal">true</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 没飞到，继续飞</span></span><br><span class="line">        item.x = item.x + (item.tx -item.x) * speed;</span><br><span class="line">        item.y = item.y + (item.ty -item.y) * speed;</span><br><span class="line">        item.z = item.z + (item.tz -item.z) * speed;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//每个粒子的重新渲染</span></span><br><span class="line">item.print(<span class="keyword">this</span>.focallength);</span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">window</span>.requestAnimationFrame(<span class="keyword">this</span>.animate.bind(<span class="keyword">this</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>至此我们的动画效果就完成了~100行多点，动手试试吧~</p>
+<p>参考资料：</p>
+<p>1.<a href="https://isux.tencent.com/canvas-particle-animation.html" target="_blank" rel="noopener">打造高大上的Canvas粒子动画</a><br>2.<a href="http://www.cnblogs.com/hongru/archive/2012/03/28/2420415.html" target="_blank" rel="noopener">事情没有想象中那么难</a><br>3.<a href="http://www.cnblogs.com/axes/p/3500655.html" target="_blank" rel="noopener">随便谈谈用canvas来实现文字图片粒子化</a></p>
+<p>源码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> canvas = &#123;&#125;;</span><br><span class="line">canvas.obj = <span class="built_in">document</span>.getElementById(<span class="string">"world"</span>);</span><br><span class="line">canvas.ctx = canvas.obj.getContext(<span class="string">"2d"</span>)</span><br><span class="line"><span class="keyword">let</span> c = canvas.obj.getContext(<span class="string">"2d"</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">window</span>.requestNextAnimationFrame = <span class="function"><span class="params">()</span> =&gt;</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">window</span>.requestAnimationFrame ||<span class="number">10</span></span><br><span class="line">            <span class="built_in">window</span>.webkitRequestAnimationFrame ||</span><br><span class="line">            <span class="built_in">window</span>.mozRequestAnimationFrame ||</span><br><span class="line">            <span class="built_in">window</span>.msRequestAnimationFrame</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dot</span></span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(centerX,centerY,centerZ,radius)&#123;</span><br><span class="line">        <span class="comment">// 粒子目的地位置   //保存原来的位置</span></span><br><span class="line">        <span class="keyword">this</span>.dx = centerX;</span><br><span class="line">        <span class="keyword">this</span>.dy = centerY;</span><br><span class="line">        <span class="keyword">this</span>.dz = centerZ;</span><br><span class="line">        <span class="comment">//保存粒子聚合后又飞散开的位置</span></span><br><span class="line">        <span class="keyword">this</span>.tx = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">this</span>.ty = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">this</span>.tz = <span class="number">0</span>;</span><br><span class="line">        <span class="comment">// 粒子现在的位置</span></span><br><span class="line">        <span class="keyword">this</span>.x = centerX;</span><br><span class="line">        <span class="keyword">this</span>.y = centerY;</span><br><span class="line">        <span class="keyword">this</span>.z = centerZ;</span><br><span class="line">        <span class="keyword">this</span>.radius = radius;</span><br><span class="line">    &#125;</span><br><span class="line">    print(focallength)&#123;</span><br><span class="line">        <span class="keyword">let</span> r = (<span class="number">33</span> * (<span class="built_in">Math</span>.random().toFixed(<span class="number">2</span>)/<span class="number">2</span>)).toFixed(<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">let</span> g = (<span class="number">125</span> * <span class="built_in">Math</span>.random().toFixed(<span class="number">2</span>)).toFixed(<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">let</span> b = (<span class="number">198</span> * <span class="built_in">Math</span>.random().toFixed(<span class="number">2</span>)).toFixed(<span class="number">0</span>)</span><br><span class="line">        c.save();</span><br><span class="line">        c.beginPath();</span><br><span class="line">        <span class="keyword">let</span> scale = focallength/(focallength + <span class="keyword">this</span>.z);</span><br><span class="line">        <span class="keyword">let</span> x = canvas.obj.width/<span class="number">2</span> + (<span class="keyword">this</span>.x - canvas.obj.width/<span class="number">2</span>) * scale;</span><br><span class="line">        <span class="keyword">let</span> y = canvas.obj.height/<span class="number">2</span> + (<span class="keyword">this</span>.y - canvas.obj.height/<span class="number">2</span>) * scale;</span><br><span class="line">        c.arc(x,y,<span class="keyword">this</span>.radius*scale,<span class="number">0</span>,<span class="built_in">Math</span>.PI * <span class="number">2</span>);</span><br><span class="line">        c.fillStyle = <span class="string">`rgba(33,125,198,<span class="subst">$&#123;scale&#125;</span>)`</span>;</span><br><span class="line">        c.fill()</span><br><span class="line">        c.restore();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ParticleText</span></span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>()&#123;</span><br><span class="line">        <span class="comment">// 焦距</span></span><br><span class="line">        <span class="keyword">this</span>.focallength = <span class="number">250</span>;</span><br><span class="line">        <span class="keyword">this</span>.dots = [];</span><br><span class="line">        <span class="keyword">this</span>.pause = <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">this</span>.derection = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">this</span>.count = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    init()&#123;</span><br><span class="line">        <span class="comment">// 取得文字信息</span></span><br><span class="line">        <span class="keyword">this</span>.dots = <span class="keyword">this</span>.getImgData(<span class="string">"人人FED"</span>);</span><br><span class="line">        <span class="keyword">let</span> dots = <span class="keyword">this</span>.dots;</span><br><span class="line">        <span class="comment">// 绘制随机点</span></span><br><span class="line">        dots.forEach(<span class="function">(<span class="params">item</span>)=&gt;</span>&#123;</span><br><span class="line">            item.x = <span class="built_in">Math</span>.random() * canvas.obj.width;</span><br><span class="line">            item.y = <span class="built_in">Math</span>.random() * canvas.obj.height;</span><br><span class="line">            item.z = <span class="built_in">Math</span>.random() * <span class="keyword">this</span>.focallength * <span class="number">2</span> - <span class="keyword">this</span>.focallength;</span><br><span class="line"></span><br><span class="line">            item.tx = <span class="built_in">Math</span>.random() * canvas.obj.width;</span><br><span class="line">            item.ty = <span class="built_in">Math</span>.random() * canvas.obj.height;</span><br><span class="line">            item.tz = <span class="built_in">Math</span>.random() * <span class="keyword">this</span>.focallength * <span class="number">2</span> - <span class="keyword">this</span>.focallength;</span><br><span class="line">            item.print();</span><br><span class="line">        &#125;)</span><br><span class="line">        <span class="comment">// 动画模拟</span></span><br><span class="line">        <span class="keyword">this</span>.animate()</span><br><span class="line">    &#125;</span><br><span class="line">    animate()&#123;</span><br><span class="line">        c.clearRect(<span class="number">0</span>,<span class="number">0</span>,canvas.obj.width,canvas.obj.height);</span><br><span class="line">        <span class="keyword">this</span>.dots.forEach(<span class="function">(<span class="params">item</span>)=&gt;</span>&#123;</span><br><span class="line">            <span class="comment">// 判断飞散的粒子是否回到了原位</span></span><br><span class="line">            <span class="keyword">let</span> flag = <span class="built_in">Math</span>.abs(item.dx - item.x) &lt; <span class="number">0.1</span> &amp;&amp; <span class="built_in">Math</span>.abs(item.dy - item.y) &lt; <span class="number">0.1</span> &amp;&amp; <span class="built_in">Math</span>.abs(item.dz - item.z) &lt; <span class="number">0.1</span>;</span><br><span class="line">            <span class="comment">// let flag = item.dx === item.x &amp;&amp; item.dy === item.y &amp;&amp; item.dz === item.z;</span></span><br><span class="line">            <span class="comment">// 粒子是否回到了飞散后的位置</span></span><br><span class="line">            <span class="keyword">let</span> flagSecond = <span class="built_in">Math</span>.abs(item.tx - item.x) &lt; <span class="number">0.1</span> &amp;&amp; <span class="built_in">Math</span>.abs(item.ty - item.y)&lt;<span class="number">0.1</span> &amp;&amp; <span class="built_in">Math</span>.abs(item.tz - item.z) &lt; <span class="number">0.1</span>;</span><br><span class="line">            <span class="keyword">const</span> speed = <span class="number">0.1</span>;</span><br><span class="line">            <span class="keyword">if</span>(<span class="keyword">this</span>.derection)&#123;</span><br><span class="line">                <span class="keyword">if</span>(flag)&#123;</span><br><span class="line">                    <span class="comment">// 粒子回到了目的地 准备返回</span></span><br><span class="line">                    item.x = item.dy;</span><br><span class="line">                    item.y = item.dy;</span><br><span class="line">                    item.z = item.dz;</span><br><span class="line">                    <span class="keyword">this</span>.derection = <span class="literal">false</span>;</span><br><span class="line">                &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="comment">// 粒子没到目的地呢，继续走</span></span><br><span class="line">                    <span class="comment">// 控制行进的坐标， 0.5是速度系数</span></span><br><span class="line">                    item.x = item.x + (item.dx -item.x) * speed;</span><br><span class="line">                    item.y = item.y + (item.dy -item.y) * speed;</span><br><span class="line">                    item.z = item.z + (item.dz -item.z) * speed;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="comment">// 飞回到了飞散后的位置</span></span><br><span class="line">                <span class="keyword">if</span>(flagSecond)&#123;</span><br><span class="line">                    item.x = item.tx;</span><br><span class="line">                    item.y = item.ty;</span><br><span class="line">                    item.z = item.tz;</span><br><span class="line">                    <span class="keyword">this</span>.derection = <span class="literal">true</span>;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="comment">// 没飞到，继续飞</span></span><br><span class="line">                    item.x = item.x + (item.tx -item.x) * speed;</span><br><span class="line">                    item.y = item.y + (item.ty -item.y) * speed;</span><br><span class="line">                    item.z = item.z + (item.tz -item.z) * speed;</span><br><span class="line">                    <span class="comment">// this.pause = false</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            item.print(<span class="keyword">this</span>.focallength);</span><br><span class="line">        &#125;)</span><br><span class="line">        <span class="built_in">window</span>.requestAnimationFrame(<span class="keyword">this</span>.animate.bind(<span class="keyword">this</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    getImgData(text)&#123;</span><br><span class="line">        <span class="keyword">this</span>.drawText(text);</span><br><span class="line">        <span class="keyword">let</span> imgData = c.getImageData(<span class="number">0</span>,<span class="number">0</span>,canvas.obj.width,canvas.obj.height)</span><br><span class="line">        <span class="comment">// 清楚画布，因为要抹去文字，开始粒子化</span></span><br><span class="line">        c.clearRect(<span class="number">0</span>,<span class="number">0</span>,canvas.obj.width,canvas.obj.height)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">let</span> dots = [];</span><br><span class="line">        <span class="keyword">let</span> baseNum =<span class="number">5</span>;</span><br><span class="line">        <span class="comment">// 在所有的点中，取1/6 之后筛选出符合要求的点</span></span><br><span class="line">        <span class="keyword">for</span>( <span class="keyword">let</span> i = <span class="number">0</span>;i &lt; imgData.width;i += baseNum)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">let</span> j = <span class="number">0</span>;j &lt; imgData.height; j += baseNum)&#123;</span><br><span class="line">                <span class="comment">// 取得img中的a</span></span><br><span class="line">                <span class="keyword">let</span> a = ((j) * imgData.width + i) * <span class="number">4</span>;</span><br><span class="line">                <span class="keyword">if</span>(imgData.data[a] &gt;= <span class="number">128</span>)&#123;</span><br><span class="line">                    <span class="keyword">let</span> dot = <span class="keyword">new</span> Dot(i<span class="number">-3</span>,j<span class="number">-3</span>,<span class="number">0</span>,<span class="number">2</span>);</span><br><span class="line">                    dots.push(dot);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dots;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    drawText(text)&#123;</span><br><span class="line">        c.save();</span><br><span class="line">        c.font = <span class="string">"250px 微软雅黑 bold"</span>;</span><br><span class="line">        c.fillStyle = <span class="string">"rgba(168,168,168,1)"</span>;</span><br><span class="line">        c.textAlign = <span class="string">"center"</span>;</span><br><span class="line">        c.textBaseline = <span class="string">"middle"</span>;</span><br><span class="line">        c.fillText(text, canvas.obj.width/<span class="number">2</span>,canvas.obj.height/<span class="number">2</span>);</span><br><span class="line">        c.restore();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> Par = <span class="keyword">new</span> ParticleText();</span><br><span class="line">Par.init();</span><br></pre></td></tr></table></figure></p>
+<hr>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/js/" rel="tag"># js</a>
+          
+            <a href="/tags/canvas/" rel="tag"># canvas</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div id="needsharebutton-postbottom">
+            <span class="btn">
+              <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </span>
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/08/如何设计一个React组件 —— 我的react编年史（一）/" rel="next" title="如何设计一个React组件 —— 我的react编年史（一）">
+                <i class="fa fa-chevron-left"></i> 如何设计一个React组件 —— 我的react编年史（一）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/10/25/简析动画执行函数requestAnimationFrame/" rel="prev" title="简析动画执行函数requestAnimationFrame">
+                简析动画执行函数requestAnimationFrame <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Yuri" />
+            
+              <p class="site-author-name" itemprop="name">Yuri</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Yuritu" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:tuqiang_ru@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#粒子动画的基本绘画思路"><span class="nav-number">1.</span> <span class="nav-text">粒子动画的基本绘画思路</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ImageData对象"><span class="nav-number">1.1.</span> <span class="nav-text">ImageData对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#绘制的思路"><span class="nav-number">1.2.</span> <span class="nav-text">绘制的思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#取得文字信息"><span class="nav-number">1.3.</span> <span class="nav-text">取得文字信息</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#动画的绘制"><span class="nav-number">2.</span> <span class="nav-text">动画的绘制</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yuri</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'YuriTu',
+            repo: 'blog',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: 'c64e22874384bc1197b1cec60b63ddb1abe057f1',
+            
+                client_id: '91bb8fa224e5687b3d2e'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+      pbOptions = {};
+      
+          pbOptions.iconStyle = "box";
+      
+          pbOptions.boxForm = "horizontal";
+      
+          pbOptions.position = "bottomCenter";
+      
+          pbOptions.networks = "Weibo,Wechat";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+  </script>
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
